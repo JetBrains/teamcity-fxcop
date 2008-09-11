@@ -24,17 +24,21 @@
           <setting name="JAR_ENABLED" value="false" />
           <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
           <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-          <setting name="RUN_JASPER_VALIDATION" value="true" />
+          <setting name="RUN_JASPER_VALIDATION" value="false" />
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
           <containerElement type="module" name="fxcop-server-buildserver">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
+            <attribute name="method" value="5" />
+            <attribute name="URI" value="/WEB-INF/lib/fxcop-server-buildserver.jar" />
           </containerElement>
           <containerElement type="facet" facetId="web-openapi/web/web-openapi">
             <attribute name="method" value="4" />
             <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="module" name="fxcop-common-buildserver">
+            <attribute name="method" value="5" />
+            <attribute name="URI" value="/WEB-INF/lib/fxcop-common-buildserver.jar" />
           </containerElement>
         </packaging>
       </configuration>
@@ -51,7 +55,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="server-openapi" />
     <orderEntry type="module" module-name="utils" />
-    <orderEntry type="module" module-name="fxcop-common-buildserver" />
+    <orderEntry type="module" module-name="fxcop-common-buildserver" exported="" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>

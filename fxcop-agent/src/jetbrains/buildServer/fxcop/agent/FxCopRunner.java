@@ -1,19 +1,17 @@
 package jetbrains.buildServer.fxcop.agent;
 
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.openapi.util.text.StringUtil;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.HashMap;
+import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.agent.BuildProgressLogger;
 import jetbrains.buildServer.agent.CurrentBuildTracker;
-import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.inspections.InspectionInstance;
+import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.inspections.InspectionTypeInfo;
 import jetbrains.buildServer.agent.runner.GenericProgramRunner;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
@@ -29,18 +27,21 @@ public class FxCopRunner extends GenericProgramRunner {
   private final CurrentBuildTracker myCurrentBuild;
   private File myOutputFile = null;
   private final FxCopInspectionsProcessor myInspectionsProcessor;
+  private final FxCopCommandLineBuilder myCommandLineBuilder;
 
-  public FxCopRunner(@NotNull CurrentBuildTracker currentBuild, FxCopInspectionsProcessor inspectionsProcessor) {
+  public FxCopRunner(@NotNull final CurrentBuildTracker currentBuild,
+                     @NotNull final FxCopInspectionsProcessor inspectionsProcessor,
+                     @NotNull final FxCopCommandLineBuilder commandLineBuilder) {
     myCurrentBuild = currentBuild;
     myInspectionsProcessor = inspectionsProcessor;
+    myCommandLineBuilder = commandLineBuilder;
   }
 
   public String getType() {
     return FxCopConstants.RUNNER_TYPE;
   }
 
-  //@Override
-  public boolean canRun(final BuildAgentConfiguration agentConfig) {
+  public boolean canRun(final BuildAgentConfiguration agentConfiguration) {
     return true;
   }
 
@@ -49,44 +50,9 @@ public class FxCopRunner extends GenericProgramRunner {
     final Map<String, String> runParameters,
     final Map<String, String> buildParameters) throws IOException, RunBuildException {
 
+    myOutputFile = myCommandLineBuilder.buildCommandLine(cmd, runParameters);
+
     final BuildProgressLogger logger = myCurrentBuild.getCurrentBuild().getBuildLogger();
-
-    final String fxcopRoot = runParameters.get(FxCopConstants.SETTINGS_FXCOP_ROOT);
-    if (StringUtil.isEmpty(fxcopRoot)) {
-      throw new RunBuildException("FxCop root not specified in build settings");
-    }
-
-    final String fxCopCmd = fxcopRoot + File.separator + FxCopConstants.FXCOPCMD_BINARY;
-    final File fxCopCmdFile = new File(fxCopCmd);
-    if (!fxCopCmdFile.exists()) {
-      throw new RunBuildException("File not found: " + fxCopCmd);
-    }
-
-    cmd.setExePath(fxCopCmdFile.getAbsolutePath());
-
-    // Additional options
-    final String additionalOptions = runParameters.get(FxCopConstants.SETTINGS_ADDITIONAL_OPTIONS);
-    if (additionalOptions != null) {
-      StringTokenizer tokenizer = new StringTokenizer(additionalOptions);
-      while (tokenizer.hasMoreTokens()) {
-        cmd.addParameter(tokenizer.nextToken());
-      }
-    }
-
-    // Files to be processed
-    final String files = runParameters.get(FxCopConstants.SETTINGS_FILES);
-    if (files != null) {
-      StringTokenizer tokenizer = new StringTokenizer(files);
-      while (tokenizer.hasMoreTokens()) {
-        cmd.addParameter("/f:" + tokenizer.nextToken());
-      }
-    }
-
-    // Output file
-    myOutputFile = File.createTempFile("fxcop-runner-output-", ".xml");
-    myOutputFile.delete();
-    cmd.addParameter("/out:" + myOutputFile.getAbsolutePath());
-
     logger.message("Running " + cmd.getCommandLineString());
     logger.progressMessage("Running FxCop");
     logger.flush();
