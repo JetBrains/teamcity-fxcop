@@ -126,7 +126,7 @@
   </patternset>
   
   <path id="fxcop-common.module.sourcepath">
-    <dirset dir="${module.fxcop-common.basedir}/fxcop-common">
+    <dirset dir="${module.fxcop-common.basedir}/common">
       <include name="src"/>
     </dirset>
   </path>
@@ -145,7 +145,7 @@
     </javac>
     
     <copy todir="${fxcop-common.output.dir}">
-      <fileset dir="${module.fxcop-common.basedir}/fxcop-common/src">
+      <fileset dir="${module.fxcop-common.basedir}/common/src">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
@@ -204,7 +204,7 @@
   </patternset>
   
   <path id="fxcop-agent.module.sourcepath">
-    <dirset dir="${module.fxcop-agent.basedir}/fxcop-agent">
+    <dirset dir="${module.fxcop-agent.basedir}/agent">
       <include name="src"/>
     </dirset>
   </path>
@@ -223,7 +223,7 @@
     </javac>
     
     <copy todir="${fxcop-agent.output.dir}">
-      <fileset dir="${module.fxcop-agent.basedir}/fxcop-agent/src">
+      <fileset dir="${module.fxcop-agent.basedir}/agent/src">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>

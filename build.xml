@@ -1,17 +1,55 @@
 <project name="FxCop Support" default="dist" basedir=".">
-  <property name="pluginName" value="fxcop"/>
+  <property name="plugin" value="fxcop"/>
 
   <property name="dependencies.dir" value="${basedir}/deps" />
   <property name="teamcity.tar.gz" value="TeamCity-*.tar.gz"/>
   
   <property name="teamcity.dist" value="${basedir}/lib/teamcity"/>
   <property name="teamcity.agent.jars" value="${teamcity.dist}/TeamCity/buildAgent/lib"/>
+  <property name="teamcity.idea.jars" value="${teamcity.dist}/idea/lib"/>
   <property name="teamcity.server.jars" value="${teamcity.dist}/TeamCity/webapps/ROOT/WEB-INF/lib"/>
 
-  <property file="fxcop.properties"/>
-  <import file="fxcop.xml"/>
+  <property name="dist" value="${basedir}/dist"/>
 
-  <property name="distPath" value="${basedir}/dist"/>
+  <path id="library.idea-openapi.classpath">
+    <pathelement location="${teamcity.idea.jars}/openapi.jar"/>
+    <pathelement location="${teamcity.idea.jars}/resources_en.jar"/>
+    <pathelement location="${teamcity.idea.jars}/annotations.jar"/>
+    <pathelement location="${teamcity.idea.jars}/util.jar"/>
+    <pathelement location="${teamcity.idea.jars}/trove4j.jar"/>
+    <pathelement location="${teamcity.idea.jars}/extensions.jar"/>
+    <pathelement location="${teamcity.idea.jars}/log4j.jar"/>
+    <pathelement location="${teamcity.idea.jars}/jdom.jar"/>
+  </path>
+
+  <path id="library.api-common.classpath">
+    <pathelement location="${teamcity.server.jars}/common-api.jar"/>
+    <pathelement location="${teamcity.server.jars}/util.jar"/>
+  </path>
+
+  <path id="library.api-agent.classpath">
+    <pathelement location="${teamcity.agent.jars}/agent-api.jar"/>
+    <pathelement location="${teamcity.agent.jars}/jniwrap-3.6.1.jar"/>
+    <pathelement location="${teamcity.agent.jars}/buildServerAgent.jar"/>
+    <pathelement location="${teamcity.agent.jars}/winpack.jar"/>
+  </path>
+  
+  <path id="library.test-sup.classpath">
+    <pathelement location="${basedir}/lib/testng-5.7-jdk15.jar"/>
+    <pathelement location="${teamcity.server.jars}/jmock-SNAPSHOT.jar"/>
+    <pathelement location="${teamcity.server.jars}/junit-3.8.1.jar"/>
+  </path>
+  
+  <path id="library.xml.classpath">
+    <pathelement location="${teamcity.server.jars}/xercesImpl.jar"/>
+    <pathelement location="${teamcity.server.jars}/xstream-1.2.1.jar"/>
+    <pathelement location="${teamcity.server.jars}/xpp3_min-1.1.3.4.M.jar"/>
+    <pathelement location="${teamcity.server.jars}/xmlrpc-2.0.1.jar"/>
+  </path>
+  
+  <path id="library.api-server.classpath">
+    <pathelement location="${teamcity.server.jars}/server-api.jar"/>
+  </path>
 
   <target name="extractTeamcityJars">
     <delete dir="${teamcity.dist}" />
@@ -21,55 +59,106 @@
     <unjar src="${teamcity.dist}\TeamCity\webapps\ROOT\update\plugins\idea_dist.jar" dest="${teamcity.dist}" />
   </target>
 
-  <target name="deploy" depends="dist">
-    <copy file="${distPath}/fxcop.zip" todir="C:\Users\Leonid.Shalupov\.BuildServer\plugins" />
+  <target name="compile">
+    <delete dir="${dist}"/>
+
+    <!-- Common -->
+    <mkdir dir="${dist}/classes/common"/> 
+    <javac srcdir="common/src" destdir="${dist}/classes/common">
+      <classpath>
+        <path refid="library.api-common.classpath"/>
+        <path refid="library.idea-openapi.classpath"/>
+      </classpath>
+    </javac>
+    <jar destfile="out/${plugin}-common.jar" basedir="${dist}/classes/common" />
+
+    <!-- Agent -->
+    <mkdir dir="${dist}/classes/agent"/> 
+    <javac srcdir="agent/src" destdir="${dist}/classes/agent">
+      <classpath>
+        <path refid="library.api-common.classpath"/>
+        <path refid="library.idea-openapi.classpath"/>
+        <path refid="library.api-agent.classpath"/>
+        <path refid="library.xml.classpath"/>
+
+        <pathelement location="out/${plugin}-common.jar"/>
+      </classpath>
+    </javac>
+    <jar destfile="out/${plugin}-agent.jar" basedir="${dist}/classes/agent" />
+
+    <!-- Server -->
+    <mkdir dir="${dist}/classes/server"/> 
+    <javac srcdir="server/src" destdir="${dist}/classes/server">
+      <classpath>
+        <path refid="library.api-common.classpath"/>
+        <path refid="library.idea-openapi.classpath"/>
+        <path refid="library.api-server.classpath"/>
+
+        <pathelement location="out/${plugin}-common.jar"/>
+      </classpath>
+    </javac>
+    <jar destfile="out/${plugin}-server.jar" basedir="${dist}/classes/server">
+         <fileset dir="${plugin}-server/resources" />
+    </jar>
+
+    <!-- Tests -->
+    <mkdir dir="${dist}/classes/tests"/> 
+    <javac srcdir="tests/src" destdir="${dist}/classes/tests">
+      <classpath>
+        <path refid="library.api-common.classpath"/>
+        <path refid="library.api-agent.classpath"/>
+        <path refid="library.api-server.classpath"/>
+        <path refid="library.idea-openapi.classpath"/>
+        <path refid="library.xml.classpath"/>
+        <path refid="library.test-sup.classpath"/>
+
+        <pathelement location="out/${plugin}-common.jar"/>
+        <pathelement location="out/${plugin}-server.jar"/>
+        <pathelement location="out/${plugin}-agent.jar"/>
+      </classpath>
+    </javac>
+    <jar destfile="out/${plugin}-tests.jar" basedir="${dist}/classes/tests" />
   </target>
 
-  <target name="dist" depends="all">
-    <delete dir="${distPath}"/>
-    <mkdir dir="${distPath}/unpacked"/>
-    <jar destfile="${distPath}/unpacked/fxcop-common.jar" basedir="${fxcop-common.output.dir}"/>
-    <jar destfile="${distPath}/unpacked/fxcop-server.jar" basedir="${fxcop-server.output.dir}">
-         <fileset dir="fxcop-server/resources" />
-    </jar>
-    <jar destfile="${distPath}/unpacked/fxcop-agent.jar" basedir="${fxcop-agent.output.dir}"/>
-    <zip destfile="${distPath}/fxcop-agent.zip">
-      <zipfileset dir="${distPath}/unpacked" prefix="fxcop/lib">
-        <include name="fxcop-agent.jar"/>
-        <include name="fxcop-common.jar"/>
+  <target name="dist" depends="compile">
+    <zip destfile="${dist}/${plugin}-agent.zip">
+      <zipfileset dir="${dist}" prefix="${plugin}/lib">
+        <include name="${plugin}-agent.jar"/>
+        <include name="${plugin}-common.jar"/>
       </zipfileset>
     </zip>
-    <zip destfile="${distPath}/fxcop.zip">
-      <zipfileset dir="${distPath}" prefix="agent">
-        <include name="fxcop-agent.zip"/>
+    <zip destfile="${dist}/${plugin}-plugin.zip">
+      <zipfileset dir="${dist}" prefix="agent">
+        <include name="${plugin}-agent.zip"/>
       </zipfileset>
-      <zipfileset dir="${basedir}" prefix="">
+      <zipfileset dir="${dist}" prefix="">
         <include name="teamcity-plugin.xml"/>
       </zipfileset>
-      <zipfileset dir="${distPath}/unpacked" prefix="server">
-        <include name="fxcop-server.jar"/>
-        <include name="fxcop-common.jar"/>
+      <zipfileset dir="${dist}" prefix="server">
+        <include name="${plugin}-server.jar"/>
+        <include name="${plugin}-common.jar"/>
       </zipfileset>
     </zip>
-    <delete file="${distPath}/fxcop-agent.zip"/>
+    <delete file="${dist}/${plugin}-agent.zip"/>
 
-    <zip basedir="${basedir}" destfile="${distPath}/fxcop-src.zip">
+    <zip basedir="${basedir}" destfile="${dist}/${plugin}-plugin-src.zip">
       <exclude name="**/.svn/**"/>
       <exclude name="*.iws"/>
       <exclude name="test-output/**"/>
       <exclude name="lib/**"/>
       <exclude name="out/**"/>
-      <exclude name="dist/**"/>
+      <exclude name="${dist}/**"/>
       <exclude name="deps/**"/>
     </zip>
   </target>
 
+  <!-- 
   <taskdef name="testng" classname="org.testng.TestNGAntTask" classpath="${basedir}/lib/testng-5.7-jdk15.jar"/>
 
-  <target name="run-tests" depends="clean, init, compile.module.fxcop-tests.production">
+  <target name="run-tests" depends="compile">
 
     <testng haltonfailure="no" failureProperty="failure_found" listener="org.testng.reporters.TestHTMLReporter"
-            outputdir="${basedir}/test-output" classpathref="fxcop-tests.runtime.module.classpath" dumpcommand="true">
+            outputdir="${basedir}/test-output" classpathref="${plugin}-tests.runtime.module.classpath" dumpcommand="true">
 
       <jvmarg value="-ea"/>
 
@@ -80,4 +169,5 @@
       </xmlfileset>
     </testng>
   </target>
+  -->
 </project>
