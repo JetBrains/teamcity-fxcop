@@ -1,0 +1,83 @@
+<project name="FxCop Support" default="dist" basedir=".">
+  <property name="pluginName" value="fxcop"/>
+
+  <property name="dependencies.dir" value="${basedir}/deps" />
+  <property name="teamcity.tar.gz" value="TeamCity-*.tar.gz"/>
+  
+  <property name="teamcity.dist" value="${basedir}/lib/teamcity"/>
+  <property name="teamcity.agent.jars" value="${teamcity.dist}/TeamCity/buildAgent/lib"/>
+  <property name="teamcity.server.jars" value="${teamcity.dist}/TeamCity/webapps/ROOT/WEB-INF/lib"/>
+
+  <property file="fxcop.properties"/>
+  <import file="fxcop.xml"/>
+
+  <property name="distPath" value="${basedir}/dist"/>
+
+  <target name="extractTeamcityJars">
+    <delete dir="${teamcity.dist}" />
+    <untar dest="${teamcity.dist}" compression="gzip">
+      <fileset dir="${dependencies.dir}" includes="${teamcity.tar.gz}" />
+    </untar>
+    <unjar src="${teamcity.dist}\TeamCity\webapps\ROOT\update\plugins\idea_dist.jar" dest="${teamcity.dist}" />
+  </target>
+
+  <target name="deploy" depends="dist">
+    <copy file="${distPath}/fxcop.zip" todir="C:\Users\Leonid.Shalupov\.BuildServer\plugins" />
+  </target>
+
+  <target name="dist" depends="all">
+    <delete dir="${distPath}"/>
+    <mkdir dir="${distPath}/unpacked"/>
+    <jar destfile="${distPath}/unpacked/fxcop-common.jar" basedir="${fxcop-common.output.dir}"/>
+    <jar destfile="${distPath}/unpacked/fxcop-server.jar" basedir="${fxcop-server.output.dir}">
+         <fileset dir="fxcop-server/resources" />
+    </jar>
+    <jar destfile="${distPath}/unpacked/fxcop-agent.jar" basedir="${fxcop-agent.output.dir}"/>
+    <zip destfile="${distPath}/fxcop-agent.zip">
+      <zipfileset dir="${distPath}/unpacked" prefix="fxcop/lib">
+        <include name="fxcop-agent.jar"/>
+        <include name="fxcop-common.jar"/>
+      </zipfileset>
+    </zip>
+    <zip destfile="${distPath}/fxcop.zip">
+      <zipfileset dir="${distPath}" prefix="agent">
+        <include name="fxcop-agent.zip"/>
+      </zipfileset>
+      <zipfileset dir="${basedir}" prefix="">
+        <include name="teamcity-plugin.xml"/>
+      </zipfileset>
+      <zipfileset dir="${distPath}/unpacked" prefix="server">
+        <include name="fxcop-server.jar"/>
+        <include name="fxcop-common.jar"/>
+      </zipfileset>
+    </zip>
+    <delete file="${distPath}/fxcop-agent.zip"/>
+
+    <zip basedir="${basedir}" destfile="${distPath}/fxcop-src.zip">
+      <exclude name="**/.svn/**"/>
+      <exclude name="*.iws"/>
+      <exclude name="test-output/**"/>
+      <exclude name="lib/**"/>
+      <exclude name="out/**"/>
+      <exclude name="dist/**"/>
+      <exclude name="deps/**"/>
+    </zip>
+  </target>
+
+  <taskdef name="testng" classname="org.testng.TestNGAntTask" classpath="${basedir}/lib/testng-5.7-jdk15.jar"/>
+
+  <target name="run-tests" depends="clean, init, compile.module.fxcop-tests.production">
+
+    <testng haltonfailure="no" failureProperty="failure_found" listener="org.testng.reporters.TestHTMLReporter"
+            outputdir="${basedir}/test-output" classpathref="fxcop-tests.runtime.module.classpath" dumpcommand="true">
+
+      <jvmarg value="-ea"/>
+
+      <sysproperty key="java.awt.headless" value="true"/>
+
+      <xmlfileset dir="${basedir}">
+        <include name="testng.xml"/>
+      </xmlfileset>
+    </testng>
+  </target>
+</project>

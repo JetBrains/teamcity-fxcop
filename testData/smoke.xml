@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopReport Version="1.36">
+  <Targets>
+    <Target Name="$(FxCopDir)\MonoDetection.exe">
+      <Modules>
+        <Module Name="monodetection.exe">
+          <Messages>
+            <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active"
+                     Created="2008-07-18 17:05:39Z" FixCategory="NonBreaking">
+              <Issue Name="NoStrongName" Certainty="95" Level="CriticalError">Sign 'MonoDetection.exe' with a strong name key.</Issue>
+            </Message>
+          </Messages>
+          <Namespaces>
+            <Namespace Name="MonoDetection">
+              <Types>
+                <Type Name="Program" Kind="Class" Accessibility="Assembly" ExternallyVisible="False">
+                  <Members>
+                    <Member Name="#Main(System.String[])" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
+                      <Messages>
+                        <Message Id="args" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Status="Active"
+                                 Created="2008-07-18 17:05:39Z" FixCategory="NonBreaking">
+                          <Issue Certainty="95" Level="Warning" Path="C:\Work\Decompiler\MonoDetection" File="Program.cs" Line="8">Parameter
+                            'args' of 'Program.Main(string[])' is never used. Remove the parameter or use it in the method body.
+                          </Issue>
+                        </Message>
+                      </Messages>
+                    </Member>
+                  </Members>
+                </Type>
+              </Types>
+            </Namespace>
+          </Namespaces>
+        </Module>
+      </Modules>
+    </Target>
+  </Targets>
+  <Rules>
+    <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
+      <Name>Assemblies should have valid strong names</Name>
+      <Description>Either the assembly has no strong name, an invalid one, or the strong name is valid only because of the computer
+        configuration. The assembly should not be deployed in this state. The most common causes of this are: 1) The assembly's contents
+        were modified after it was signed. 2) The signing process failed. 3) The assembly was delay-signed. 4) A registry key existed that
+        allowed the check to pass (where it would not have otherwise).
+      </Description>
+      <Resolution Name="NoStrongName">Sign {0} with a strong name key.</Resolution>
+      <Owner/>
+      <Url>http://msdn2.microsoft.com/ms182127(VS.90).aspx</Url>
+      <Email>[none]</Email>
+      <MessageLevel Certainty="95">CriticalError</MessageLevel>
+      <File Name="DesignRules.dll" Version="9.0.0.0"/>
+    </Rule>
+    <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
+      <Name>Review unused parameters</Name>
+      <Description>Review parameters in non-virtual methods that are not used in the method body to ensure no correctness exists around
+        failure to access them. Unused parameters incur maintenance and performance costs. Sometimes a violation of this rule can point to
+        an implementation bug in the method (i.e. the parameter should actually have been used in the method body). Exclude warnings of this
+        rule if the parameter has to exist because of backward compatibility.
+      </Description>
+      <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
+      <Owner/>
+      <Url>http://msdn2.microsoft.com/ms182268(VS.90).aspx</Url>
+      <Email>[none]</Email>
+      <MessageLevel Certainty="95">Warning</MessageLevel>
+      <File Name="UsageRules.dll" Version="9.0.0.0"/>
+    </Rule>
+  </Rules>
+  <Localized>
+    <String Key="Category">Category</String>
+    <String Key="Certainty">Certainty</String>
+    <String Key="CollapseAll">Collapse All</String>
+    <String Key="CheckId">Check Id</String>
+    <String Key="Error">Error</String>
+    <String Key="Errors">error(s)</String>
+    <String Key="ExpandAll">Expand All</String>
+    <String Key="Help">Help</String>
+    <String Key="Line">Line</String>
+    <String Key="Messages">message(s)</String>
+    <String Key="LocationNotStoredInPdb">[Location not stored in Pdb]</String>
+    <String Key="Project">Project</String>
+    <String Key="Resolution">Resolution</String>
+    <String Key="Rule">Rule</String>
+    <String Key="RuleFile">Rule File</String>
+    <String Key="RuleDescription">Rule Description</String>
+    <String Key="Source">Source</String>
+    <String Key="Status">Status</String>
+    <String Key="Target">Target</String>
+    <String Key="Warning">Warning</String>
+    <String Key="Warnings">warning(s)</String>
+    <String Key="ReportTitle">Code Analysis Report</String>
+  </Localized>
+</FxCopReport>

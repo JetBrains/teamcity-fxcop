@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="FxCop Suite">
+  <test name="FxCop Tests">
+    <classes>
+      <class name="jetbrains.buildServer.fxcop.agent.FxCopFileProcessorTest"/>
+    </classes>
+  </test>
+</suite>
