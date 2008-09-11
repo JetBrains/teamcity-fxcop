@@ -7,8 +7,6 @@ import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.serverSide.artifacts.ArtifactsInfo;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.ViewLogTab;
-import static jetbrains.buildServer.web.reportTabs.ReportTabsProvider.BASE_PATH;
-import static jetbrains.buildServer.web.reportTabs.ReportTabsProvider.START_PAGE;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,8 +29,8 @@ public class FxCopReportTab extends ViewLogTab {
   }
 
   protected void fillModel(final Map model, final HttpServletRequest request, final SBuild build) {
-    model.put(BASE_PATH, TAB_BASEPATH);
-    model.put(START_PAGE, TAB_STARTPAGE);
+    model.put("basePath", TAB_BASEPATH);
+    model.put("startPage", TAB_STARTPAGE);
   }
 
   public boolean isAvailable(@NotNull final HttpServletRequest request) {
