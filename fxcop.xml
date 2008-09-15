@@ -137,7 +137,7 @@
   </patternset>
   
   <path id="fxcop-common.module.sourcepath">
-    <dirset dir="${module.fxcop-common.basedir}/common">
+    <dirset dir="${module.fxcop-common.basedir}/fxcop-common">
       <include name="src"/>
     </dirset>
   </path>
@@ -156,7 +156,7 @@
     </javac>
     
     <copy todir="${fxcop-common.output.dir}">
-      <fileset dir="${module.fxcop-common.basedir}/common/src">
+      <fileset dir="${module.fxcop-common.basedir}/fxcop-common/src">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
@@ -215,7 +215,7 @@
   </patternset>
   
   <path id="fxcop-agent.module.sourcepath">
-    <dirset dir="${module.fxcop-agent.basedir}/agent">
+    <dirset dir="${module.fxcop-agent.basedir}/fxcop-agent">
       <include name="src"/>
     </dirset>
   </path>
@@ -234,7 +234,7 @@
     </javac>
     
     <copy todir="${fxcop-agent.output.dir}">
-      <fileset dir="${module.fxcop-agent.basedir}/agent/src">
+      <fileset dir="${module.fxcop-agent.basedir}/fxcop-agent/src">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
@@ -293,7 +293,7 @@
   </patternset>
   
   <path id="fxcop-server.module.sourcepath">
-    <dirset dir="${module.fxcop-server.basedir}/server">
+    <dirset dir="${module.fxcop-server.basedir}/fxcop-server">
       <include name="src"/>
     </dirset>
   </path>
@@ -312,7 +312,7 @@
     </javac>
     
     <copy todir="${fxcop-server.output.dir}">
-      <fileset dir="${module.fxcop-server.basedir}/server/src">
+      <fileset dir="${module.fxcop-server.basedir}/fxcop-server/src">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
@@ -377,7 +377,7 @@
   </patternset>
   
   <path id="fxcop-tests.module.sourcepath">
-    <dirset dir="${module.fxcop-tests.basedir}/tests">
+    <dirset dir="${module.fxcop-tests.basedir}/fxcop-tests">
       <include name="src"/>
     </dirset>
   </path>
@@ -396,7 +396,7 @@
     </javac>
     
     <copy todir="${fxcop-tests.output.dir}">
-      <fileset dir="${module.fxcop-tests.basedir}/tests/src">
+      <fileset dir="${module.fxcop-tests.basedir}/fxcop-tests/src">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>

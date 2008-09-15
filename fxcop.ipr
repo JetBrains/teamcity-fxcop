@@ -375,10 +375,10 @@
   <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/agent/fxcop-agent.iml" filepath="$PROJECT_DIR$/agent/fxcop-agent.iml" />
-      <module fileurl="file://$PROJECT_DIR$/common/fxcop-common.iml" filepath="$PROJECT_DIR$/common/fxcop-common.iml" />
-      <module fileurl="file://$PROJECT_DIR$/server/fxcop-server.iml" filepath="$PROJECT_DIR$/server/fxcop-server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/tests/fxcop-tests.iml" filepath="$PROJECT_DIR$/tests/fxcop-tests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fxcop-agent/fxcop-agent.iml" filepath="$PROJECT_DIR$/fxcop-agent/fxcop-agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fxcop-common/fxcop-common.iml" filepath="$PROJECT_DIR$/fxcop-common/fxcop-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fxcop-server/fxcop-server.iml" filepath="$PROJECT_DIR$/fxcop-server/fxcop-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fxcop-tests/fxcop-tests.iml" filepath="$PROJECT_DIR$/fxcop-tests/fxcop-tests.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" project-jdk-type="JavaSDK">
