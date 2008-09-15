@@ -62,7 +62,7 @@ public class FxCopFileProcessorTest extends BaseTestCase {
     };
 
     final FxCopFileProcessor processor = new FxCopFileProcessor(
-      new File(prefix), "C:/Work/Decompiler", logger, reporter);
+      new File(prefix), "C:\\Work\\Decompiler", logger, reporter);
     processor.processReport();
 
     final File goldf = new File(goldFile);
