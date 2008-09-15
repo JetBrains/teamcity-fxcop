@@ -70,7 +70,7 @@
         <path refid="library.idea-openapi.classpath"/>
       </classpath>
     </javac>
-    <jar destfile="out/${plugin}-common.jar" basedir="${dist}/classes/common" />
+    <jar destfile="${dist}/${plugin}-common.jar" basedir="${dist}/classes/common" />
 
     <!-- Agent -->
     <mkdir dir="${dist}/classes/agent"/> 
@@ -81,10 +81,10 @@
         <path refid="library.api-agent.classpath"/>
         <path refid="library.xml.classpath"/>
 
-        <pathelement location="out/${plugin}-common.jar"/>
+        <pathelement location="${dist}/${plugin}-common.jar"/>
       </classpath>
     </javac>
-    <jar destfile="out/${plugin}-agent.jar" basedir="${dist}/classes/agent" />
+    <jar destfile="${dist}/${plugin}-agent.jar" basedir="${dist}/classes/agent" />
 
     <!-- Server -->
     <mkdir dir="${dist}/classes/server"/> 
@@ -94,10 +94,10 @@
         <path refid="library.idea-openapi.classpath"/>
         <path refid="library.api-server.classpath"/>
 
-        <pathelement location="out/${plugin}-common.jar"/>
+        <pathelement location="${dist}/${plugin}-common.jar"/>
       </classpath>
     </javac>
-    <jar destfile="out/${plugin}-server.jar" basedir="${dist}/classes/server">
+    <jar destfile="${dist}/${plugin}-server.jar" basedir="${dist}/classes/server">
          <fileset dir="${plugin}-server/resources" />
     </jar>
 
@@ -112,12 +112,12 @@
         <path refid="library.xml.classpath"/>
         <path refid="library.test-sup.classpath"/>
 
-        <pathelement location="out/${plugin}-common.jar"/>
-        <pathelement location="out/${plugin}-server.jar"/>
-        <pathelement location="out/${plugin}-agent.jar"/>
+        <pathelement location="${dist}/${plugin}-common.jar"/>
+        <pathelement location="${dist}/${plugin}-server.jar"/>
+        <pathelement location="${dist}/${plugin}-agent.jar"/>
       </classpath>
     </javac>
-    <jar destfile="out/${plugin}-tests.jar" basedir="${dist}/classes/tests" />
+    <jar destfile="${dist}/${plugin}-tests.jar" basedir="${dist}/classes/tests" />
   </target>
 
   <target name="dist" depends="compile">
@@ -146,7 +146,6 @@
       <exclude name="*.iws"/>
       <exclude name="test-output/**"/>
       <exclude name="lib/**"/>
-      <exclude name="out/**"/>
       <exclude name="${dist}/**"/>
       <exclude name="deps/**"/>
     </zip>
