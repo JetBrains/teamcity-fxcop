@@ -16,7 +16,7 @@ import jetbrains.buildServer.fxcop.common.FxCopConstants;
  * Time: 15:59:45
  */
 public class FxCopCommandLineBuilderImpl implements FxCopCommandLineBuilder {
-  public File buildCommandLine(
+  public void buildCommandLine(
     final GeneralCommandLine cmd, final Map<String, String> runParameters) throws IOException, RunBuildException {
 
     final String fxcopRoot = runParameters.get(FxCopConstants.SETTINGS_FXCOP_ROOT);
@@ -26,9 +26,6 @@ public class FxCopCommandLineBuilderImpl implements FxCopCommandLineBuilder {
 
     final String fxCopCmd = fxcopRoot + File.separator + FxCopConstants.FXCOPCMD_BINARY;
     final File fxCopCmdFile = new File(fxCopCmd);
-    if (!fxCopCmdFile.exists()) {
-      throw new RunBuildException("File not found: " + fxCopCmd);
-    }
 
     cmd.setExePath(fxCopCmdFile.getAbsolutePath());
 
@@ -42,18 +39,26 @@ public class FxCopCommandLineBuilderImpl implements FxCopCommandLineBuilder {
     }
 
     // Files to be processed
-    final String files = runParameters.get(FxCopConstants.SETTINGS_FILES);
-    if (files != null) {
-      StringTokenizer tokenizer = new StringTokenizer(files);
-      while (tokenizer.hasMoreTokens()) {
-        cmd.addParameter("/f:" + tokenizer.nextToken());
+    final String what = runParameters.get(FxCopConstants.SETTINGS_WHAT_TO_INSPECT);
+    if (FxCopConstants.WHAT_TO_INSPECT_PROJECT.equals(what)) {
+      final String project = runParameters.get(FxCopConstants.SETTINGS_PROJECT);
+      if (project != null) {
+        cmd.addParameter("/project:" + project);
       }
+    } else if (FxCopConstants.WHAT_TO_INSPECT_FILES.equals(what)) {
+      final String files = runParameters.get(FxCopConstants.SETTINGS_FILES);
+      if (files != null) {
+        StringTokenizer tokenizer = new StringTokenizer(files);
+        while (tokenizer.hasMoreTokens()) {
+          cmd.addParameter("/f:" + tokenizer.nextToken());
+        }
+      }
+    } else {
+      throw new RunBuildException("Unknown target to inspect: " + what);
     }
 
     // Output file
-    File outputFile = File.createTempFile("fxcop-runner-output-", ".xml");
-    cmd.addParameter("/out:" + outputFile.getAbsolutePath());
-
-    return outputFile;
+    cmd.addParameter("/out:" + FxCopConstants.OUTPUT_DIR +
+                     File.separator + FxCopConstants.OUTPUT_FILE);
   }
 }

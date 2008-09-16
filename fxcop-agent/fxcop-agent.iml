@@ -24,7 +24,6 @@
     <orderEntry type="library" name="api-agent" level="project" />
     <orderEntry type="library" name="xml" level="project" />
     <orderEntry type="module" module-name="fxcop-common" />
-    <orderEntry type="library" name="log4j" level="project" />
     <orderEntry type="library" name="idea-openapi" level="project" />
   </component>
 </module>

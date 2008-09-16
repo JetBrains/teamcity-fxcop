@@ -20,7 +20,6 @@ public class FxCopReportTab extends ViewLogTab {
   private static String TAB_TITLE = "FxCop";
   private static String TAB_CODE = "fxcopReportTab";
   
-  private static String TAB_BASEPATH = FxCopConstants.REPORT_DIR;
   private static String TAB_STARTPAGE = FxCopConstants.REPORT_FILE;
 
   public FxCopReportTab(final PagePlaces pagePlaces, final SBuildServer server) {
@@ -29,7 +28,7 @@ public class FxCopReportTab extends ViewLogTab {
   }
 
   protected void fillModel(final Map model, final HttpServletRequest request, final SBuild build) {
-    model.put("basePath", TAB_BASEPATH);
+    model.put("basePath", "");
     model.put("startPage", TAB_STARTPAGE);
   }
 
@@ -41,6 +40,6 @@ public class FxCopReportTab extends ViewLogTab {
     if (projectId == null) return false;
 
     final ArtifactsInfo info = new ArtifactsInfo(build);
-    return info.getSize(TAB_BASEPATH) >= 0 || info.getSize(TAB_BASEPATH + "/" + TAB_STARTPAGE) >= 0;
+    return info.getSize(TAB_STARTPAGE) >= 0;
   }
 }

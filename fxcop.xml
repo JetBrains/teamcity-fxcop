@@ -50,8 +50,8 @@
   <path id="library.api-agent.classpath">
     <pathelement location="${path.variable.teamcity.agent.libs}/agent-api.jar"/>
     <pathelement location="${path.variable.teamcity.agent.libs}/jniwrap-3.6.1.jar"/>
-    <pathelement location="${path.variable.teamcity.agent.libs}/buildServerAgent.jar"/>
     <pathelement location="${path.variable.teamcity.agent.libs}/winpack.jar"/>
+    <pathelement location="${path.variable.teamcity.agent.libs}/buildServerAgent.jar"/>
   </path>
   
   <path id="library.test-sup.classpath">
@@ -89,6 +89,8 @@
     <pathelement location="${path.variable.teamcity.tomcat.libs}/jsp-api.jar"/>
     <pathelement location="${path.variable.teamcity.tomcat.libs}/el-api.jar"/>
     <pathelement location="${path.variable.teamcity.tomcat.libs}/annotations-api.jar"/>
+    <pathelement location="${path.variable.teamcity.server.libs}/jstl.jar"/>
+    <pathelement location="${path.variable.teamcity.server.libs}/standard.jar"/>
   </path>
   
   
@@ -352,6 +354,8 @@
     <path refid="library.api-server.classpath"/>
     <path refid="library.idea-openapi.classpath"/>
     <path refid="library.servlets.classpath"/>
+    <pathelement location="${fxcop-common.output.dir}"/>
+    <pathelement location="${fxcop-common.testoutput.dir}"/>
   </path>
   
   <path id="fxcop-tests.runtime.module.classpath">
@@ -365,6 +369,7 @@
     <path refid="library.api-server.classpath"/>
     <path refid="library.idea-openapi.classpath"/>
     <path refid="library.servlets.classpath"/>
+    <path refid="fxcop-common.runtime.module.classpath"/>
   </path>
   
   
@@ -385,7 +390,7 @@
   
   <target name="compile.module.fxcop-tests" depends="compile.module.fxcop-tests.production,compile.module.fxcop-tests.tests" description="Compile module fxcop-tests"/>
   
-  <target name="compile.module.fxcop-tests.production" depends="compile.module.fxcop-agent" description="Compile module fxcop-tests; production classes">
+  <target name="compile.module.fxcop-tests.production" depends="compile.module.fxcop-agent,compile.module.fxcop-common" description="Compile module fxcop-tests; production classes">
     <mkdir dir="${fxcop-tests.output.dir}"/>
     <javac destdir="${fxcop-tests.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.fxcop-tests}"/>

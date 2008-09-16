@@ -53,5 +53,7 @@ public class FxCopRunType extends RunType {
     parameters.put(
       FxCopConstants.SETTINGS_FXCOP_ROOT,
       "%" + FxCopConstants.FXCOP_ROOT_PROPERTY + "%");
+    parameters.put(
+      FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_FILES);
   }
 }

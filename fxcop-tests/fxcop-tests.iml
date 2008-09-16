@@ -12,10 +12,10 @@
     <orderEntry type="module" module-name="fxcop-agent" />
     <orderEntry type="library" name="test-sup" level="project" />
     <orderEntry type="library" name="xml" level="project" />
-    <orderEntry type="library" name="log4j" level="project" />
     <orderEntry type="library" name="api-server" level="project" />
     <orderEntry type="library" name="idea-openapi" level="project" />
     <orderEntry type="library" name="servlets" level="project" />
+    <orderEntry type="module" module-name="fxcop-common" />
   </component>
 </module>
 

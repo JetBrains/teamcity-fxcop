@@ -1,9 +1,8 @@
 package jetbrains.buildServer.fxcop.agent;
 
-import java.io.File;
+import com.intellij.execution.configurations.GeneralCommandLine;
 import java.io.IOException;
 import java.util.Map;
-import com.intellij.execution.configurations.GeneralCommandLine;
 import jetbrains.buildServer.RunBuildException;
 
 /**
@@ -13,7 +12,6 @@ import jetbrains.buildServer.RunBuildException;
  * Time: 16:03:58
  */
 public interface FxCopCommandLineBuilder {
-  // returns output file
-  File buildCommandLine(
+  void buildCommandLine(
     GeneralCommandLine cmd, Map<String, String> runParameters) throws IOException, RunBuildException;
 }
