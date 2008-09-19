@@ -37,16 +37,16 @@ public class FxCopRunner extends GenericProgramRunner {
   private final CurrentBuildTracker myCurrentBuild;
   private File myOutputFile = null;
   private File myOutputDir = null;
-  private final FxCopInspectionsProcessor myInspectionsProcessor;
+  private final FxCopDataProcessor myDataProcessor;
   private final FxCopCommandLineBuilder myCommandLineBuilder;
 
   public FxCopRunner(@NotNull final ArtifactsWatcher artifactsWatcher,
                      @NotNull final CurrentBuildTracker currentBuild,
-                     @NotNull final FxCopInspectionsProcessor inspectionsProcessor,
+                     @NotNull final FxCopDataProcessor dataProcessor,
                      @NotNull final FxCopCommandLineBuilder commandLineBuilder) {
     myArtifactsWatcher = artifactsWatcher;
     myCurrentBuild = currentBuild;
-    myInspectionsProcessor = inspectionsProcessor;
+    myDataProcessor = dataProcessor;
     myCommandLineBuilder = commandLineBuilder;
   }
 
@@ -112,7 +112,7 @@ public class FxCopRunner extends GenericProgramRunner {
     logger.progressMessage("Importing inspection results");
     logger.flush();
 
-    myInspectionsProcessor.processData(myOutputFile, new HashMap<String, String>());
+    myDataProcessor.processData(myOutputFile, new HashMap<String, String>());
   }
 
   private void GenerateHtmlReport() throws TransformerException {
@@ -160,6 +160,6 @@ public class FxCopRunner extends GenericProgramRunner {
       public void flush() {
       }
     };
-    new FxCopInspectionsProcessor(myCurrentBuild, reporter).processData(myOutputFile, new HashMap<String, String>());
+    new FxCopDataProcessor(myCurrentBuild, reporter).processData(myOutputFile, new HashMap<String, String>());
   }
 }

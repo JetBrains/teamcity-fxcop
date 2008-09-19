@@ -8,7 +8,9 @@
       <customJdkName value="" />
       <maximumHeapSize value="128" />
       <maximumStackSize value="32" />
-      <properties />
+      <properties>
+        <property name="teamcity.dist" value="C:\TeamCity" />
+      </properties>
     </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
@@ -418,8 +420,8 @@
       <CLASSES>
         <root url="jar://$teamcity.agent.libs$/agent-api.jar!/" />
         <root url="jar://$teamcity.agent.libs$/jniwrap-3.6.1.jar!/" />
-        <root url="jar://$teamcity.agent.libs$/buildServerAgent.jar!/" />
         <root url="jar://$teamcity.agent.libs$/winpack.jar!/" />
+        <root url="jar://$teamcity.agent.libs$/buildServerAgent.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -472,6 +474,8 @@
         <root url="jar://$teamcity.tomcat.libs$/jsp-api.jar!/" />
         <root url="jar://$teamcity.tomcat.libs$/el-api.jar!/" />
         <root url="jar://$teamcity.tomcat.libs$/annotations-api.jar!/" />
+        <root url="jar://$teamcity.server.libs$/jstl.jar!/" />
+        <root url="jar://$teamcity.server.libs$/standard.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />

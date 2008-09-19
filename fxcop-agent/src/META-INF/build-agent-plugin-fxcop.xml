@@ -3,7 +3,7 @@
 
 <beans default-autowire="constructor">
   <bean name="FxCopPropertiesExtension" class="jetbrains.buildServer.fxcop.agent.FxCopPropertiesExtension" />
-  <bean name="FxCopInspectionsProcessor" class="jetbrains.buildServer.fxcop.agent.FxCopInspectionsProcessor" />
+  <bean name="FxCopInspectionsProcessor" class="jetbrains.buildServer.fxcop.agent.FxCopDataProcessor" />
   <bean name="FxCopRunner" class="jetbrains.buildServer.fxcop.agent.FxCopRunner" />
   <bean name="FxCopCommandLineBuilderImpl" class="jetbrains.buildServer.fxcop.agent.FxCopCommandLineBuilderImpl" />
 </beans>

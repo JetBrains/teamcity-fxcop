@@ -26,7 +26,19 @@ public class FxCopFileProcessor {
     ISSUES, RULES
   }
 
+  private enum EntityType {
+    TARGET, RESOURCE, NAMESPACE, TYPE, MEMBER, ACCESSOR
+  }
+
   private Stack<String> myMessageInspectionId = new Stack<String>();
+  private Stack<EntityType> myCurrentEntity = new Stack<EntityType>();
+  private String myCurrentTarget;
+  private String myCurrentResource;
+  private String myCurrentNamespace;
+  private String myCurrentType;
+  private String myCurrentMember;
+  private String myCurrentAccessor;
+
   private PassType myCurrentPass;
 
   private final File myFxCopReport;
@@ -60,6 +72,8 @@ public class FxCopFileProcessor {
     try {
       try {
         myStream = new XppReader(reader);
+
+        myCurrentEntity.clear();
         handleChildren();
       } finally {
         if (myStream != null) myStream.close();
@@ -98,7 +112,11 @@ public class FxCopFileProcessor {
   }
 
   private void handleNamespaceTag() {
+    myCurrentNamespace = myStream.getAttribute("Name");
+    myCurrentEntity.push(EntityType.NAMESPACE);
     handleChildren();
+    myCurrentEntity.pop();
+    myCurrentNamespace = null;
   }
 
   private void handleMessagesTag() {
@@ -112,15 +130,32 @@ public class FxCopFileProcessor {
     myMessageInspectionId.pop();
   }
 
-  private boolean isNullOrEmpty(String s) {
-    return s == null || s.length() == 0;
+  private String getEntitySpec() {
+    if (myCurrentEntity.isEmpty()) {
+      return "*none*/*none*";
+    }
+
+    switch (myCurrentEntity.peek()) {
+      case NAMESPACE:
+        return "*Namespaces*/" + myCurrentNamespace;
+      case TARGET:
+        return myCurrentTarget + "/*assembly*";
+      case RESOURCE:
+        return myCurrentTarget + "/*Resources*/" + myCurrentResource;
+      case TYPE:
+      case MEMBER:
+      case ACCESSOR:
+        return myCurrentTarget + "/" + myCurrentNamespace.replace(".", "/") + "/" + myCurrentType;
+      default:
+        return "*unknown*/*unknown*";
+    }
   }
 
   private void handleIssueTag() {
     if (myCurrentPass != PassType.ISSUES) {
       return;
     }
-    
+
     InspectionInstance info = new InspectionInstance();
 
     final String path = myStream.getAttribute("Path");
@@ -128,12 +163,18 @@ public class FxCopFileProcessor {
     final String line = myStream.getAttribute("Line");
     final String level = myStream.getAttribute("Level");
 
-    if (path == null || isNullOrEmpty(file) || isNullOrEmpty(line)) {
-      info.setFilePath("-/-");
-      info.setLine(0);
-    } else {
-      if (path.length() == 0) {
-        info.setFilePath(file);
+    String inspectionMessage = reformatInOneLine(myStream.getValue());
+    if (myCurrentEntity.peek() == EntityType.MEMBER) {
+      inspectionMessage += " (" + myCurrentMember + ")";
+    } else if (myCurrentEntity.peek() == EntityType.ACCESSOR) {
+      inspectionMessage += " (" + myCurrentAccessor + ")";
+    }
+    info.setMessage(inspectionMessage);
+
+    String inspectionFile = getEntitySpec();
+    if (!StringUtil.isEmptyOrSpaces(file)) {
+      if (StringUtil.isEmptyOrSpaces(path)) {
+        inspectionFile += " :: " + file;
       } else {
         String reportPath = path;
 
@@ -141,22 +182,27 @@ public class FxCopFileProcessor {
           reportPath = reportPath.substring(mySourceFilePrefix.length());
         }
 
-        reportPath = reportPath.replace('\\', '/');
-        if (reportPath.startsWith("/")) {
+        reportPath = reportPath.replace('/', '|').replace("\\", "|");
+        if (reportPath.startsWith("|")) {
           reportPath = reportPath.substring(1);
         }
 
         if (reportPath.length() > 0) {
-          info.setFilePath(reportPath + '/' + file);
+          inspectionFile += " :: " + reportPath + "|" + file;
         } else {
-          info.setFilePath(file);          
+          inspectionFile += " :: " + file;
         }
       }
+    }
+    info.setFilePath(inspectionFile);
 
+    if (StringUtil.isEmptyOrSpaces(line)) {
+      info.setLine(0);
+    } else {
       info.setLine(Integer.parseInt(line));
     }
 
-    if (!StringUtil.isEmpty(level)) {
+    if (!StringUtil.isEmptyOrSpaces(level)) {
       final InspectionSeverityValues apiLevel = convertLevel(level);
 
       final Collection<String> attrValue = new Vector<String>();
@@ -165,7 +211,6 @@ public class FxCopFileProcessor {
       info.addAttribute(InspectionAttributesId.SEVERITY.toString(), attrValue);
     }
 
-    info.setMessage(reformatInOneLine(myStream.getValue()));
     info.setInspectionId(myMessageInspectionId.peek());
 
     myReporter.reportInspection(info);
@@ -188,7 +233,11 @@ public class FxCopFileProcessor {
   }
 
   private void handleTargetTag() {
+    myCurrentTarget = new File(myStream.getAttribute("Name")).getName();
+    myCurrentEntity.push(EntityType.TARGET);
     handleChildren();
+    myCurrentEntity.pop();
+    myCurrentTarget = null;
   }
 
   private void handleModulesTag() {
@@ -204,7 +253,11 @@ public class FxCopFileProcessor {
   }
 
   private void handleTypeTag() {
+    myCurrentType = myStream.getAttribute("Name");
+    myCurrentEntity.push(EntityType.TYPE);
     handleChildren();
+    myCurrentEntity.pop();
+    myCurrentType = null;
   }
 
   private void handleMembersTag() {
@@ -212,7 +265,11 @@ public class FxCopFileProcessor {
   }
 
   private void handleMemberTag() {
+    myCurrentMember = myStream.getAttribute("Name");
+    myCurrentEntity.push(EntityType.MEMBER);
     handleChildren();
+    myCurrentEntity.pop();
+    myCurrentMember = null;
   }
 
   private void handleAccessorsTag() {
@@ -220,7 +277,11 @@ public class FxCopFileProcessor {
   }
 
   private void handleAccessorTag() {
+    myCurrentAccessor = myStream.getAttribute("Name");
+    myCurrentEntity.push(EntityType.ACCESSOR);
     handleChildren();
+    myCurrentEntity.pop();
+    myCurrentAccessor = null;
   }
 
   private void handleResourcesTag() {
@@ -228,7 +289,11 @@ public class FxCopFileProcessor {
   }
 
   private void handleResourceTag() {
+    myCurrentResource = myStream.getAttribute("Name");
+    myCurrentEntity.push(EntityType.RESOURCE);
     handleChildren();
+    myCurrentEntity.pop();
+    myCurrentResource = null;
   }
 
   private void handleRulesTag() {

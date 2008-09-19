@@ -82,4 +82,8 @@ public class FxCopFileProcessorTest extends BaseTestCase {
   public void testSmoke() throws Exception {
     runTest("smoke.xml");
   }
+
+  public void testTargets() throws Exception {
+    runTest("targets.xml");
+  }
 }

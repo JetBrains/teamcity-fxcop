@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="c:\program files (x86)\microsoft fxcop 1.36\Xml\FxCopReport.xsl"?>
+<FxCopReport Version="1.36">
+ <Namespaces>
+  <Namespace Name="JetBrains.CodeDup.Lib">
+   <Messages>
+    <Message Id="Lib" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Status="Active" Created="2008-07-27 15:52:03Z" FixCategory="Breaking">
+     <Issue Name="Namespace" Certainty="95" Level="Error">Rename namespace JetBrains.CodeDup.Lib so that it no longer conflicts with the reserved language keyword 'Lib'. Using a reserved keyword as the name of a namespace makes it harder for consumers in other languages to use the namespace.</Issue>
+    </Message>
+   </Messages>
+  </Namespace>
+  <Namespace Name="JetBrains.CodeDup.Lib.Cost">
+   <Messages>
+    <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Status="Active" Created="2008-07-27 15:52:03Z" FixCategory="Breaking">
+     <Issue Certainty="50" Level="Warning">Consider merging the types defined in 'JetBrains.CodeDup.Lib.Cost' with another namespace.</Issue>
+    </Message>
+    <Message Id="Lib" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Status="Active" Created="2008-07-27 15:52:03Z" FixCategory="Breaking">
+     <Issue Name="Namespace" Certainty="95" Level="Error">Rename namespace JetBrains.CodeDup.Lib.Cost so that it no longer conflicts with the reserved language keyword 'Lib'. Using a reserved keyword as the name of a namespace makes it harder for consumers in other languages to use the namespace.</Issue>
+    </Message>
+   </Messages>
+  </Namespace>
+ </Namespaces>
+ <Targets>
+   <Target Name="$(ProjectDir)/CodeDup/bin/JetBrains.CodeDup.Lib.dll">
+     <Messages>
+      <Message TypeName="PerTarget" Category="Microsoft.Design" CheckId="CAXXXX" Status="Active" Created="2008-07-27 15:52:03Z" FixCategory="NonBreaking">
+       <Issue Name="PerTargetSample" Certainty="95" Level="CriticalError">Per target sample</Issue>
+      </Message>
+     </Messages>
+   
+   <Modules>
+    <Module Name="jetbrains.codedup.lib.dll">
+     <Messages>
+      <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Status="Active" Created="2008-07-27 15:52:03Z" FixCategory="NonBreaking">
+       <Issue Name="NoStrongName" Certainty="95" Level="CriticalError">Sign 'JetBrains.CodeDup.Lib.dll' with a strong name key.</Issue>
+      </Message>
+     </Messages>
+     <Namespaces>
+      <Namespace Name="JetBrains.CodeDup.Lib">
+       <Types>
+        <Type Name="CodeDupSettings" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+     <Messages>
+      <Message TypeName="PerType" Category="Microsoft.Design" CheckId="CAXXXX" Status="Active" Created="2008-07-27 15:52:03Z" FixCategory="NonBreaking">
+       <Issue Name="PerType" Certainty="95" Level="CriticalError">Per type sample</Issue>
+      </Message>
+     </Messages>
+         <Members>
+          <Member Name="#DEFAULT_DISCARD_COST" Kind="Field" Static="True" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message Id="COST" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Status="Active" Created="2008-07-27 15:52:03Z" FixCategory="Breaking">
+             <Issue Name="Member" Certainty="85" Level="Error">Correct the casing of 'COST' in member name 'CodeDupSettings.DEFAULT_DISCARD_COST' by changing it to 'Cost'.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#System.Collections.ICollection.SyncRoot" Kind="Property" Static="False" Accessibility="Private" ExternallyVisible="True">
+           <Accessors>
+            <Accessor Name="#System.Collections.ICollection.get_SyncRoot()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="True">
+             <Messages>
+              <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Status="Active" Created="2008-07-27 15:52:03Z" FixCategory="NonBreaking">
+               <Issue Certainty="95" Level="Error" Path="C:\Work\Decompiler\DupLib\src\Util" File="Set.cs" Line="220">Make 'Set&lt;T&gt;' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of 'ICollection.SyncRoot.get()' and is visible to derived classes.</Issue>
+              </Message>
+             </Messages>
+            </Accessor>
+           </Accessors>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
+   <Name>Assemblies should have valid strong names</Name>
+   <Description>Either the assembly has no strong name, an invalid one, or the strong name is valid only because of the computer configuration. The assembly should not be deployed in this state. The most common causes of this are: 1) The assembly's contents were modified after it was signed. 2) The signing process failed. 3) The assembly was delay-signed. 4) A registry key existed that allowed the check to pass (where it would not have otherwise).</Description>
+   <Resolution Name="NoStrongName">Sign {0} with a strong name key.</Resolution>
+   <Owner />
+   <Url>http://msdn2.microsoft.com/ms182127(VS.90).aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">CriticalError</MessageLevel>
+   <File Name="DesignRules.dll" Version="9.0.0.0" />
+  </Rule>
+ </Rules>
+</FxCopReport>

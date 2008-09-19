@@ -16,12 +16,12 @@ import org.jetbrains.annotations.NotNull;
  * Date: 15.08.2008
  * Time: 20:11:11
  */
-public class FxCopInspectionsProcessor implements DataProcessor {
+public class FxCopDataProcessor implements DataProcessor {
   private final CurrentBuildTracker myCurrentBuild;
   private final InspectionReporter myReporter;
 
-  public FxCopInspectionsProcessor(final CurrentBuildTracker currentBuild,
-                                   final InspectionReporter reporter) {
+  public FxCopDataProcessor(final CurrentBuildTracker currentBuild,
+                            final InspectionReporter reporter) {
     myCurrentBuild = currentBuild;
     myReporter = reporter;
   }
