@@ -65,7 +65,9 @@
   <target name="test" depends="all">
 
     <testng haltonfailure="no" failureProperty="failure_found" listener="org.testng.reporters.TestHTMLReporter"
-            outputdir="${basedir}/test-output" classpathref="${plugin}-tests.runtime.module.classpath" dumpcommand="true">
+            outputdir="${basedir}/test-output" classpathref="${plugin}-tests.runtime.module.classpath"
+            dumpcommand="true"
+            workingdir="${basedir}">
 
       <jvmarg value="-ea"/>
 
