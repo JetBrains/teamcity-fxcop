@@ -18,12 +18,6 @@ package jetbrains.buildServer.fxcop.agent;
 
 import java.util.EnumSet;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Leonid.Shalupov
- * Date: 24.09.2008
- * Time: 20:49:14
- */
 public enum FxCopReturnCode {
   ANALYSIS_ERROR(0x1),
   RULE_EXCEPTIONS(0x2),

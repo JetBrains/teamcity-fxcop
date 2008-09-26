@@ -18,12 +18,6 @@ package jetbrains.buildServer.fxcop.common;
 
 import jetbrains.buildServer.agent.Constants;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Leonid.Shalupov
- * Date: 28.08.2008
- * Time: 18:30:20
- */
 public interface FxCopConstants {
   String FXCOP_ROOT_PROPERTY = Constants.SYSTEM_PREFIX + "FxCopRoot";
   String RUNNER_TYPE = "FxCop";

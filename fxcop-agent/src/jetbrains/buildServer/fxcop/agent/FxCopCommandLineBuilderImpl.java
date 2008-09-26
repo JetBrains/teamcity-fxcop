@@ -25,12 +25,6 @@ import java.util.StringTokenizer;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Leonid.Shalupov
- * Date: 11.09.2008
- * Time: 15:59:45
- */
 public class FxCopCommandLineBuilderImpl implements FxCopCommandLineBuilder {
   public void buildCommandLine(
     final GeneralCommandLine cmd, final Map<String, String> runParameters) throws IOException, RunBuildException {

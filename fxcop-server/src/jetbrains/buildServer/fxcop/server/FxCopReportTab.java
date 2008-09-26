@@ -26,12 +26,6 @@ import jetbrains.buildServer.web.openapi.ViewLogTab;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Leonid.Shalupov
- * Date: 11.09.2008
- * Time: 13:08:21
- */
 public class FxCopReportTab extends ViewLogTab {
   private static String TAB_TITLE = "FxCop";
   private static String TAB_CODE = "fxcopReportTab";

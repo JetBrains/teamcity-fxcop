@@ -25,12 +25,6 @@ import jetbrains.buildServer.fxcop.agent.loggers.SimpleLogger;
 import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.Test;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Leonid.Shalupov
- * Date: 15.08.2008
- * Time: 20:51:13
- */
 @Test
 public class FxCopFileProcessorTest extends BaseTestCase {
   private String getTestDataPath(final String fileName) {

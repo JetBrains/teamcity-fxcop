@@ -26,12 +26,6 @@ import jetbrains.buildServer.fxcop.agent.loggers.BuildLogSimpleLogger;
 import jetbrains.buildServer.fxcop.agent.loggers.SimpleLogger;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Leonid.Shalupov
- * Date: 15.08.2008
- * Time: 20:11:11
- */
 public class FxCopDataProcessor implements DataProcessor {
   private final CurrentBuildTracker myCurrentBuild;
   private final InspectionReporter myReporter;

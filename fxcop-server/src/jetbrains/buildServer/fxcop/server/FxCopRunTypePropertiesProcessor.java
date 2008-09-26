@@ -25,12 +25,6 @@ import java.util.Map;
 import java.util.List;
 import java.util.Vector;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Leonid.Shalupov
- * Date: 11.09.2008
- * Time: 12:16:01
- */
 public class FxCopRunTypePropertiesProcessor implements PropertiesProcessor {
   public Collection<InvalidProperty> process(Map properties) {
     List<InvalidProperty> result = new Vector<InvalidProperty>();

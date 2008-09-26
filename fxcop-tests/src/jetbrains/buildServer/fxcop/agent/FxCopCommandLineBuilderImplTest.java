@@ -26,12 +26,6 @@ import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Leonid.Shalupov
- * Date: 16.09.2008
- * Time: 19:57:15
- */
 @Test
 public class FxCopCommandLineBuilderImplTest extends BaseTestCase {
   private Map<String, String> myRunParameters;

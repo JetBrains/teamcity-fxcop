@@ -23,12 +23,6 @@ import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Leonid.Shalupov
- * Date: 28.08.2008
- * Time: 20:34:56
- */
 public class FxCopRunType extends RunType {
   public FxCopRunType(final RunTypeRegistry runTypeRegistry) {
     runTypeRegistry.registerRunType(this);

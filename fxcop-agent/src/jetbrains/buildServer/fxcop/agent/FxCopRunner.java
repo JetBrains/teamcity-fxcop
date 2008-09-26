@@ -40,12 +40,6 @@ import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Leonid.Shalupov
- * Date: 28.08.2008
- * Time: 18:47:13
- */
 public class FxCopRunner extends GenericProgramRunner {
   private final ArtifactsWatcher myArtifactsWatcher;
   private final CurrentBuildTracker myCurrentBuild;

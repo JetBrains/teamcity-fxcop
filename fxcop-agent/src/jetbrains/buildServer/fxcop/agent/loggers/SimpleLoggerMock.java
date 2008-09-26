@@ -18,12 +18,6 @@ package jetbrains.buildServer.fxcop.agent.loggers;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Leonid.Shalupov
- * Date: 15.08.2008
- * Time: 20:22:59
- */
 public class SimpleLoggerMock implements SimpleLogger {
   private final StringBuilder myText = new StringBuilder();
 

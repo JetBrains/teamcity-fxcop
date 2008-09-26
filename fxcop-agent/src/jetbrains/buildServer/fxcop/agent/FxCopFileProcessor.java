@@ -29,12 +29,6 @@ import jetbrains.buildServer.agent.inspections.*;
 import jetbrains.buildServer.fxcop.agent.loggers.SimpleLogger;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Leonid.Shalupov
- * Date: 27.07.2008
- * Time: 20:00:01
- */
 public class FxCopFileProcessor {
   private static char BYTE_ORDER_MARK = 65279;
 
