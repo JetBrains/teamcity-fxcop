@@ -4,26 +4,24 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.openapi.util.text.StringUtil;
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.util.FileUtil;
-import jetbrains.buildServer.agent.AgentRunningBuild;
-import jetbrains.buildServer.agent.BuildAgentConfiguration;
-import jetbrains.buildServer.agent.BuildProgressLogger;
-import jetbrains.buildServer.agent.CurrentBuildTracker;
+import jetbrains.buildServer.agent.*;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
 import jetbrains.buildServer.agent.inspections.InspectionInstance;
 import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.inspections.InspectionTypeInfo;
 import jetbrains.buildServer.agent.runner.GenericProgramRunner;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
+import jetbrains.buildServer.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -66,11 +64,11 @@ public class FxCopRunner extends GenericProgramRunner {
     final AgentRunningBuild currentBuild = myCurrentBuild.getCurrentBuild();
 
     myCommandLineBuilder.buildCommandLine(cmd, runParameters);
-    
+
     myOutputDir = new File(currentBuild.getWorkingDirectory(), FxCopConstants.OUTPUT_DIR);
     FileUtil.delete(myOutputDir);
     myOutputDir.mkdirs();
-    
+
     myOutputFile = new File(myOutputDir, FxCopConstants.OUTPUT_FILE);
 
     final BuildProgressLogger logger = currentBuild.getBuildLogger();
@@ -80,11 +78,35 @@ public class FxCopRunner extends GenericProgramRunner {
   }
 
   @Override
-  protected void processTerminated(RunEnvironment runEnvironment, boolean badExitCode) {
-    if (badExitCode) {
-      return;
+  protected void prepareForRunning(final Map<String, String> runParameters, final Map<String, String> buildParameters, final File tempDir)
+    throws RunBuildException {
+    runParameters.put(AgentRuntimeProperties.FAIL_EXIT_CODE, "false");
+  }
+
+  @Override
+  protected boolean failBuildOnExitCode(final int code, final RunEnvironment runEnv) {
+    final BuildProgressLogger logger = myCurrentBuild.getCurrentBuild().getBuildLogger();
+
+    if (code != 0) {
+      final EnumSet<FxCopReturnCode> errors = FxCopReturnCode.decodeReturnCode(code);
+
+      StringBuilder exitCodeStr = new StringBuilder("FxCop return code contains flags:");
+      for (FxCopReturnCode rc : errors) {
+        exitCodeStr.append(" ").append(rc.name());
+      }
+
+      logger.error(exitCodeStr.toString());
+
+      if (errors.contains(FxCopReturnCode.BUILD_BREAKING_MESSAGE)) {
+        logger.buildFailureDescription("Return code contains 'Build breaking message'");
+      }
     }
 
+    return (code & FxCopReturnCode.BUILD_BREAKING_MESSAGE.getCode()) != 0;
+  }
+
+  @Override
+  protected void processTerminated(RunEnvironment runEnvironment, boolean badExitCode) {
     final AgentRunningBuild currentBuild = myCurrentBuild.getCurrentBuild();
     final BuildProgressLogger logger = currentBuild.getBuildLogger();
 
@@ -101,8 +123,16 @@ public class FxCopRunner extends GenericProgramRunner {
       logger.buildFailureDescription("FxCop results import error");
     }
 
-    myArtifactsWatcher.addNewArtifactsPath(FxCopConstants.OUTPUT_DIR + "/*.xml");
-    myArtifactsWatcher.addNewArtifactsPath(FxCopConstants.OUTPUT_DIR + "/*.html");    
+    final File outputDir = new File(currentBuild.getWorkingDirectory(),
+                                    FxCopConstants.OUTPUT_DIR);
+
+    if (outputDir.listFiles(new ExtensionFilenameFilter(".xml")).length > 0) {
+      myArtifactsWatcher.addNewArtifactsPath(FxCopConstants.OUTPUT_DIR + "/*.xml");
+    }
+
+    if (outputDir.listFiles(new ExtensionFilenameFilter(".html")).length > 0) {
+      myArtifactsWatcher.addNewArtifactsPath(FxCopConstants.OUTPUT_DIR + "/*.html");
+    }
   }
 
   private void ImportInspectionResults() throws Exception {

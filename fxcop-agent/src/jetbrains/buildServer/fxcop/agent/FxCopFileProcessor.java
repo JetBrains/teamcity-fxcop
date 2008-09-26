@@ -100,6 +100,9 @@ public class FxCopFileProcessor {
         myLogger.info("Won't handle tag " + nodeName);
       } catch (InvocationTargetException e) {
         myLogger.error(e.toString());
+        if (e.getTargetException() != null) {
+          myLogger.error(e.getTargetException().toString());                 
+        }
       } catch (IllegalAccessException e) {
         myLogger.error(e.toString());
       }
@@ -230,6 +233,64 @@ public class FxCopFileProcessor {
 
   private void handleTargetsTag() {
     handleChildren();
+  }
+
+  private void handleExceptionsTag() {
+    handleChildren();
+  }
+
+  private void handleExceptionTag() {
+    if (myCurrentPass != PassType.ISSUES) {
+      return;
+    }
+    
+    final String keyword = myStream.getAttribute("Keyword");
+    final String kind = myStream.getAttribute("Kind");
+    final boolean warningMessage = "True".equals(myStream.getAttribute("TreatAsWarning"));
+
+    String type = null, message = null, stacktrace = null;
+    while (myStream.hasMoreChildren()) {
+      myStream.moveDown();
+
+      if (myStream.getNodeName().equals("Type")) {
+        type = reformatInOneLine(myStream.getValue());
+      }
+
+      if (myStream.getNodeName().equals("ExceptionMessage")) {
+        message = reformatInOneLine(myStream.getValue());
+      }
+
+      if (myStream.getNodeName().equals("StackTrace")) {
+        stacktrace = myStream.getValue();
+      }
+
+      myStream.moveUp();
+    }
+
+    final StringBuilder descr = new StringBuilder("FxCop exception:");
+
+    if (keyword != null) {
+      descr.append(" Keyword=").append(keyword);
+    }
+    if (kind != null) {
+      descr.append(" Kind=").append(kind);
+    }
+    if (type != null) {
+      descr.append(" Type=").append(type);
+    }
+    if (message != null) {
+      descr.append(" ").append(message);
+    }
+    if (stacktrace != null) {
+      final String lineSeparator = System.getProperty("line.separator");
+      descr.append(lineSeparator).append(stacktrace);
+    }
+
+    if (warningMessage) {
+      myLogger.warning(descr.toString());
+    } else {
+      myLogger.error(descr.toString());
+    }
   }
 
   private void handleTargetTag() {

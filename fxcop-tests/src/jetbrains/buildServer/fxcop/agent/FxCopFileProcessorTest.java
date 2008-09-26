@@ -5,7 +5,7 @@ import jetbrains.buildServer.BaseTestCase;
 import jetbrains.buildServer.agent.inspections.InspectionInstance;
 import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.inspections.InspectionTypeInfo;
-import jetbrains.buildServer.fxcop.agent.loggers.SimpleLoggerMock;
+import jetbrains.buildServer.fxcop.agent.loggers.SimpleLogger;
 import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.Test;
 
@@ -42,24 +42,13 @@ public class FxCopFileProcessorTest extends BaseTestCase {
     final String resultsFile = prefix + ".tmp";
     final String goldFile = prefix + ".gold";
 
-    final SimpleLoggerMock logger = new SimpleLoggerMock();
-
     new File(resultsFile).delete();
     new File(logFile).delete();
 
     final StringBuilder results = new StringBuilder();
-    final InspectionReporter reporter = new InspectionReporter() {
-      public void reportInspection(@NotNull final InspectionInstance inspection) {
-        results.append(inspection.toString()).append("\n");
-      }
-
-      public void reportInspectionType(@NotNull final InspectionTypeInfo inspectionType) {
-        results.append(inspectionType.toString()).append("\n");
-      }
-
-      public void flush() {
-      }
-    };
+    
+    final SimpleLogger logger = createFakeLogger(results);    
+    final InspectionReporter reporter = createFakeReporter(results);
 
     final FxCopFileProcessor processor = new FxCopFileProcessor(
       new File(prefix), "C:\\Work\\Decompiler", logger, reporter);
@@ -71,12 +60,39 @@ public class FxCopFileProcessorTest extends BaseTestCase {
       resultsWriter.write(results.toString());
       resultsWriter.close();
 
-      final FileWriter logWriter = new FileWriter(logFile);
-      logWriter.write(logger.getText());
-      logWriter.close();
-
       assertEquals(readFile(goldf), results.toString());
     }
+  }
+
+  private InspectionReporter createFakeReporter(final StringBuilder results) {
+    return new InspectionReporter() {
+      public void reportInspection(@NotNull final InspectionInstance inspection) {
+        results.append(inspection.toString()).append("\n");
+      }
+
+      public void reportInspectionType(@NotNull final InspectionTypeInfo inspectionType) {
+        results.append(inspectionType.toString()).append("\n");
+      }
+
+      public void flush() {
+      }
+    };
+  }
+
+  private SimpleLogger createFakeLogger(final StringBuilder results) {
+    return new SimpleLogger() {
+      public void info(@NotNull final String message) {
+        results.append("INFO: ").append(message).append("\n");
+      }
+
+      public void warning(@NotNull final String message) {
+        results.append("WARNING: ").append(message).append("\n");
+      }
+
+      public void error(@NotNull final String message) {
+        results.append("ERROR: ").append(message).append("\n");
+      }
+    };
   }
 
   public void testSmoke() throws Exception {
@@ -85,5 +101,9 @@ public class FxCopFileProcessorTest extends BaseTestCase {
 
   public void testTargets() throws Exception {
     runTest("targets.xml");
+  }
+
+  public void testExceptions() throws Exception {
+    runTest("exceptions.xml");
   }
 }
