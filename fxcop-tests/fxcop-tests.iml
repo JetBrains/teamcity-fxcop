@@ -17,5 +17,10 @@
     <orderEntry type="library" name="servlets" level="project" />
     <orderEntry type="module" module-name="fxcop-common" />
   </component>
+  <component name="copyright">
+    <Base>
+      <setting name="state" value="1" />
+    </Base>
+  </component>
 </module>
 

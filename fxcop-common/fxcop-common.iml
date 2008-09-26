@@ -10,5 +10,10 @@
     <orderEntry type="library" name="api-common" level="project" />
     <orderEntry type="library" name="idea-openapi" level="project" />
   </component>
+  <component name="copyright">
+    <Base>
+      <setting name="state" value="1" />
+    </Base>
+  </component>
 </module>
 

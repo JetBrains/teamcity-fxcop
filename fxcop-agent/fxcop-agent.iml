@@ -6,10 +6,6 @@
         <fileset id="fileset1" name="FxCopAgentSpring" removed="false">
           <file>file://$MODULE_DIR$/src/META-INF/build-agent-plugin-fxcop.xml</file>
         </fileset>
-        <options>
-          <option name="enableValidation" value="false" />
-          <option name="reportErrorsAsWarnings" value="true" />
-        </options>
       </configuration>
     </facet>
   </component>
@@ -25,6 +21,11 @@
     <orderEntry type="library" name="xml" level="project" />
     <orderEntry type="module" module-name="fxcop-common" />
     <orderEntry type="library" name="idea-openapi" level="project" />
+  </component>
+  <component name="copyright">
+    <Base>
+      <setting name="state" value="1" />
+    </Base>
   </component>
 </module>
 
