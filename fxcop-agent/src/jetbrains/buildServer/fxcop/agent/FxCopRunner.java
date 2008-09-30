@@ -159,7 +159,7 @@ public class FxCopRunner extends GenericProgramRunner {
     final AgentRunningBuild currentBuild = myCurrentBuild.getCurrentBuild();
     final BuildProgressLogger logger = currentBuild.getBuildLogger();
 
-    final String fxcopReportXslt = currentBuild.getRunParameters().get(FxCopConstants.SETTINGS_REPORT_XSLT);
+    final String fxcopReportXslt = currentBuild.getRunnerParameters().get(FxCopConstants.SETTINGS_REPORT_XSLT);
     if (StringUtil.isEmptyOrSpaces(fxcopReportXslt)) {
       logger.message("Skipped html report generation since not requested");
       return;
