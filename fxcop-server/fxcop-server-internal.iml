@@ -6,6 +6,10 @@
         <fileset id="fileset1" name="My Fileset" removed="false">
           <file>file://$MODULE_DIR$/src/META-INF/build-server-plugin-fxcop.xml</file>
         </fileset>
+        <options>
+          <option name="enableValidation" value="false" />
+          <option name="reportErrorsAsWarnings" value="true" />
+        </options>
       </configuration>
     </facet>
     <facet type="web" name="fxcop-server">
@@ -18,8 +22,10 @@
           <setting name="EXPLODED_ENABLED" value="false" />
           <setting name="JAR_URL" value="file://" />
           <setting name="JAR_ENABLED" value="false" />
+          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
           <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
           <setting name="RUN_JASPER_VALIDATION" value="false" />
+          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
           <containerElement type="facet" facetId="web-openapi/web/web-openapi">
@@ -49,17 +55,9 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="server-openapi" />
     <orderEntry type="module" module-name="utils" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/j2ee.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="module" module-name="web-openapi" />
     <orderEntry type="module" module-name="fxcop-common-internal" />
+    <orderEntry type="library" name="Tomcat" level="project" />
   </component>
   <component name="copyright">
     <Base>
