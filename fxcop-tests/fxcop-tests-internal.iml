@@ -16,6 +16,7 @@
     <orderEntry type="module" module-name="fxcop-agent-internal" />
     <orderEntry type="module" module-name="fxcop-common-internal" />
     <orderEntry type="module" module-name="fxcop-server-internal" />
+    <orderEntry type="module" module-name="runtime-util" />
   </component>
   <component name="copyright">
     <Base>
