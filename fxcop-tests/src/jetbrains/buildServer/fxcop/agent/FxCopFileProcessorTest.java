@@ -29,7 +29,13 @@ import org.testng.annotations.Test;
 @Test
 public class FxCopFileProcessorTest extends BaseTestCase {
   private String getTestDataPath(final String fileName) {
-    return "testData/" + fileName;
+    File file = new File("testData/" + fileName);
+
+    if (!file.exists()) {
+      file = new File("svnrepo/fxcop/testData/" + fileName);
+    }
+
+    return file.getAbsolutePath();
   }
 
   static private String readFile(@NotNull final File file) throws IOException {
@@ -57,7 +63,7 @@ public class FxCopFileProcessorTest extends BaseTestCase {
     new File(logFile).delete();
 
     final StringBuilder results = new StringBuilder();
-    
+
     final SimpleBuildLogger logger = new SimpleBuildLoggerMock(results);
     final InspectionReporter reporter = createFakeReporter(results);
 
