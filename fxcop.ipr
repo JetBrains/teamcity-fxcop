@@ -542,6 +542,7 @@
     <library name="api-common">
       <CLASSES>
         <root url="jar://$teamcity.server.libs$/common-api.jar!/" />
+        <root url="jar://$teamcity.server.libs$/runtime-util.jar!/" />
         <root url="jar://$teamcity.server.libs$/util.jar!/" />
       </CLASSES>
       <JAVADOC />
@@ -552,7 +553,7 @@
         <root url="jar://$teamcity.agent.libs$/agent-api.jar!/" />
         <root url="jar://$teamcity.agent.libs$/jniwrap-3.6.1.jar!/" />
         <root url="jar://$teamcity.agent.libs$/winpack.jar!/" />
-        <root url="jar://$teamcity.agent.libs$/buildServerAgent.jar!/" />
+        <root url="jar://$teamcity.agent.libs$/agent.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />

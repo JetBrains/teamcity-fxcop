@@ -44,6 +44,7 @@
   
   <path id="library.api-common.classpath">
     <pathelement location="${path.variable.teamcity.server.libs}/common-api.jar"/>
+    <pathelement location="${path.variable.teamcity.server.libs}/runtime-util.jar"/>
     <pathelement location="${path.variable.teamcity.server.libs}/util.jar"/>
   </path>
   
@@ -51,7 +52,7 @@
     <pathelement location="${path.variable.teamcity.agent.libs}/agent-api.jar"/>
     <pathelement location="${path.variable.teamcity.agent.libs}/jniwrap-3.6.1.jar"/>
     <pathelement location="${path.variable.teamcity.agent.libs}/winpack.jar"/>
-    <pathelement location="${path.variable.teamcity.agent.libs}/buildServerAgent.jar"/>
+    <pathelement location="${path.variable.teamcity.agent.libs}/agent.jar"/>
   </path>
   
   <path id="library.test-sup.classpath">
