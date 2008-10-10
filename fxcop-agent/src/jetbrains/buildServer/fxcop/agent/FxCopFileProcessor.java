@@ -25,8 +25,8 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Stack;
 import java.util.Vector;
+import jetbrains.buildServer.agent.SimpleBuildLogger;
 import jetbrains.buildServer.agent.inspections.*;
-import jetbrains.buildServer.fxcop.agent.loggers.SimpleLogger;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopFileProcessor {
@@ -52,14 +52,14 @@ public class FxCopFileProcessor {
   private PassType myCurrentPass;
 
   private final File myFxCopReport;
-  private final SimpleLogger myLogger;
+  private final SimpleBuildLogger myLogger;
   private final String mySourceFilePrefix;
   private final InspectionReporter myReporter;
   private HierarchicalStreamReader myStream = null;
 
   public FxCopFileProcessor(@NotNull final File fxcopReport,
                             @NotNull final String sourceFilePrefix,
-                            @NotNull final SimpleLogger logger,
+                            @NotNull final SimpleBuildLogger logger,
                             @NotNull final InspectionReporter reporter) {
     myFxCopReport = fxcopReport;
     myLogger = logger;
@@ -107,7 +107,7 @@ public class FxCopFileProcessor {
         //handler.setAccessible(true);
         handler.invoke(this);
       } catch (NoSuchMethodException e) {
-        myLogger.info("Won't handle tag " + nodeName);
+        myLogger.message("Won't handle tag " + nodeName);
       } catch (InvocationTargetException e) {
         myLogger.error(e.toString());
         if (e.getTargetException() != null) {

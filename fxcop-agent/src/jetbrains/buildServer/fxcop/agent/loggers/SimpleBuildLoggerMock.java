@@ -16,19 +16,36 @@
 
 package jetbrains.buildServer.fxcop.agent.loggers;
 
+import jetbrains.buildServer.agent.SimpleBuildLogger;
 import org.jetbrains.annotations.NotNull;
 
-public class SimpleLoggerMock implements SimpleLogger {
-  private final StringBuilder myText = new StringBuilder();
+public class SimpleBuildLoggerMock implements SimpleBuildLogger {
+  private final StringBuilder myText;
 
-  public void info(@NotNull final String message) {
-    myText.append("INFO: ");
-    myText.append(message);
-    myText.append("\n");
+  public SimpleBuildLoggerMock(final StringBuilder text) {
+    myText = text;
   }
 
   public void warning(@NotNull final String message) {
     myText.append("WARNING: ");
+    myText.append(message);
+    myText.append("\n");
+  }
+
+  public void exception(final Throwable th) {
+    myText.append("EXCEPTION: ");
+    myText.append(th.toString());
+    myText.append("\n");
+  }
+
+  public void progressMessage(final String message) {
+    myText.append("PROGRESS: ");
+    myText.append(message);
+    myText.append("\n");
+  }
+
+  public void message(final String message) {
+    myText.append("MESSAGE: ");
     myText.append(message);
     myText.append("\n");
   }
@@ -39,7 +56,7 @@ public class SimpleLoggerMock implements SimpleLogger {
     myText.append("\n");
   }
 
-  public String getText() {
-    return myText.toString();
+  public StringBuilder getText() {
+    return myText;
   }
 }

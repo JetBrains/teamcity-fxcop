@@ -21,9 +21,8 @@ import java.util.Map;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.CurrentBuildTracker;
 import jetbrains.buildServer.agent.DataProcessor;
+import jetbrains.buildServer.agent.SimpleBuildLogger;
 import jetbrains.buildServer.agent.inspections.InspectionReporter;
-import jetbrains.buildServer.fxcop.agent.loggers.BuildLogSimpleLogger;
-import jetbrains.buildServer.fxcop.agent.loggers.SimpleLogger;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopDataProcessor implements DataProcessor {
@@ -40,7 +39,7 @@ public class FxCopDataProcessor implements DataProcessor {
     final AgentRunningBuild currentBuild = myCurrentBuild.getCurrentBuild();
     final String workingRoot = currentBuild.getWorkingDirectory().toString();
 
-    final SimpleLogger logger = new BuildLogSimpleLogger(currentBuild.getBuildLogger());
+    final SimpleBuildLogger logger = currentBuild.getBuildLogger();
     final FxCopFileProcessor fileProcessor =
       new FxCopFileProcessor(file, workingRoot, logger, myReporter);
 

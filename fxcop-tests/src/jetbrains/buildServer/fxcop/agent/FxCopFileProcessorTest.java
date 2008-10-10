@@ -18,10 +18,11 @@ package jetbrains.buildServer.fxcop.agent;
 
 import java.io.*;
 import jetbrains.buildServer.BaseTestCase;
+import jetbrains.buildServer.agent.SimpleBuildLogger;
 import jetbrains.buildServer.agent.inspections.InspectionInstance;
 import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.inspections.InspectionTypeInfo;
-import jetbrains.buildServer.fxcop.agent.loggers.SimpleLogger;
+import jetbrains.buildServer.fxcop.agent.loggers.SimpleBuildLoggerMock;
 import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.Test;
 
@@ -57,7 +58,7 @@ public class FxCopFileProcessorTest extends BaseTestCase {
 
     final StringBuilder results = new StringBuilder();
     
-    final SimpleLogger logger = createFakeLogger(results);    
+    final SimpleBuildLogger logger = new SimpleBuildLoggerMock(results);
     final InspectionReporter reporter = createFakeReporter(results);
 
     final FxCopFileProcessor processor = new FxCopFileProcessor(
@@ -85,22 +86,6 @@ public class FxCopFileProcessorTest extends BaseTestCase {
       }
 
       public void flush() {
-      }
-    };
-  }
-
-  private SimpleLogger createFakeLogger(final StringBuilder results) {
-    return new SimpleLogger() {
-      public void info(@NotNull final String message) {
-        results.append("INFO: ").append(message).append("\n");
-      }
-
-      public void warning(@NotNull final String message) {
-        results.append("WARNING: ").append(message).append("\n");
-      }
-
-      public void error(@NotNull final String message) {
-        results.append("ERROR: ").append(message).append("\n");
       }
     };
   }
