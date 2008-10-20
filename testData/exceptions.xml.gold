@@ -1,4 +1,4 @@
-ERROR: FxCop exception: Keyword=CA0001 Kind=Engine Type=Microsoft.FxCop.Sdk.InvalidMetadataException The following error was encountered while reading module 'JetBrains.Platform.ReSharper.VSIntegration': Assembly reference not resolved: EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a.
+WARNING: FxCop error: Keyword=CA0001 Kind=Engine Type=Microsoft.FxCop.Sdk.InvalidMetadataException The following error was encountered while reading module 'JetBrains.Platform.ReSharper.VSIntegration': Assembly reference not resolved: EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a.
    at Microsoft.FxCop.Sdk.Reader.HandleError(ModuleNode mod, String errorMessage)
    at Microsoft.FxCop.Sdk.Reader.GetAssemblyFromReference(AssemblyReference assemblyReference)
    at Microsoft.FxCop.Sdk.AssemblyReference.get_Assembly()
@@ -27,5 +27,5 @@ ERROR: FxCop exception: Keyword=CA0001 Kind=Engine Type=Microsoft.FxCop.Sdk.Inva
    at Microsoft.FxCop.Engines.Introspection.LoadVisitor.VisitAssembly(AssemblyNode assembly, TargetFile target)
    at Microsoft.FxCop.Engines.Introspection.LoadVisitor.Load(TargetFile target, Boolean buildTree, Boolean queueItems, AssemblyNode loadedAssembly)
    at Microsoft.FxCop.Engines.Introspection.LoadVisitor.LoadAssemblies(Queue queue, ExceptionCollection exceptions)
-ERROR: FxCop exception: Keyword=CA0058 Kind=Engine Type=Microsoft.FxCop.Sdk.FxCopException The referenced assembly 'EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' could not be found. This assembly is required for analysis and was referenced by: 'JetBrains.Platform.ReSharper.VSIntegration.dll'.
-WARNING: FxCop exception: Keyword=CA0060 Kind=Engine Type=Microsoft.FxCop.Sdk.FxCopException The indirectly-referenced assembly 'stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' could not be found. This assembly is not required for analysis, however, analysis results could be incomplete. This assembly was referenced by: 'Microsoft.VisualStudio.CommandBars.dll'.
+WARNING: FxCop error: Keyword=CA0058 Kind=Engine Type=Microsoft.FxCop.Sdk.FxCopException The referenced assembly 'EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' could not be found. This assembly is required for analysis and was referenced by: 'JetBrains.Platform.ReSharper.VSIntegration.dll'.
+WARNING: FxCop warning: Keyword=CA0060 Kind=Engine Type=Microsoft.FxCop.Sdk.FxCopException The indirectly-referenced assembly 'stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' could not be found. This assembly is not required for analysis, however, analysis results could be incomplete. This assembly was referenced by: 'Microsoft.VisualStudio.CommandBars.dll'.

@@ -254,6 +254,7 @@ public class FxCopFileProcessor {
     
     final String keyword = myStream.getAttribute("Keyword");
     final String kind = myStream.getAttribute("Kind");
+    final String treatAsWarning = myStream.getAttribute("TreatAsWarning");
 
     String type = null, message = null, stacktrace = null;
     while (myStream.hasMoreChildren()) {
@@ -274,7 +275,7 @@ public class FxCopFileProcessor {
       myStream.moveUp();
     }
 
-    final boolean warningMessage = "True".equals(myStream.getAttribute("TreatAsWarning"));
+    final boolean warningMessage = treatAsWarning != null && treatAsWarning.equals("True");
     final StringBuilder descr = new StringBuilder("FxCop " + (warningMessage ? "warning" : "error") + ":");
 
     if (keyword != null) {
