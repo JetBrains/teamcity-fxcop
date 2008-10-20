@@ -26,6 +26,9 @@
     <exclude name="**/vssver2.scc/**"/>
     <exclude name="**/.pyc/**"/>
     <exclude name="**/.pyo/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/.git/**"/>
   </patternset>
   <patternset id="compiler.resources">
     <include name="**/?*.properties"/>
@@ -43,59 +46,38 @@
   <!-- Project Libraries -->
   
   <path id="library.api-common.classpath">
-    <pathelement location="${path.variable.teamcity.server.libs}/common-api.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/runtime-util.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/util.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/log4j-1.2.12.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/openapi/runtime-util.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/util.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/openapi/common-api.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/annotations.jar"/>
   </path>
   
   <path id="library.api-agent.classpath">
-    <pathelement location="${path.variable.teamcity.agent.libs}/agent-api.jar"/>
-    <pathelement location="${path.variable.teamcity.agent.libs}/jniwrap-3.6.1.jar"/>
-    <pathelement location="${path.variable.teamcity.agent.libs}/winpack.jar"/>
-    <pathelement location="${path.variable.teamcity.agent.libs}/agent.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/openapi/agent-api.jar"/>
   </path>
   
   <path id="library.test-sup.classpath">
-    <pathelement location="${path.variable.teamcity.server.libs}/jmock-SNAPSHOT.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/junit-3.8.1.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/ant-runner-server.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/artefacts.jar"/>
     <pathelement location="${basedir}/lib/testng-jdk15.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/junit-3.8.1.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/jmock-SNAPSHOT.jar"/>
   </path>
   
   <path id="library.xml.classpath">
-    <pathelement location="${path.variable.teamcity.server.libs}/xercesImpl.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/xstream-1.2.1.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/xpp3_min-1.1.3.4.M.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/xmlrpc-2.0.1.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/xmlrpc-2.0.1.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/xpp3_min-1.1.3.4.M.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/xercesImpl.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/xstream-1.2.1.jar"/>
   </path>
   
   <path id="library.api-server.classpath">
-    <pathelement location="${path.variable.teamcity.server.libs}/server-api.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/openapi/server-api.jar"/>
   </path>
   
-  <path id="library.idea-openapi.classpath">
-    <pathelement location="${path.variable.teamcity.server.libs}/openapi.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/resources_en.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/annotations.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/util.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/trove4j.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/extensions.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/log4j-1.2.12.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/jdom.jar"/>
+  <path id="library.jni.classpath">
+    <pathelement location="${basedir}/lib/teamcity/server/winpack.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/jniwrap-3.6.1.jar"/>
   </path>
-  
-  <path id="library.servlets.classpath">
-    <pathelement location="${path.variable.teamcity.tomcat.libs}/servlet-api.jar"/>
-    <pathelement location="${path.variable.teamcity.tomcat.libs}/jsp-api.jar"/>
-    <pathelement location="${path.variable.teamcity.tomcat.libs}/el-api.jar"/>
-    <pathelement location="${path.variable.teamcity.tomcat.libs}/annotations-api.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/jstl.jar"/>
-    <pathelement location="${path.variable.teamcity.server.libs}/standard.jar"/>
-  </path>
-  
-  
-  <!-- Global Libraries -->
   
   
   <!-- Application Server Libraries -->
@@ -120,14 +102,12 @@
   
   <path id="fxcop-common.module.classpath">
     <path refid="library.api-common.classpath"/>
-    <path refid="library.idea-openapi.classpath"/>
   </path>
   
   <path id="fxcop-common.runtime.module.classpath">
     <pathelement location="${fxcop-common.output.dir}"/>
     <pathelement location="${fxcop-common.testoutput.dir}"/>
     <path refid="library.api-common.classpath"/>
-    <path refid="library.idea-openapi.classpath"/>
   </path>
   
   
@@ -195,7 +175,7 @@
     <path refid="library.xml.classpath"/>
     <pathelement location="${fxcop-common.output.dir}"/>
     <pathelement location="${fxcop-common.testoutput.dir}"/>
-    <path refid="library.idea-openapi.classpath"/>
+    <path refid="library.jni.classpath"/>
   </path>
   
   <path id="fxcop-agent.runtime.module.classpath">
@@ -205,7 +185,7 @@
     <path refid="library.api-agent.classpath"/>
     <path refid="library.xml.classpath"/>
     <path refid="fxcop-common.runtime.module.classpath"/>
-    <path refid="library.idea-openapi.classpath"/>
+    <path refid="library.jni.classpath"/>
   </path>
   
   
@@ -272,8 +252,7 @@
     <pathelement location="${fxcop-common.output.dir}"/>
     <pathelement location="${fxcop-common.testoutput.dir}"/>
     <path refid="library.api-common.classpath"/>
-    <path refid="library.idea-openapi.classpath"/>
-    <path refid="library.servlets.classpath"/>
+    <pathelement location="${module.fxcop-server.basedir}/lib/servlet-api.jar"/>
   </path>
   
   <path id="fxcop-server.runtime.module.classpath">
@@ -282,8 +261,7 @@
     <path refid="library.api-server.classpath"/>
     <path refid="fxcop-common.runtime.module.classpath"/>
     <path refid="library.api-common.classpath"/>
-    <path refid="library.idea-openapi.classpath"/>
-    <path refid="library.servlets.classpath"/>
+    <pathelement location="${module.fxcop-server.basedir}/lib/servlet-api.jar"/>
   </path>
   
   
@@ -353,8 +331,6 @@
     <path refid="library.test-sup.classpath"/>
     <path refid="library.xml.classpath"/>
     <path refid="library.api-server.classpath"/>
-    <path refid="library.idea-openapi.classpath"/>
-    <path refid="library.servlets.classpath"/>
     <pathelement location="${fxcop-common.output.dir}"/>
     <pathelement location="${fxcop-common.testoutput.dir}"/>
   </path>
@@ -368,8 +344,6 @@
     <path refid="library.test-sup.classpath"/>
     <path refid="library.xml.classpath"/>
     <path refid="library.api-server.classpath"/>
-    <path refid="library.idea-openapi.classpath"/>
-    <path refid="library.servlets.classpath"/>
     <path refid="fxcop-common.runtime.module.classpath"/>
   </path>
   

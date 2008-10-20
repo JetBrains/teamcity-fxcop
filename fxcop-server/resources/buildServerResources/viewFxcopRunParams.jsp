@@ -36,6 +36,18 @@
 </div>
 
 <div class="parameter">
+  Ignore generated code: <strong><props:displayCheckboxValue name="fxcop.ignore_generated_code"/></strong>
+</div>
+
+<div class="parameter">
+  Search dependencies in GAC: <strong><props:displayCheckboxValue name="fxcop.search_in_gac"/></strong>
+</div>
+
+<div class="parameter">
+  Search dependencies in directories: <strong><props:displayCheckboxValue name="fxcop.search_in_dirs"/></strong>
+</div>
+
+<div class="parameter">
   Report XSLT file: <strong><props:displayValue name="fxcop.report_xslt" emptyValue="not specified"/></strong>
 </div>
 

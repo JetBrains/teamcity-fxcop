@@ -192,19 +192,6 @@
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
-  <component name="FacetAutodetectingManager">
-    <autodetection-disabled>
-      <facet-type id="Groovy">
-        <modules>
-          <module name="tst">
-            <files>
-              <file url="file://$PROJECT_DIR$/tst/src/main.groovy" />
-            </files>
-          </module>
-        </modules>
-      </facet-type>
-    </autodetection-disabled>
-  </component>
   <component name="IdProvider" IDEtalkID="1D92F87E1D1987FFD42446CFF93C1AFF" />
   <component name="InspectionProjectProfileManager">
     <option name="PROJECT_PROFILE" value="Project Default" />
@@ -401,6 +388,17 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
   </component>
   <component name="SvnBranchConfigurationManager">
+    <option name="myConfigurationMap">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="trunkUrl" value="http://svn.jetbrains.org/teamcity/plugins/fxcop/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="myVersion" value="124" />
   </component>
   <component name="VcsDirectoryMappings">
@@ -541,82 +539,56 @@
   <component name="libraryTable">
     <library name="api-common">
       <CLASSES>
-        <root url="jar://$teamcity.server.libs$/common-api.jar!/" />
-        <root url="jar://$teamcity.server.libs$/runtime-util.jar!/" />
-        <root url="jar://$teamcity.server.libs$/util.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/log4j-1.2.12.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/openapi/runtime-util.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/util.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/openapi/common-api.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/annotations.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="api-agent">
       <CLASSES>
-        <root url="jar://$teamcity.agent.libs$/agent-api.jar!/" />
-        <root url="jar://$teamcity.agent.libs$/jniwrap-3.6.1.jar!/" />
-        <root url="jar://$teamcity.agent.libs$/winpack.jar!/" />
-        <root url="jar://$teamcity.agent.libs$/agent.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/openapi/agent-api.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="test-sup">
       <CLASSES>
-        <root url="jar://$teamcity.server.libs$/jmock-SNAPSHOT.jar!/" />
-        <root url="jar://$teamcity.server.libs$/junit-3.8.1.jar!/" />
-        <root url="jar://$teamcity.server.libs$/ant-runner-server.jar!/" />
-        <root url="jar://$teamcity.server.libs$/artefacts.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/testng-jdk15.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/junit-3.8.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/jmock-SNAPSHOT.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="xml">
       <CLASSES>
-        <root url="jar://$teamcity.server.libs$/xercesImpl.jar!/" />
-        <root url="jar://$teamcity.server.libs$/xstream-1.2.1.jar!/" />
-        <root url="jar://$teamcity.server.libs$/xpp3_min-1.1.3.4.M.jar!/" />
-        <root url="jar://$teamcity.server.libs$/xmlrpc-2.0.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/xmlrpc-2.0.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/xpp3_min-1.1.3.4.M.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/xercesImpl.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/xstream-1.2.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="api-server">
       <CLASSES>
-        <root url="jar://$teamcity.server.libs$/server-api.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/openapi/server-api.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="idea-openapi">
+    <library name="jni">
       <CLASSES>
-        <root url="jar://$teamcity.server.libs$/openapi.jar!/" />
-        <root url="jar://$teamcity.server.libs$/resources_en.jar!/" />
-        <root url="jar://$teamcity.server.libs$/annotations.jar!/" />
-        <root url="jar://$teamcity.server.libs$/util.jar!/" />
-        <root url="jar://$teamcity.server.libs$/trove4j.jar!/" />
-        <root url="jar://$teamcity.server.libs$/extensions.jar!/" />
-        <root url="jar://$teamcity.server.libs$/log4j-1.2.12.jar!/" />
-        <root url="jar://$teamcity.server.libs$/jdom.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
-    <library name="servlets">
-      <CLASSES>
-        <root url="jar://$teamcity.tomcat.libs$/servlet-api.jar!/" />
-        <root url="jar://$teamcity.tomcat.libs$/jsp-api.jar!/" />
-        <root url="jar://$teamcity.tomcat.libs$/el-api.jar!/" />
-        <root url="jar://$teamcity.tomcat.libs$/annotations-api.jar!/" />
-        <root url="jar://$teamcity.server.libs$/jstl.jar!/" />
-        <root url="jar://$teamcity.server.libs$/standard.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/winpack.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/jniwrap-3.6.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
   </component>
-  <UsedPathMacros>
-    <macro name="teamcity.agent.libs" />
-    <macro name="teamcity.server.libs" />
-    <macro name="teamcity.tomcat.libs" />
-  </UsedPathMacros>
 </project>
 

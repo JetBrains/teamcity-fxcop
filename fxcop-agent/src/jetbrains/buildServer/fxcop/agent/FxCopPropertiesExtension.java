@@ -19,19 +19,27 @@ package jetbrains.buildServer.fxcop.agent;
 import com.jniwrapper.win32.registry.RegistryException;
 import com.jniwrapper.win32.registry.RegistryKey;
 import java.io.File;
-import java.util.Map;
-import jetbrains.buildServer.agent.AgentPropertiesExtension;
+import jetbrains.buildServer.agent.AgentLifeCycleAdapter;
+import jetbrains.buildServer.agent.AgentLifeCycleListener;
+import jetbrains.buildServer.agent.BuildAgent;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
+import jetbrains.buildServer.util.EventDispatcher;
+import jetbrains.buildServer.util.PEReader.PEUtil;
+import jetbrains.buildServer.util.PEReader.PEVersion;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class FxCopPropertiesExtension extends AgentPropertiesExtension {
+public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
   private static final Logger LOG = Logger.getLogger(FxCopPropertiesExtension.class);
 
-  public FxCopPropertiesExtension() {
+  public FxCopPropertiesExtension(@NotNull final EventDispatcher<AgentLifeCycleListener> events) {
+    events.addListener(this);
   }
 
+  //TODO: Move registry access interfaces to common and implementation to common-impl
+  @Nullable
   private static String readRegistryText(RegistryKey rootKey, final String subKey, final String value) {
     if (rootKey == null || subKey == null) {
       return null;
@@ -56,7 +64,10 @@ public class FxCopPropertiesExtension extends AgentPropertiesExtension {
     return null;
   }
 
-  public void appendAfterUserProperties(@NotNull BuildAgentConfiguration config) {
+  @Override
+  public void beforeAgentConfigurationLoaded(@NotNull final BuildAgent agent) {
+    final BuildAgentConfiguration config = agent.getConfiguration();
+    
     if (!config.getSystemInfo().isWindows()) {
       return;
     }
@@ -65,10 +76,18 @@ public class FxCopPropertiesExtension extends AgentPropertiesExtension {
     final String fxcopRoot = searchFxCopInClassesRoot();
 
     if (fxcopRoot != null) {
-      addRootProperty(config, fxcopRoot);
+      final File fxcopCmd = new File(fxcopRoot, FxCopConstants.FXCOPCMD_BINARY);
+      PEVersion fileVersion = PEUtil.getFileVersion(fxcopCmd);
+      if (fileVersion != null) {
+        config.addCustomProperty(FxCopConstants.FXCOPCMD_FILE_VERSION_PROPERTY, fileVersion.toString());
+        LOG.info("Found FxCopCmd file version: " + fileVersion);
+      }
+
+      config.addCustomProperty(FxCopConstants.FXCOP_ROOT_PROPERTY, fxcopRoot);
     }
   }
 
+  @Nullable
   private String searchFxCopInClassesRoot() {
     // Use .fxcop file association
 
@@ -118,13 +137,5 @@ public class FxCopPropertiesExtension extends AgentPropertiesExtension {
     }
 
     return bin;
-  }
-
-  private void addRootProperty(BuildAgentConfiguration config, String fxcopRoot) {
-    final Map customProperties = config.getCustomProperties();
-    final String propertyName = FxCopConstants.FXCOP_ROOT_PROPERTY;
-    if (!customProperties.containsKey(propertyName)) {
-      config.addCustomProperty(propertyName, fxcopRoot);
-    }
   }
 }

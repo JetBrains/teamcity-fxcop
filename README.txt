@@ -1,3 +1,16 @@
+FxCop inspections support for TeamCity
+
+Installation
+============
+
+FxCop support bundled with TeamCity 4.
+
+Current sources provided as reference for plugin writers.
+
+
+Development notes
+=================
+
 How to update fxcop.xml
 -----------------------
 

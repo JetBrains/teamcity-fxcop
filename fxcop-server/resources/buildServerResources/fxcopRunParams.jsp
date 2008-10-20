@@ -64,6 +64,30 @@
     </td>
   </tr>
   <tr>
+    <th><label for="fxcop.search_in_gac">Search referenced assemblies in GAC</label></th>
+    <td>
+      <props:checkboxProperty name="fxcop.search_in_gac"/>
+      <span class="error" id="error_fxcop.search_in_gac"></span>
+    </td>
+  </tr>
+  <tr>
+    <th><label for="fxcop.search_in_dirs">Search referenced assemblies in directories</label></th>
+    <td>
+      <props:textProperty name="fxcop.search_in_dirs" className="longField"/>
+      <span class="error" id="error_fxcop.search_in_dirs"></span>
+      <span class="smallNote">List of directories (relative to checkout root and separated by spaces) to search referenced assemblies in.<br/>
+      Sets /d: options for FxCopCmd</span>
+    </td>
+  </tr>
+  <tr>
+    <th><label for="fxcop.ignore_generated_code">Ignore generated code</label></th>
+    <td>
+      <props:checkboxProperty name="fxcop.ignore_generated_code"/>
+      <span class="error" id="error_fxcop.ignore_generated_code"></span>
+      <span class="smallNote">Sets /ignoregeneratedcode for FxCopCmd (note: it's supported since FxCop 1.36)</span>
+    </td>
+  </tr>
+  <tr>
     <th><label for="fxcop.report_xslt">Report XSLT file:</label></th>
     <td><props:textProperty name="fxcop.report_xslt" className="longField"/>
       <span class="error" id="error_fxcop.report_xslt"></span>

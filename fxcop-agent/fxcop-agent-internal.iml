@@ -18,14 +18,13 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="utils" />
-    <orderEntry type="library" name="IDEA-openapi" level="project" />
     <orderEntry type="module" module-name="agent-openapi" />
     <orderEntry type="module" module-name="runtime-util" />
     <orderEntry type="library" name="xstream" level="project" />
-    <orderEntry type="module" module-name="agent" />
     <orderEntry type="library" name="JNIWrap" level="project" />
     <orderEntry type="module" module-name="common" />
     <orderEntry type="module" module-name="fxcop-common-internal" />
+    <orderEntry type="module" module-name="common-runtime" />
   </component>
   <component name="copyright">
     <Base>

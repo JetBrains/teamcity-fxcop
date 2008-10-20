@@ -1,12 +1,9 @@
 <project name="FxCop Support" default="dist" basedir=".">
   <property name="plugin" value="fxcop"/>
   <property name="dist" value="${basedir}/dist"/>
+  <property name="lib" value="${basedir}/lib"/>
 
-  <property name="teamcity.dist" value="/path/to/teamcity"/>
-
-  <property name="path.variable.teamcity.agent.libs" value="${teamcity.dist}/buildAgent/lib"/>
-  <property name="path.variable.teamcity.tomcat.libs" value="${teamcity.dist}/lib"/>
-  <property name="path.variable.teamcity.server.libs" value="${teamcity.dist}/webapps/ROOT/WEB-INF/lib"/>
+  <property name="teamcity.dist" value="../../dist"/>
 
   <import file="${plugin}.xml"/>
 
@@ -14,12 +11,27 @@
     <copy file="${dist}/${plugin}-plugin.zip" todir="${teamcity.dist}/webapps/ROOT/WEB-INF/plugins" />
   </target>
 
-  <target name="dist">
-    <echo message="Teamcity paths debug" />
-    <echo message="agent libs: ${path.variable.teamcity.agent.libs}" />
-    <echo message="server libs: ${path.variable.teamcity.server.libs}" />
-    <echo message="tomcat libs: ${path.variable.teamcity.tomcat.libs}" />
+  <target name="update-jars-from-dist">
+    <pathconvert property="openapi.jars" pathsep=",">
+      <fileset dir="${lib}/teamcity/openapi" includes="*.jar"/>
+      <map from="${lib}/teamcity/openapi/" to=''/>
+    </pathconvert>
 
+    <pathconvert property="server.jars" pathsep=",">
+      <fileset dir="${lib}/teamcity/server" includes="*.jar"/>
+      <map from="${lib}/teamcity/server/" to=''/>
+    </pathconvert>
+
+    <copy todir="${lib}/teamcity/openapi" verbose="true" overwrite="true">
+      <filelist dir="${teamcity.dist}/openapi" files="${openapi.jars}" />
+    </copy>
+
+    <copy todir="${lib}/teamcity/server" verbose="true" overwrite="true">
+      <filelist dir="${teamcity.dist}/tmp/WEB-INF/lib" files="${server.jars}" />
+    </copy>
+  </target>
+
+  <target name="dist">
     <antcall target="all" />
 
     <delete dir="${dist}"/>

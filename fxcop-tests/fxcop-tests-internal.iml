@@ -10,7 +10,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="agent-openapi" />
     <orderEntry type="module" module-name="common" />
-    <orderEntry type="library" name="IDEA-openapi" level="project" />
     <orderEntry type="library" name="testng" level="project" />
     <orderEntry type="library" name="JUnit" level="project" />
     <orderEntry type="module" module-name="fxcop-agent-internal" />

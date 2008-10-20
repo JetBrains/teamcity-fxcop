@@ -16,7 +16,6 @@
 
 package jetbrains.buildServer.fxcop.agent;
 
-import com.intellij.openapi.util.text.StringUtil;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.xml.XppReader;
 import java.io.*;
@@ -27,11 +26,10 @@ import java.util.Stack;
 import java.util.Vector;
 import jetbrains.buildServer.agent.SimpleBuildLogger;
 import jetbrains.buildServer.agent.inspections.*;
+import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopFileProcessor {
-  private static char BYTE_ORDER_MARK = 65279;
-
   private enum PassType {
     ISSUES, RULES
   }
@@ -256,7 +254,6 @@ public class FxCopFileProcessor {
     
     final String keyword = myStream.getAttribute("Keyword");
     final String kind = myStream.getAttribute("Kind");
-    final boolean warningMessage = "True".equals(myStream.getAttribute("TreatAsWarning"));
 
     String type = null, message = null, stacktrace = null;
     while (myStream.hasMoreChildren()) {
@@ -277,7 +274,8 @@ public class FxCopFileProcessor {
       myStream.moveUp();
     }
 
-    final StringBuilder descr = new StringBuilder("FxCop exception:");
+    final boolean warningMessage = "True".equals(myStream.getAttribute("TreatAsWarning"));
+    final StringBuilder descr = new StringBuilder("FxCop " + (warningMessage ? "warning" : "error") + ":");
 
     if (keyword != null) {
       descr.append(" Keyword=").append(keyword);
@@ -296,11 +294,7 @@ public class FxCopFileProcessor {
       descr.append(lineSeparator).append(stacktrace);
     }
 
-    if (warningMessage) {
-      myLogger.warning(descr.toString());
-    } else {
-      myLogger.error(descr.toString());
-    }
+    myLogger.warning(descr.toString());
   }
 
   private void handleTargetTag() {

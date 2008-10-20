@@ -16,9 +16,9 @@
 
 package jetbrains.buildServer.fxcop.agent;
 
-import com.intellij.execution.configurations.GeneralCommandLine;
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import jetbrains.buildServer.BaseTestCase;
 import jetbrains.buildServer.RunBuildException;
@@ -29,79 +29,104 @@ import org.testng.annotations.Test;
 @Test
 public class FxCopCommandLineBuilderImplTest extends BaseTestCase {
   private Map<String, String> myRunParameters;
-  private FxCopCommandLineBuilder myCmdBuilder;
-  private final String myOutParam =
+  private final String myExpectedPostfix =
     "[/out:" + FxCopConstants.OUTPUT_DIR +
     File.separator + FxCopConstants.OUTPUT_FILE + "] ";
+  private final String myExpectedPrefix =
+    "[/forceoutput] ";
 
   @BeforeMethod
   @Override
   protected void setUp() throws Exception {
     myRunParameters = new HashMap<String, String>();
-    myCmdBuilder = new FxCopCommandLineBuilderImpl();
     super.setUp();
   }
 
-  private void assertCmdLine(final String expected) throws Exception {
-    final GeneralCommandLine cmdLine = new GeneralCommandLine();
-    myCmdBuilder.buildCommandLine(cmdLine, myRunParameters);
+  private void assertCmdArgs(final String expected) throws Exception {
+    final List<String> args = FxCopCommandLineBuilder.getArguments(myRunParameters);
 
     StringBuilder result = new StringBuilder();
-
-    for (String chunk : cmdLine.getCommands()) {
+    for (String chunk : args) {
       result.append("[").append(chunk).append("] ");
     }
-    assertEquals(expected, result.toString());
+    assertEquals(myExpectedPrefix + expected + myExpectedPostfix, result.toString());
+  }
+
+  public void testCmd1() throws RunBuildException {
+    myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "a");
+    assertEquals("a" + File.separator + "FxCopCmd.exe", FxCopCommandLineBuilder.getExecutablePath(myRunParameters));
+  }
+
+  public void testCmd2() throws RunBuildException {
+    myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "/c/d/");
+    assertEquals(new File("/c/d", "FxCopCmd.exe").getPath(), FxCopCommandLineBuilder.getExecutablePath(myRunParameters));
   }
 
   @Test(expectedExceptions = RunBuildException.class)
   public void testNoRoot() throws Exception {
-    assertCmdLine("");
+    assertCmdArgs("");
   }
 
   @Test(expectedExceptions = RunBuildException.class)
   public void testNoWhat() throws Exception {
-    myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "/myroot");
-    assertCmdLine("");
+    assertCmdArgs("");
   }
 
   @Test(expectedExceptions = RunBuildException.class)
   public void testUnknownWhat() throws Exception {
-    myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "/myroot");
     myRunParameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, "trash");
-    assertCmdLine("");
+    assertCmdArgs("");
   }
 
   public void testWhatNoProject() throws Exception {
-    myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "/myroot");
     myRunParameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_PROJECT);
-    assertCmdLine("[C:\\myroot\\FxCopCmd.exe] " + myOutParam);
+    assertCmdArgs("");
   }
 
   public void testWhatNoFiles() throws Exception {
-    myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "/myroot");
     myRunParameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_FILES);
-    assertCmdLine("[C:\\myroot\\FxCopCmd.exe] " + myOutParam);
+    assertCmdArgs("");
   }
 
   public void testWhatProject() throws Exception {
-    myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "/myroot");
     myRunParameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_PROJECT);
     myRunParameters.put(FxCopConstants.SETTINGS_PROJECT, "someproject");
-    assertCmdLine("[C:\\myroot\\FxCopCmd.exe] [/project:someproject] " + myOutParam);
+    assertCmdArgs("[/project:someproject] ");
   }
 
   public void testWhatFiles() throws Exception {
-    myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "/myroot");
     myRunParameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_FILES);
     myRunParameters.put(FxCopConstants.SETTINGS_FILES, "file1*.dll file2");
-    assertCmdLine("[C:\\myroot\\FxCopCmd.exe] [/f:file1*.dll] [/f:file2] " + myOutParam);
+    assertCmdArgs("[/f:file1*.dll] [/f:file2] ");
+  }
+
+  public void testFilesQuotes() throws Exception {
+    myRunParameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_FILES);
+    myRunParameters.put(FxCopConstants.SETTINGS_FILES, "\"some dir \\file1*.dll\" file2");
+    assertCmdArgs("[/f:some dir \\file1*.dll] [/f:file2] ");
   }
 
   public void testAddonOptions() throws Exception {
-    myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "/myroot");
     myRunParameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_PROJECT);
     myRunParameters.put(FxCopConstants.SETTINGS_ADDITIONAL_OPTIONS, "bla-bla qqq");
-    assertCmdLine("[C:\\myroot\\FxCopCmd.exe] [bla-bla] [qqq] " + myOutParam);
+    assertCmdArgs("[bla-bla] [qqq] ");
+  }
+
+  public void testSearchInGAC() throws Exception {
+    myRunParameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_PROJECT);
+    myRunParameters.put(FxCopConstants.SETTINGS_SEARCH_IN_GAC, "true");
+    assertCmdArgs("[/gac] ");
+  }
+
+  public void testSearchInDirs() throws Exception {
+    myRunParameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_PROJECT);
+    myRunParameters.put(FxCopConstants.SETTINGS_SEARCH_DIRS, "\"a b\" c");
+    assertCmdArgs("[/d:a b] [/d:c] ");
+  }
+
+  public void testIgnoreGeneratedCode() throws Exception {
+    myRunParameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_PROJECT);
+    myRunParameters.put(FxCopConstants.SETTINGS_IGNORE_GENERATED_CODE, "true");
+    assertCmdArgs("[/ignoregeneratedcode] ");
   }
 }

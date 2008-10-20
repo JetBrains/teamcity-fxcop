@@ -15,8 +15,15 @@
     <orderEntry type="library" name="api-server" level="project" />
     <orderEntry type="module" module-name="fxcop-common" />
     <orderEntry type="library" name="api-common" level="project" />
-    <orderEntry type="library" name="idea-openapi" level="project" />
-    <orderEntry type="library" name="servlets" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../lib/servlet-api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
   <component name="copyright">
     <Base>
