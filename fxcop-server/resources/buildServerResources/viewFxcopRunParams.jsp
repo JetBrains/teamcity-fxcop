@@ -44,7 +44,7 @@
 </div>
 
 <div class="parameter">
-  Search dependencies in directories: <strong><props:displayCheckboxValue name="fxcop.search_in_dirs"/></strong>
+  Search dependencies in directories: <strong><props:displayValue name="fxcop.search_in_dirs" emptyValue="empty list" /></strong>
 </div>
 
 <div class="parameter">

@@ -143,22 +143,22 @@ public class FxCopFileProcessor {
 
   private String getEntitySpec() {
     if (myCurrentEntity.isEmpty()) {
-      return "*none*/*none*";
+      return "_none_/_none_";
     }
 
     switch (myCurrentEntity.peek()) {
       case NAMESPACE:
-        return "*Namespaces*/" + myCurrentNamespace;
+        return "_Namespaces_/" + myCurrentNamespace;
       case TARGET:
-        return myCurrentTarget + "/*assembly*";
+        return myCurrentTarget + "/_assembly_";
       case RESOURCE:
-        return myCurrentTarget + "/*Resources*/" + myCurrentResource;
+        return myCurrentTarget + "/_resources_/" + myCurrentResource;
       case TYPE:
       case MEMBER:
       case ACCESSOR:
         return myCurrentTarget + "/" + myCurrentNamespace.replace(".", "/") + "/" + myCurrentType;
       default:
-        return "*unknown*/*unknown*";
+        return "_unknown_/_unknown_";
     }
   }
 
