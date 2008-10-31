@@ -14,15 +14,15 @@ import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildFinishedStatus;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
-import jetbrains.buildServer.agent.runner.AbstractProcessBuildRunnerState;
 import jetbrains.buildServer.agent.runner.AbstractProgramCommandLine;
+import jetbrains.buildServer.agent.runner.ProcessBuildRunnerState;
 import jetbrains.buildServer.agent.runner.ProgramCommandLine;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class FxCopRunnerState extends AbstractProcessBuildRunnerState {
+public class FxCopRunnerState extends ProcessBuildRunnerState {
   private final ArtifactsWatcher myArtifactsWatcher;
   private final FxCopDataProcessor myDataProcessor;
 
@@ -127,7 +127,7 @@ public class FxCopRunnerState extends AbstractProcessBuildRunnerState {
 
   @NotNull
   public ProgramCommandLine getProgramCommandLine() {
-    return new AbstractProgramCommandLine(myBuild) {
+    return new AbstractProgramCommandLine(getBuild()) {
       @NotNull
       public String getExecutablePath() throws RunBuildException {
         return FxCopCommandLineBuilder.getExecutablePath(getBuild().getRunnerParameters());
