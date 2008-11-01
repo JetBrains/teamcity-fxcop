@@ -23,8 +23,11 @@ import jetbrains.buildServer.agent.runner.ProcessBuildRunner;
 import jetbrains.buildServer.agent.runner.ProcessBuildRunnerState;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import org.jetbrains.annotations.NotNull;
+import org.apache.log4j.Logger;
 
 public class FxCopRunner implements ProcessBuildRunner {
+  private static final Logger LOG = Logger.getLogger(FxCopRunner.class);
+
   private final ArtifactsWatcher myArtifactsWatcher;
   private final FxCopDataProcessor myDataProcessor;
 
@@ -40,6 +43,12 @@ public class FxCopRunner implements ProcessBuildRunner {
   }
 
   public boolean canRun(@NotNull final BuildAgentConfiguration agentConfiguration) {
+    if (!agentConfiguration.getSystemInfo().isWindows()) {
+      LOG.info(getType() + " runner can works only under Windows");
+
+      return false;
+    }
+
     return true;
   }
 
