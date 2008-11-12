@@ -18,6 +18,7 @@ package jetbrains.buildServer.fxcop.agent;
 
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
+import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
 import jetbrains.buildServer.agent.runner.ProcessBuildRunner;
 import jetbrains.buildServer.agent.runner.ProcessBuildRunnerState;
@@ -29,12 +30,11 @@ public class FxCopRunner implements ProcessBuildRunner {
   private static final Logger LOG = Logger.getLogger(FxCopRunner.class);
 
   private final ArtifactsWatcher myArtifactsWatcher;
-  private final FxCopDataProcessor myDataProcessor;
+  private final InspectionReporter myInspectionReporter;
 
-  public FxCopRunner(@NotNull final ArtifactsWatcher artifactsWatcher,
-                     @NotNull final FxCopDataProcessor dataProcessor) {
+  public FxCopRunner(@NotNull final ArtifactsWatcher artifactsWatcher, final InspectionReporter inspectionReporter) {
     myArtifactsWatcher = artifactsWatcher;
-    myDataProcessor = dataProcessor;
+    myInspectionReporter = inspectionReporter;
   }
 
   @NotNull
@@ -53,6 +53,6 @@ public class FxCopRunner implements ProcessBuildRunner {
 
   @NotNull
   public ProcessBuildRunnerState runBuild(@NotNull final AgentRunningBuild build) {
-    return new FxCopRunnerState(build, myArtifactsWatcher, myDataProcessor);
+    return new FxCopRunnerState(build, myArtifactsWatcher, myInspectionReporter);
   }
 }

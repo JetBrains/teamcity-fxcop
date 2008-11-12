@@ -70,6 +70,8 @@ public class FxCopFileProcessorTest extends BaseTestCase {
     final FxCopFileProcessor processor = new FxCopFileProcessor(
       new File(prefix), "C:\\Work\\Decompiler", logger, reporter);
     processor.processReport();
+    results.append("Errors: ").append(processor.getErrorsCount()).append("\r\n");
+    results.append("Warnings: ").append(processor.getWarningsCount()).append("\r\n");
 
     final File goldf = new File(goldFile);
     if (!goldf.exists() || !readFile(goldf).equals(results.toString())) {

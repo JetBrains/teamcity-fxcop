@@ -16,22 +16,22 @@
 
 package jetbrains.buildServer.fxcop.server;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.serverSide.InvalidProperty;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
-import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.util.PropertiesUtil;
-import java.util.Collection;
-import java.util.Map;
-import java.util.List;
-import java.util.Vector;
 
 public class FxCopRunTypePropertiesProcessor implements PropertiesProcessor {
-  public Collection<InvalidProperty> process(Map properties) {
+  public Collection<InvalidProperty> process(Map<String, String> properties) {
     List<InvalidProperty> result = new Vector<InvalidProperty>();
 
-    final String files = (String)properties.get(
+    final String files = properties.get(
       FxCopConstants.SETTINGS_FILES);
-    final String project = (String)properties.get(
+    final String project = properties.get(
       FxCopConstants.SETTINGS_PROJECT);
     if (PropertiesUtil.isEmptyOrNull(project) && PropertiesUtil.isEmptyOrNull(files)) {
       result.add(
@@ -40,13 +40,27 @@ public class FxCopRunTypePropertiesProcessor implements PropertiesProcessor {
           "Files or project option must be specified"));
     }
 
-    final String fxcopRoot = (String)properties.get(
+    final String fxcopRoot = properties.get(
       FxCopConstants.SETTINGS_FXCOP_ROOT);
     if (PropertiesUtil.isEmptyOrNull(fxcopRoot)) {
       result.add(
         new InvalidProperty(
           FxCopConstants.SETTINGS_FXCOP_ROOT,
           "FxCop installation root must be specified"));
+    }
+
+    if (!PropertiesUtil.isEmptyOrNull(properties.get(FxCopConstants.SETTINGS_ERROR_LIMIT))) {
+      Integer value = PropertiesUtil.parseInt(properties.get(FxCopConstants.SETTINGS_ERROR_LIMIT));
+      if (value == null || value < 0) {
+        result.add(new InvalidProperty(FxCopConstants.SETTINGS_ERROR_LIMIT, "Errors limit must be a positive number or zero"));
+      }
+    }
+
+    if (!PropertiesUtil.isEmptyOrNull(properties.get(FxCopConstants.SETTINGS_WARNING_LIMIT))) {
+      Integer value = PropertiesUtil.parseInt(properties.get(FxCopConstants.SETTINGS_WARNING_LIMIT));
+      if (value == null || value < 0) {
+        result.add(new InvalidProperty(FxCopConstants.SETTINGS_WARNING_LIMIT, "Warnings limit must be a positive number or zero"));
+      }
     }
 
     return result;

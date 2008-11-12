@@ -55,6 +55,8 @@ public class FxCopFileProcessor {
   private final InspectionReporter myReporter;
   private HierarchicalStreamReader myStream = null;
 
+  private int myErrorsCount, myWarningsCount;
+
   public FxCopFileProcessor(@NotNull final File fxcopReport,
                             @NotNull final String sourceFilePrefix,
                             @NotNull final SimpleBuildLogger logger,
@@ -215,6 +217,14 @@ public class FxCopFileProcessor {
 
     if (!StringUtil.isEmptyOrSpaces(level)) {
       final InspectionSeverityValues apiLevel = convertLevel(level);
+
+      if (apiLevel == InspectionSeverityValues.ERROR) {
+        myErrorsCount++;
+      }
+
+      if (apiLevel == InspectionSeverityValues.WARNING) {
+        myWarningsCount++;
+      }
 
       final Collection<String> attrValue = new Vector<String>();
       attrValue.add(apiLevel.toString());
@@ -399,5 +409,13 @@ public class FxCopFileProcessor {
 
   private String reformatInOneLine(@NotNull final String source) {
     return source.replace("\r", "").replace("\n", " ").replaceAll("\\s+", " ").trim();
+  }
+
+  public int getErrorsCount() {
+    return myErrorsCount;
+  }
+
+  public int getWarningsCount() {
+    return myWarningsCount;
   }
 }
