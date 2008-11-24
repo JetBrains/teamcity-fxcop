@@ -16,25 +16,26 @@
 
 package jetbrains.buildServer.fxcop.agent;
 
+import jetbrains.buildServer.agent.AgentBuildRunnerInfo;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
-import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
-import jetbrains.buildServer.agent.runner.ProcessBuildRunner;
-import jetbrains.buildServer.agent.runner.ProcessBuildRunnerState;
+import jetbrains.buildServer.agent.runner.CommandLineBuildService;
+import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-public class FxCopRunner implements ProcessBuildRunner {
-  private static final Logger LOG = Logger.getLogger(FxCopRunner.class);
+public class FxCopBuildServiceFactory implements CommandLineBuildServiceFactory, AgentBuildRunnerInfo {
+  private static final Logger LOG = Logger.getLogger(FxCopBuildServiceFactory.class);
 
   private final ArtifactsWatcher myArtifactsWatcher;
-  private final InspectionReporter myInspectionReporter;
+  private final FxCopDataProcessor myDataProcessor;
 
-  public FxCopRunner(@NotNull final ArtifactsWatcher artifactsWatcher, final InspectionReporter inspectionReporter) {
+  public FxCopBuildServiceFactory(@NotNull final ArtifactsWatcher artifactsWatcher,
+                     @NotNull final FxCopDataProcessor dataProcessor) {
     myArtifactsWatcher = artifactsWatcher;
-    myInspectionReporter = inspectionReporter;
+    myDataProcessor = dataProcessor;
   }
 
   @NotNull
@@ -52,7 +53,13 @@ public class FxCopRunner implements ProcessBuildRunner {
 
 
   @NotNull
-  public ProcessBuildRunnerState runBuild(@NotNull final AgentRunningBuild build) {
-    return new FxCopRunnerState(build, myArtifactsWatcher, myInspectionReporter);
+  public CommandLineBuildService createService(@NotNull final AgentRunningBuild build) {
+    return new FxCopBuildService(build, myArtifactsWatcher, myDataProcessor);
   }
+
+  @NotNull
+  public AgentBuildRunnerInfo getBuildRunnerInfo() {
+    return this;
+  }
+
 }
