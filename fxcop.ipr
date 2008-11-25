@@ -544,6 +544,7 @@
         <root url="jar://$PROJECT_DIR$/lib/teamcity/server/util.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/teamcity/openapi/common-api.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/teamcity/server/annotations.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/openapi.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />

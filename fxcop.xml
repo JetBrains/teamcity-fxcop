@@ -2,6 +2,7 @@
 <project name="fxcop" default="all">
   
   
+  <property file="fxcop.properties"/>
   <!-- Uncomment the following property if no tests compilation is needed -->
   <!-- 
   <property name="skip.tests" value="true"/>
@@ -30,6 +31,14 @@
     <exclude name="**/*.pyo/**"/>
     <exclude name="**/.git/**"/>
   </patternset>
+  <patternset id="library.patterns">
+    <include name="*.zip"/>
+    <include name="*.war"/>
+    <include name="*.egg"/>
+    <include name="*.ear"/>
+    <include name="*.swc"/>
+    <include name="*.jar"/>
+  </patternset>
   <patternset id="compiler.resources">
     <include name="**/?*.properties"/>
     <include name="**/?*.xml"/>
@@ -45,29 +54,17 @@
   
   <!-- Project Libraries -->
   
-  <path id="library.api-common.classpath">
-    <pathelement location="${basedir}/lib/teamcity/server/log4j-1.2.12.jar"/>
-    <pathelement location="${basedir}/lib/teamcity/openapi/runtime-util.jar"/>
-    <pathelement location="${basedir}/lib/teamcity/server/util.jar"/>
-    <pathelement location="${basedir}/lib/teamcity/openapi/common-api.jar"/>
-    <pathelement location="${basedir}/lib/teamcity/server/annotations.jar"/>
-  </path>
-  
   <path id="library.api-agent.classpath">
     <pathelement location="${basedir}/lib/teamcity/openapi/agent-api.jar"/>
   </path>
   
-  <path id="library.test-sup.classpath">
-    <pathelement location="${basedir}/lib/testng-jdk15.jar"/>
-    <pathelement location="${basedir}/lib/teamcity/server/junit-3.8.1.jar"/>
-    <pathelement location="${basedir}/lib/teamcity/server/jmock-SNAPSHOT.jar"/>
-  </path>
-  
-  <path id="library.xml.classpath">
-    <pathelement location="${basedir}/lib/teamcity/server/xmlrpc-2.0.1.jar"/>
-    <pathelement location="${basedir}/lib/teamcity/server/xpp3_min-1.1.3.4.M.jar"/>
-    <pathelement location="${basedir}/lib/teamcity/server/xercesImpl.jar"/>
-    <pathelement location="${basedir}/lib/teamcity/server/xstream-1.2.1.jar"/>
+  <path id="library.api-common.classpath">
+    <pathelement location="${basedir}/lib/teamcity/openapi/common-api.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/openapi/runtime-util.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/annotations.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/log4j-1.2.12.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/openapi.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/util.jar"/>
   </path>
   
   <path id="library.api-server.classpath">
@@ -75,8 +72,21 @@
   </path>
   
   <path id="library.jni.classpath">
-    <pathelement location="${basedir}/lib/teamcity/server/winpack.jar"/>
     <pathelement location="${basedir}/lib/teamcity/server/jniwrap-3.6.1.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/winpack.jar"/>
+  </path>
+  
+  <path id="library.test-sup.classpath">
+    <pathelement location="${basedir}/lib/teamcity/server/jmock-SNAPSHOT.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/junit-3.8.1.jar"/>
+    <pathelement location="${basedir}/lib/testng-jdk15.jar"/>
+  </path>
+  
+  <path id="library.xml.classpath">
+    <pathelement location="${basedir}/lib/teamcity/server/xercesImpl.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/xmlrpc-2.0.1.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/xpp3_min-1.1.3.4.M.jar"/>
+    <pathelement location="${basedir}/lib/teamcity/server/xstream-1.2.1.jar"/>
   </path>
   
   
@@ -252,7 +262,7 @@
     <pathelement location="${fxcop-common.output.dir}"/>
     <pathelement location="${fxcop-common.testoutput.dir}"/>
     <path refid="library.api-common.classpath"/>
-    <pathelement location="${module.fxcop-server.basedir}/lib/servlet-api.jar"/>
+    <pathelement location="${basedir}/lib/servlet-api.jar"/>
   </path>
   
   <path id="fxcop-server.runtime.module.classpath">
@@ -261,7 +271,7 @@
     <path refid="library.api-server.classpath"/>
     <path refid="fxcop-common.runtime.module.classpath"/>
     <path refid="library.api-common.classpath"/>
-    <pathelement location="${module.fxcop-server.basedir}/lib/servlet-api.jar"/>
+    <pathelement location="${basedir}/lib/servlet-api.jar"/>
   </path>
   
   
