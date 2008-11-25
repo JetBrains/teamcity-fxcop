@@ -17,7 +17,6 @@
 package jetbrains.buildServer.fxcop.agent;
 
 import jetbrains.buildServer.agent.AgentBuildRunnerInfo;
-import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
 import jetbrains.buildServer.agent.runner.CommandLineBuildService;
@@ -53,8 +52,8 @@ public class FxCopBuildServiceFactory implements CommandLineBuildServiceFactory,
 
 
   @NotNull
-  public CommandLineBuildService createService(@NotNull final AgentRunningBuild build) {
-    return new FxCopBuildService(build, myArtifactsWatcher, myDataProcessor);
+  public CommandLineBuildService createService() {
+    return new FxCopBuildService(myArtifactsWatcher, myDataProcessor);
   }
 
   @NotNull

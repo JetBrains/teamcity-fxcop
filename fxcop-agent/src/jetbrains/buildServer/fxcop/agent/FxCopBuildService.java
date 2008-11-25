@@ -10,7 +10,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildFinishedStatus;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
 import jetbrains.buildServer.agent.runner.CommandLineBuildService;
@@ -25,8 +24,7 @@ public class FxCopBuildService extends CommandLineBuildService {
   private final ArtifactsWatcher myArtifactsWatcher;
   private final FxCopDataProcessor myDataProcessor;
 
-  public FxCopBuildService(final AgentRunningBuild build, ArtifactsWatcher artifactsWatcher, FxCopDataProcessor dataProcessor) {
-    super(build);
+  public FxCopBuildService(ArtifactsWatcher artifactsWatcher, FxCopDataProcessor dataProcessor) {
     myArtifactsWatcher = artifactsWatcher;
     myDataProcessor = dataProcessor;
   }
