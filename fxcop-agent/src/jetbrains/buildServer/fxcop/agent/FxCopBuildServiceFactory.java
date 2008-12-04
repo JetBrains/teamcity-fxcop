@@ -19,6 +19,7 @@ package jetbrains.buildServer.fxcop.agent;
 import jetbrains.buildServer.agent.AgentBuildRunnerInfo;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
+import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.runner.CommandLineBuildService;
 import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
@@ -29,12 +30,12 @@ public class FxCopBuildServiceFactory implements CommandLineBuildServiceFactory,
   private static final Logger LOG = Logger.getLogger(FxCopBuildServiceFactory.class);
 
   private final ArtifactsWatcher myArtifactsWatcher;
-  private final FxCopDataProcessor myDataProcessor;
+  private InspectionReporter myInspectionsReporter;
 
   public FxCopBuildServiceFactory(@NotNull final ArtifactsWatcher artifactsWatcher,
-                     @NotNull final FxCopDataProcessor dataProcessor) {
+                                  @NotNull final InspectionReporter inspectionsReporter) {
     myArtifactsWatcher = artifactsWatcher;
-    myDataProcessor = dataProcessor;
+    myInspectionsReporter = inspectionsReporter;
   }
 
   @NotNull
@@ -53,7 +54,7 @@ public class FxCopBuildServiceFactory implements CommandLineBuildServiceFactory,
 
   @NotNull
   public CommandLineBuildService createService() {
-    return new FxCopBuildService(myArtifactsWatcher, myDataProcessor);
+    return new FxCopBuildService(myArtifactsWatcher, myInspectionsReporter);
   }
 
   @NotNull

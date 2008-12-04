@@ -2,7 +2,7 @@ package jetbrains.buildServer.fxcop.agent;
 
 import java.io.File;
 import java.util.EnumSet;
-import java.util.HashMap;
+import java.util.Map;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -12,21 +12,23 @@ import javax.xml.transform.stream.StreamSource;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.BuildFinishedStatus;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
+import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.runner.CommandLineBuildService;
 import jetbrains.buildServer.agent.runner.ProgramCommandLine;
 import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.util.FileUtil;
+import jetbrains.buildServer.util.PropertiesUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopBuildService extends CommandLineBuildService {
   private final ArtifactsWatcher myArtifactsWatcher;
-  private final FxCopDataProcessor myDataProcessor;
+  private InspectionReporter myInspectionReporter;
 
-  public FxCopBuildService(ArtifactsWatcher artifactsWatcher, FxCopDataProcessor dataProcessor) {
+  public FxCopBuildService(ArtifactsWatcher artifactsWatcher, final InspectionReporter inspectionReporter) {
     myArtifactsWatcher = artifactsWatcher;
-    myDataProcessor = dataProcessor;
+    myInspectionReporter = inspectionReporter;
   }
 
   @Override
@@ -64,9 +66,42 @@ public class FxCopBuildService extends CommandLineBuildService {
   }
 
   private void ImportInspectionResults() throws Exception {
+    final String workingRoot = getBuild().getWorkingDirectory().toString();
+    final Map<String, String> runParameters = getBuild().getRunnerParameters();
+
     getLogger().progressMessage("Importing inspection results");
 
-    myDataProcessor.processData(getOutputFile(FxCopConstants.OUTPUT_FILE), new HashMap<String, String>());
+    final FxCopFileProcessor fileProcessor =
+      new FxCopFileProcessor(getOutputFile(FxCopConstants.OUTPUT_FILE),
+                             workingRoot, getLogger(), myInspectionReporter);
+
+    fileProcessor.processReport();
+
+    final int errors = fileProcessor.getErrorsCount();
+    final int warnings = fileProcessor.getWarningsCount();
+
+    boolean limitReached = false;
+
+    final Integer errorLimit = PropertiesUtil.parseInt(runParameters.get(FxCopConstants.SETTINGS_ERROR_LIMIT));
+    if (errorLimit != null && errors > errorLimit) {
+      getLogger().error("Errors limit reached: found " + errors + " errors, limit " + errorLimit);
+      limitReached = true;
+    }
+
+    final Integer warningLimit = PropertiesUtil.parseInt(runParameters.get(FxCopConstants.SETTINGS_WARNING_LIMIT));
+    if (warningLimit != null && warnings > warningLimit) {
+      getLogger().error("Warnings limit reached: found " + warnings + " warnings, limit " + warningLimit);
+      limitReached = true;
+    }
+
+    final String buildStatus = generateBuildStatus(errors, warnings);
+    getLogger().message("##teamcity[buildStatus status='" +
+                        (limitReached ? "FAILURE" : "SUCCESS") +
+                        "' text='" + buildStatus + "']");
+  }
+
+  private String generateBuildStatus(int errors, int warnings) {
+    return "Errors: " + errors + ", warnings: " + warnings;
   }
 
   private void GenerateHtmlReport() throws TransformerException {
@@ -125,7 +160,7 @@ public class FxCopBuildService extends CommandLineBuildService {
   @NotNull
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
     return new SimpleProgramCommandLine(getBuild(),
-        FxCopCommandLineBuilder.getExecutablePath(getBuild().getRunnerParameters()),
-        FxCopCommandLineBuilder.getArguments(getBuild().getRunnerParameters()));
+                                        FxCopCommandLineBuilder.getExecutablePath(getBuild().getRunnerParameters()),
+                                        FxCopCommandLineBuilder.getArguments(getBuild().getRunnerParameters()));
   }
 }
