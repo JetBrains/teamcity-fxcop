@@ -35,19 +35,19 @@ public class FxCopDataProcessor implements DataProcessor {
     myReporter = reporter;
   }
 
-  public void processData(@NotNull final File file, final Map<String, String> arguments) throws Exception {
+  public void processData(@NotNull final File path, final Map<String, String> arguments) throws Exception {
     final AgentRunningBuild currentBuild = myCurrentBuild.getCurrentBuild();
     final String workingRoot = currentBuild.getWorkingDirectory().toString();
 
     final SimpleBuildLogger logger = currentBuild.getBuildLogger();
     final FxCopFileProcessor fileProcessor =
-      new FxCopFileProcessor(file, workingRoot, logger, myReporter);
+      new FxCopFileProcessor(path, workingRoot, logger, myReporter);
 
     fileProcessor.processReport();
   }
 
   @NotNull
-  public String getId() {
+  public String getType() {
     return "FxCop";
   }
 }
