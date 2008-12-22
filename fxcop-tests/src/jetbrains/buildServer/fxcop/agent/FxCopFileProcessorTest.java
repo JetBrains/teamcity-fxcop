@@ -93,6 +93,9 @@ public class FxCopFileProcessorTest extends BaseTestCase {
         results.append(inspectionType.toString()).append("\n");
       }
 
+      public void markBuildAsInspectionsBuild() {        
+      }
+
       public void flush() {
       }
     };

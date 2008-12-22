@@ -43,6 +43,7 @@ public class FxCopDataProcessor implements DataProcessor {
     final FxCopFileProcessor fileProcessor =
       new FxCopFileProcessor(path, workingRoot, logger, myReporter);
 
+    myReporter.markBuildAsInspectionsBuild();
     fileProcessor.processReport();
   }
 
