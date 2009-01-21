@@ -40,13 +40,14 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
 
   //TODO: Move registry access interfaces to common and implementation to common-impl
   @Nullable
-  private static String readRegistryText(RegistryKey rootKey, final String subKey, final String value) {
-    if (rootKey == null || subKey == null) {
+  private static String readRegistryText(final String subKey, final String value) {
+    if (subKey == null) {
       return null;
     }
 
     try {
       try {
+        RegistryKey rootKey = RegistryKey.CLASSES_ROOT;
         RegistryKey registryKey = rootKey.openSubKey(subKey);
         if (registryKey != null) {
           try {
@@ -91,7 +92,7 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
   private String searchFxCopInClassesRoot() {
     // Use .fxcop file association
 
-    final String fxcopClass = readRegistryText(RegistryKey.CLASSES_ROOT, ".fxcop", "");
+    final String fxcopClass = readRegistryText(".fxcop", "");
     if (fxcopClass == null) {
       LOG.info(".fxcop file association wasn't found in CLASSES_ROOT");
       return null;
@@ -99,7 +100,7 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
 
     LOG.info("Found FxCop class in CLASSES_ROOT: " + fxcopClass);
 
-    final String fxcopStartCmd = readRegistryText(RegistryKey.CLASSES_ROOT, fxcopClass + "\\shell\\open\\command", "");
+    final String fxcopStartCmd = readRegistryText(fxcopClass + "\\shell\\open\\command", "");
     if (fxcopStartCmd == null) {
       return null;
     }
