@@ -17,6 +17,8 @@
 package jetbrains.buildServer.fxcop.agent;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Map;
 import javax.xml.transform.Source;
@@ -120,7 +122,7 @@ public class FxCopBuildService extends CommandLineBuildService {
     return "Errors: " + errors + ", warnings: " + warnings;
   }
 
-  private void GenerateHtmlReport() throws TransformerException {
+  private void GenerateHtmlReport() throws TransformerException, IOException {
     final String fxcopReportXslt = getBuild().getRunnerParameters().get(FxCopConstants.SETTINGS_REPORT_XSLT);
     if (StringUtil.isEmptyOrSpaces(fxcopReportXslt)) {
       getLogger().message("Skipped html report generation since not requested");
@@ -139,12 +141,17 @@ public class FxCopBuildService extends CommandLineBuildService {
 
     Source xmlSource = new StreamSource(getOutputFile(FxCopConstants.OUTPUT_FILE));
     Source xsltSource = new StreamSource(xsltFile);
+    final FileOutputStream reportFileStream = new FileOutputStream(reportFile);
 
-    TransformerFactory transformerFactory =
-      TransformerFactory.newInstance();
-    Transformer trans = transformerFactory.newTransformer(xsltSource);
+    try {
+      TransformerFactory transformerFactory =
+        TransformerFactory.newInstance();
+      Transformer trans = transformerFactory.newTransformer(xsltSource);
 
-    trans.transform(xmlSource, new StreamResult(reportFile));
+      trans.transform(xmlSource, new StreamResult(reportFileStream));
+    } finally {
+      reportFileStream.close();
+    }
 
     myArtifactsWatcher.addNewArtifactsPath(FxCopConstants.OUTPUT_DIR + "/*.html");
   }
