@@ -21,27 +21,33 @@
 
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
-<l:settingsGroup title="FxCop options">
+<l:settingsGroup title="What to inspect">
   <tr>
     <c:set var="onclick">
       $('fxcop.project').disabled = this.checked;
       $('fxcop.files').disabled = !this.checked;
       $('fxcop.files').focus();
     </c:set>
-    <th><strong>What to inspect:</strong></th>
-    <td>
+
+    <th>
       <props:radioButtonProperty name="fxcop.what"
                                  value="files"
                                  id="mod-files"
                                  onclick="${onclick}"
                                  checked="${propertiesBean.properties['fxcop.what'] == 'files'}"/>
-      <label for="mod-files">Assemblies:</label>
-      <props:textProperty name="fxcop.files" className="longField"
-                          disabled="${propertiesBean.properties['fxcop.what'] != 'files'}"/>
+      <label for="mod-files">Assemblies:</label></th>
+    <td><span>
+        <props:multilineProperty name="fxcop.files"
+                                 linkTitle="Type assemblies names or wildcards"
+                                 cols="40" rows="6"
+                                 onkeydown="$('webDAV_false').checked = true;$('webDAV_true').checked = false;"
+                                 expanded="true"
+                                 disabled="${propertiesBean.properties['fxcop.what'] != 'files'}"/>
+      </span>
       <span class="smallNote">Assembly file names relative to checkout root separated by spaces.<br/>
         Windows wildcards are allowed.<br/>
         Example: bin\*.dll</span>
-    </td>
+      <span class="error" id="error_fxcop.files"></span></td>
   </tr>
 
   <tr>
@@ -50,19 +56,26 @@
       $('fxcop.project').disabled = !this.checked;
       $('fxcop.project').focus();
     </c:set>
-    <td>&nbsp;</td>
-    <td>
+    <th>
       <props:radioButtonProperty name="fxcop.what"
                                  value="project"
                                  id="mod-project"
                                  onclick="${onclick}"
                                  checked="${propertiesBean.properties['fxcop.what'] == 'project'}"/>
-      <label for="mod-project">FxCop project file:</label>
-      <props:textProperty name="fxcop.project" className="longField"
-                          disabled="${propertiesBean.properties['fxcop.what'] != 'project'}"/>
+      <label for="mod-project">FxCop project file:</label></th>
+    <td>
+      <span>
+        <props:textProperty name="fxcop.project" className="longField"
+                            disabled="${propertiesBean.properties['fxcop.what'] != 'project'}"/>
+        </span>
       <span class="smallNote">FxCop project file name relative to checkout root</span>
+      <span class="error" id="error_fxcop.project"></span></td>
     </td>
   </tr>
+
+</l:settingsGroup>
+
+<l:settingsGroup title="FxCop options">
   <tr>
     <th><label for="fxcop.search_in_gac">Search referenced assemblies in GAC</label></th>
     <td>
@@ -75,7 +88,8 @@
     <td>
       <props:textProperty name="fxcop.search_in_dirs" className="longField"/>
       <span class="error" id="error_fxcop.search_in_dirs"></span>
-      <span class="smallNote">List of directories (relative to checkout root and separated by spaces) to search referenced assemblies in.<br/>
+      <span
+          class="smallNote">List of directories (relative to checkout root and separated by spaces) to search referenced assemblies in.<br/>
       Sets /d: options for FxCopCmd</span>
     </td>
   </tr>
