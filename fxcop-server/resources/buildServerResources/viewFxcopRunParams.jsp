@@ -48,6 +48,18 @@
 </div>
 
 <div class="parameter">
+  Errors limit: <strong><props:displayValue name="fxcop.fail.error.limit" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
+  Warnings limit: <strong><props:displayValue name="fxcop.fail.warning.limit" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
+  Fail on analysis errors: <strong><props:displayCheckboxValue name="fxcop.fail_on_analysis_error"/></strong>
+</div>
+
+<div class="parameter">
   Report XSLT file: <strong><props:displayValue name="fxcop.report_xslt" emptyValue="not specified"/></strong>
 </div>
 

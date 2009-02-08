@@ -120,20 +120,35 @@
   </tr>
 </l:settingsGroup>
 
-<tr>
-  <th><label for="fxcop.fail.error.limit">Maximum error limit:</label></th>
-  <td><props:textProperty name="fxcop.fail.error.limit" style="width:6em;" maxlength="12"/>
-    <span class="error" id="error_fxcop.fail.error.limit"></span>
-    <span class="smallNote">Fail the build if the specified number of errors is exceeded.</span>
-  </td>
-</tr>
+<l:settingsGroup title="Build success criteria">
 
-<tr>
-  <th class="noBorder"><label for="fxcop.fail.warning.limit">Warnings limit:</label></th>
-  <td class="noBorder"><props:textProperty name="fxcop.fail.warning.limit" style="width:6em;" maxlength="12"/>
-    <span class="error" id="error_fxcop.fail.warning.limit"></span>
-    <span class="smallNote">Fail the build if the specified number of warnings is exceeded. Leave blank if there is no limit.</span></td>
-</tr>
+  <tr>
+    <th><label for="fxcop.fail.error.limit">Errors limit:</label></th>
+    <td><props:textProperty name="fxcop.fail.error.limit" style="width:6em;" maxlength="12"/>
+      <span class="error" id="error_fxcop.fail.error.limit"></span>
+      <span class="smallNote">Fail the build if the specified number of errors is exceeded.</span>
+    </td>
+  </tr>
+
+  <tr>
+    <th class="noBorder"><label for="fxcop.fail.warning.limit">Warnings limit:</label></th>
+    <td class="noBorder"><props:textProperty name="fxcop.fail.warning.limit" style="width:6em;" maxlength="12"/>
+      <span class="error" id="error_fxcop.fail.warning.limit"></span>
+      <span class="smallNote">Fail the build if the specified number of warnings is exceeded. Leave blank if there is no limit.</span></td>
+  </tr>
+
+  <tr>
+    <th><label for="fxcop.fail_on_analysis_error">Fail on analysis errors</label></th>
+    <td>
+      <props:checkboxProperty name="fxcop.fail_on_analysis_error"/>
+      <span class="error" id="error_fxcop.fail_on_analysis_error"></span>
+      <span class="smallNote">Fails build on analysis errors from FxCop such as:<br/>
+        ANALYSIS_ERROR ASSEMBLY_LOAD_ERROR ASSEMBLY_REFERENCES_ERROR PROJECT_LOAD_ERROR RULE_LIBRARY_LOAD_ERROR UNKNOWN_ERROR OUTPUT_ERROR
+      </span>
+    </td>
+  </tr>
+
+</l:settingsGroup>
 
 <l:settingsGroup title="FxCop location">
 

@@ -168,9 +168,33 @@ public class FxCopBuildService extends CommandLineBuildService {
       getLogger().buildFailureDescription("Return code contains 'Build breaking message'");
     }
 
-    return errors.contains(FxCopReturnCode.BUILD_BREAKING_MESSAGE)
+    boolean fail = false;
+    if (errors.contains(FxCopReturnCode.BUILD_BREAKING_MESSAGE)) {
+      fail = true;
+    }
+
+    boolean failOnAnalysisErrors = isParameterEnabled(
+      getBuild().getRunnerParameters(),
+      FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR);
+    if (failOnAnalysisErrors &&
+        (errors.contains(FxCopReturnCode.ANALYSIS_ERROR) ||
+         errors.contains(FxCopReturnCode.ASSEMBLY_LOAD_ERROR) ||
+         errors.contains(FxCopReturnCode.ASSEMBLY_REFERENCES_ERROR) ||
+         errors.contains(FxCopReturnCode.PROJECT_LOAD_ERROR) ||
+         errors.contains(FxCopReturnCode.RULE_LIBRARY_LOAD_ERROR) ||
+         errors.contains(FxCopReturnCode.UNKNOWN_ERROR) ||
+         errors.contains(FxCopReturnCode.OUTPUT_ERROR))) {
+      fail = true;
+    }
+
+    return fail
            ? BuildFinishedStatus.FINISHED_FAILED
            : BuildFinishedStatus.FINISHED_SUCCESS;
+  }
+
+  private static boolean isParameterEnabled(final Map<String, String> runParameters, final String key) {
+    return runParameters.containsKey(key) && runParameters.get(key)
+      .equals(Boolean.TRUE.toString());
   }
 
   @NotNull
