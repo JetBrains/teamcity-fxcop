@@ -5,7 +5,7 @@
 
   <import file="${plugin}.xml"/>
 
-  <property name="teamcity.dist" value="${path.variable.teamcitydistribution}" />
+  <property name="path.variable.teamcitydistribution" value="${teamcity.dist}" />
 
   <target name="deploy" depends="dist">
     <copy file="${dist}/${plugin}-plugin.zip" todir="${teamcity.dist}/webapps/ROOT/WEB-INF/plugins" />
