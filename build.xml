@@ -3,39 +3,22 @@
   <property name="dist" value="${basedir}/dist"/>
   <property name="lib" value="${basedir}/lib"/>
 
-  <property name="teamcity.dist" value="../../dist"/>
-
   <import file="${plugin}.xml"/>
+
+  <property name="teamcity.dist" value="${path.variable.teamcitydistribution}" />
 
   <target name="deploy" depends="dist">
     <copy file="${dist}/${plugin}-plugin.zip" todir="${teamcity.dist}/webapps/ROOT/WEB-INF/plugins" />
   </target>
 
-  <target name="update-jars-from-dist">
-    <pathconvert property="openapi.jars" pathsep=",">
-      <fileset dir="${lib}/teamcity/openapi" includes="*.jar"/>
-      <map from="${lib}/teamcity/openapi/" to=''/>
-    </pathconvert>
-
-    <pathconvert property="server.jars" pathsep=",">
-      <fileset dir="${lib}/teamcity/server" includes="*.jar"/>
-      <map from="${lib}/teamcity/server/" to=''/>
-    </pathconvert>
-
-    <copy todir="${lib}/teamcity/openapi" verbose="true" overwrite="true">
-      <filelist dir="${teamcity.dist}/openapi" files="${openapi.jars}" />
-    </copy>
-
-    <copy todir="${lib}/teamcity/server" verbose="true" overwrite="true">
-      <filelist dir="${teamcity.dist}/tmp/WEB-INF/lib" files="${server.jars}" />
-    </copy>
-  </target>
-
   <target name="dist">
+    <echo message="Using TeamCity from ${path.variable.teamcitydistribution}" />
+    
     <antcall target="all" />
 
     <delete dir="${dist}"/>
     <mkdir dir="${dist}/unpacked"/>
+
     <jar destfile="${dist}/unpacked/${plugin}-common.jar" basedir="${basedir}/out/production/${plugin}-common"/>
     <jar destfile="${dist}/unpacked/${plugin}-server.jar" basedir="${basedir}/out/production/${plugin}-server">
          <fileset dir="${plugin}-server/resources" />
@@ -47,6 +30,7 @@
         <include name="${plugin}-common.jar"/>
       </zipfileset>
     </zip>
+
     <zip destfile="${dist}/${plugin}-plugin.zip">
       <zipfileset dir="${dist}" prefix="agent">
         <include name="${plugin}-agent.zip"/>
