@@ -77,7 +77,8 @@ public class FxCopCommandLineBuilder {
       final String filesString = runParameters.get(FxCopConstants.SETTINGS_FILES);
 
       if (filesString != null) {
-        final List<String> files = StringUtil.splitCommandArgumentsAndUnquote(filesString);
+        String filesStringWithSpaces = filesString.replace('\n', ' ').replace('\r', ' '); 
+        final List<String> files = StringUtil.splitCommandArgumentsAndUnquote(filesStringWithSpaces);
 
         for (String file : files) {
           arguments.add("/f:" + file);
