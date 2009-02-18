@@ -66,23 +66,6 @@ public class FxCopBuildService extends CommandLineBuildService {
     return new File(getOutputDirectory(), shortName);
   }
 
-  @Override
-  public void afterProcessFinished() throws RunBuildException {
-    if (!getOutputFile(FxCopConstants.OUTPUT_FILE).exists()) {
-      getLogger().error("Output xml from fxcop not found");
-      getLogger().buildFailureDescription("FxCop failed");
-    }
-    myArtifactsWatcher.addNewArtifactsPath(FxCopConstants.OUTPUT_DIR + "/*.xml");
-
-    try {
-      ImportInspectionResults();
-      GenerateHtmlReport();
-    } catch (Exception e) {
-      getLogger().error("Exception while importing fxcop results: " + e);
-      getLogger().buildFailureDescription("FxCop results import error");
-    }
-  }
-
   private void ImportInspectionResults() throws Exception {
     final String workingRoot = getBuild().getWorkingDirectory().toString();
     final Map<String, String> runParameters = getBuild().getRunnerParameters();
@@ -159,42 +142,65 @@ public class FxCopBuildService extends CommandLineBuildService {
   @NotNull
   @Override
   public BuildFinishedStatus getRunResult(final int exitCode) {
-    if (exitCode == 0) {
-      return BuildFinishedStatus.FINISHED_SUCCESS;
+    String failMessage = null;
+
+    if (exitCode != 0) {
+      final EnumSet<FxCopReturnCode> errors = FxCopReturnCode.decodeReturnCode(exitCode);
+      StringBuilder exitCodeStr = new StringBuilder("FxCop return code (" + exitCode + "):");
+      for (FxCopReturnCode rc : errors) {
+        exitCodeStr.append(" ").append(rc.name());
+      }
+
+      getLogger().warning(exitCodeStr.toString());
+
+      if (errors.contains(FxCopReturnCode.BUILD_BREAKING_MESSAGE)) {
+        failMessage = "FxCop return code contains 'Build breaking message'\"";
+      }
+
+      if (errors.contains(FxCopReturnCode.COMMAND_LINE_SWITCH_ERROR)) {
+        failMessage = exitCodeStr.toString();
+      }
+
+      if (errors.contains(FxCopReturnCode.ANALYSIS_ERROR) ||
+          errors.contains(FxCopReturnCode.ASSEMBLY_LOAD_ERROR) ||
+          errors.contains(FxCopReturnCode.ASSEMBLY_REFERENCES_ERROR) ||
+          errors.contains(FxCopReturnCode.PROJECT_LOAD_ERROR) ||
+          errors.contains(FxCopReturnCode.RULE_LIBRARY_LOAD_ERROR) ||
+          errors.contains(FxCopReturnCode.UNKNOWN_ERROR) ||
+          errors.contains(FxCopReturnCode.OUTPUT_ERROR)) {
+        boolean failOnAnalysisErrors = isParameterEnabled(
+          getBuild().getRunnerParameters(),
+          FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR);
+        
+        if (failOnAnalysisErrors) {
+          failMessage = exitCodeStr.toString();
+        } else {
+          getLogger().warning("Analysis errors ignored as 'Fail on analysis errors' option unchecked");
+        }
+      }
     }
 
-    final EnumSet<FxCopReturnCode> errors = FxCopReturnCode.decodeReturnCode(exitCode);
-    StringBuilder exitCodeStr = new StringBuilder("FxCop return code contains flags:");
-    for (FxCopReturnCode rc : errors) {
-      exitCodeStr.append(" ").append(rc.name());
+    if (getOutputFile(FxCopConstants.OUTPUT_FILE).exists()) {
+      myArtifactsWatcher.addNewArtifactsPath(FxCopConstants.OUTPUT_DIR + "/*.xml");
+
+      try {
+        ImportInspectionResults();
+        GenerateHtmlReport();
+      } catch (Exception e) {
+        getLogger().error("Exception while importing fxcop results: " + e);
+        failMessage = "FxCop results import error";
+      }
+    } else {
+      if (failMessage == null) {
+        failMessage = "Output xml from FxCop is not found";
+      }
     }
 
-    getLogger().warning(exitCodeStr.toString());
-
-    if (errors.contains(FxCopReturnCode.BUILD_BREAKING_MESSAGE)) {
-      getLogger().buildFailureDescription("Return code contains 'Build breaking message'");
+    if (failMessage != null) {
+      getLogger().buildFailureDescription(failMessage);
     }
 
-    boolean fail = false;
-    if (errors.contains(FxCopReturnCode.BUILD_BREAKING_MESSAGE)) {
-      fail = true;
-    }
-
-    boolean failOnAnalysisErrors = isParameterEnabled(
-      getBuild().getRunnerParameters(),
-      FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR);
-    if (failOnAnalysisErrors &&
-        (errors.contains(FxCopReturnCode.ANALYSIS_ERROR) ||
-         errors.contains(FxCopReturnCode.ASSEMBLY_LOAD_ERROR) ||
-         errors.contains(FxCopReturnCode.ASSEMBLY_REFERENCES_ERROR) ||
-         errors.contains(FxCopReturnCode.PROJECT_LOAD_ERROR) ||
-         errors.contains(FxCopReturnCode.RULE_LIBRARY_LOAD_ERROR) ||
-         errors.contains(FxCopReturnCode.UNKNOWN_ERROR) ||
-         errors.contains(FxCopReturnCode.OUTPUT_ERROR))) {
-      fail = true;
-    }
-
-    return fail
+    return failMessage != null
            ? BuildFinishedStatus.FINISHED_FAILED
            : BuildFinishedStatus.FINISHED_SUCCESS;
   }
