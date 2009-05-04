@@ -22,6 +22,7 @@ import jetbrains.buildServer.agent.SimpleBuildLogger;
 import jetbrains.buildServer.agent.inspections.InspectionInstance;
 import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.inspections.InspectionTypeInfo;
+import jetbrains.buildServer.agent.inspections.InspectionReporterListener;
 import jetbrains.buildServer.fxcop.agent.loggers.SimpleBuildLoggerMock;
 import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.Test;
@@ -93,10 +94,13 @@ public class FxCopFileProcessorTest extends BaseTestCase {
         results.append(inspectionType.toString()).append("\n");
       }
 
-      public void markBuildAsInspectionsBuild() {        
+      public void markBuildAsInspectionsBuild() {
       }
 
       public void flush() {
+      }
+
+      public void addListener(@NotNull final InspectionReporterListener listener) {
       }
     };
   }
