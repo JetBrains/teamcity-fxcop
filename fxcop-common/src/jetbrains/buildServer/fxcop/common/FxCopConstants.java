@@ -24,7 +24,6 @@ public interface FxCopConstants {
 
   String RUNNER_TYPE = "FxCop";
   String FXCOPCMD_BINARY = "FxCopCmd.exe";
-  String FXCOP_REPORT_XSL = "Xml/FxCopReport.xsl";
 
   String SETTINGS_WHAT_TO_INSPECT = "fxcop.what";
   String SETTINGS_FILES = "fxcop.files";
@@ -32,7 +31,7 @@ public interface FxCopConstants {
   String SETTINGS_ADDITIONAL_OPTIONS = "fxcop.addon_options";
   String SETTINGS_REPORT_XSLT = "fxcop.report_xslt";
   String SETTINGS_FXCOP_ROOT = "fxcop.root";
-  String SETTINGS_SEARCH_DIRS = "fxcop.search_dirs";
+  String SETTINGS_SEARCH_DIRS = "fxcop.search_in_dirs";
   String SETTINGS_SEARCH_IN_GAC = "fxcop.search_in_gac";
   String SETTINGS_IGNORE_GENERATED_CODE = "fxcop.ignore_generated_code";
   String SETTINGS_FAIL_ON_ANALYSIS_ERROR = "fxcop.fail_on_analysis_error";
@@ -48,6 +47,5 @@ public interface FxCopConstants {
   String OUTPUT_DIR = "05A1B22A-DE6E-49ae-AA30-DC52A074EF22";
   
   String REPORT_FILE = "fxcop-report.html";
-  String ARGUMENTS_FILE = "args.txt";
   String OUTPUT_FILE = "fxcop-result.xml";
 }
