@@ -16,8 +16,6 @@
 
 package jetbrains.buildServer.fxcop.agent;
 
-import com.jniwrapper.win32.registry.RegistryException;
-import com.jniwrapper.win32.registry.RegistryKey;
 import java.io.File;
 import jetbrains.buildServer.agent.AgentLifeCycleAdapter;
 import jetbrains.buildServer.agent.AgentLifeCycleListener;
@@ -27,6 +25,7 @@ import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.util.EventDispatcher;
 import jetbrains.buildServer.util.PEReader.PEUtil;
 import jetbrains.buildServer.util.PEReader.PEVersion;
+import jetbrains.buildServer.util.Win32RegistryAccessor;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,33 +35,6 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
 
   public FxCopPropertiesExtension(@NotNull final EventDispatcher<AgentLifeCycleListener> events) {
     events.addListener(this);
-  }
-
-  //TODO: Move registry access interfaces to common and implementation to common-impl
-  @Nullable
-  private static String readRegistryText(final String subKey, final String value) {
-    if (subKey == null) {
-      return null;
-    }
-
-    try {
-      try {
-        RegistryKey rootKey = RegistryKey.CLASSES_ROOT;
-        RegistryKey registryKey = rootKey.openSubKey(subKey);
-        if (registryKey != null) {
-          try {
-            return (String)registryKey.values().get(value);
-          } finally {
-            registryKey.close();
-          }
-        }
-      } catch (RegistryException e) {
-        //
-      }
-    } catch (Error e) {
-      //
-    }
-    return null;
   }
 
   @Override
@@ -92,7 +64,8 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
   private String searchFxCopInClassesRoot() {
     // Use .fxcop file association
 
-    final String fxcopClass = readRegistryText(".fxcop", "");
+    final String fxcopClass =
+      Win32RegistryAccessor.tryReadRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Win32RegistryAccessor.Arch.X_86, ".fxcop", "");
     if (fxcopClass == null) {
       LOG.info(".fxcop file association wasn't found in CLASSES_ROOT");
       return null;
@@ -100,7 +73,9 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
 
     LOG.info("Found FxCop class in CLASSES_ROOT: " + fxcopClass);
 
-    final String fxcopStartCmd = readRegistryText(fxcopClass + "\\shell\\open\\command", "");
+    final String fxcopStartCmd = Win32RegistryAccessor
+      .tryReadRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Win32RegistryAccessor.Arch.X_86, fxcopClass + "\\shell\\open\\command",
+                           "");
     if (fxcopStartCmd == null) {
       return null;
     }
