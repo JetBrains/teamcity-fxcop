@@ -26,6 +26,7 @@ import jetbrains.buildServer.util.EventDispatcher;
 import jetbrains.buildServer.util.PEReader.PEUtil;
 import jetbrains.buildServer.util.PEReader.PEVersion;
 import jetbrains.buildServer.util.Win32RegistryAccessor;
+import jetbrains.buildServer.util.Win32RegistryAccessorImpl;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +34,11 @@ import org.jetbrains.annotations.Nullable;
 public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
   private static final Logger LOG = Logger.getLogger(FxCopPropertiesExtension.class);
 
-  public FxCopPropertiesExtension(@NotNull final EventDispatcher<AgentLifeCycleListener> events) {
+  private final Win32RegistryAccessor myAccessor;
+
+
+  public FxCopPropertiesExtension(@NotNull final EventDispatcher<AgentLifeCycleListener> events, final Win32RegistryAccessor accessor) {
+    myAccessor = accessor;
     events.addListener(this);
   }
 
@@ -65,7 +70,7 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
     // Use .fxcop file association
 
     final String fxcopClass =
-      Win32RegistryAccessor.tryReadRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Win32RegistryAccessor.Arch.X_86, ".fxcop", "");
+      myAccessor.tryReadRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Win32RegistryAccessor.Arch.X_86, ".fxcop", "");
     if (fxcopClass == null) {
       LOG.info(".fxcop file association wasn't found in CLASSES_ROOT");
       return null;
@@ -73,7 +78,7 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
 
     LOG.info("Found FxCop class in CLASSES_ROOT: " + fxcopClass);
 
-    final String fxcopStartCmd = Win32RegistryAccessor
+    final String fxcopStartCmd = myAccessor
       .tryReadRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Win32RegistryAccessor.Arch.X_86, fxcopClass + "\\shell\\open\\command",
                            "");
     if (fxcopStartCmd == null) {
