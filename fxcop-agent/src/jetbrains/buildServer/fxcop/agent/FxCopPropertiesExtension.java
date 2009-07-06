@@ -26,7 +26,6 @@ import jetbrains.buildServer.util.EventDispatcher;
 import jetbrains.buildServer.util.PEReader.PEUtil;
 import jetbrains.buildServer.util.PEReader.PEVersion;
 import jetbrains.buildServer.util.Win32RegistryAccessor;
-import jetbrains.buildServer.util.Win32RegistryAccessorImpl;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
