@@ -50,7 +50,6 @@
     <orderEntry type="module" module-name="utils" />
     <orderEntry type="module" module-name="web-openapi" />
     <orderEntry type="module" module-name="fxcop-common-internal" />
-    <orderEntry type="library" name="Tomcat" level="project" />
   </component>
   <component name="copyright">
     <Base>
