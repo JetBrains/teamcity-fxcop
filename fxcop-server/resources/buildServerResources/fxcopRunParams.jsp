@@ -27,6 +27,8 @@
       $('fxcop.project').disabled = this.checked;
       $('fxcop.files').disabled = !this.checked;
       $('fxcop.files').focus();
+      BS.VisibilityHandlers.updateVisibility($('fxcop.files'));
+      BS.VisibilityHandlers.updateVisibility($('fxcop.project'));
     </c:set>
 
     <th>
@@ -55,6 +57,8 @@
       $('fxcop.files').disabled = this.checked;
       $('fxcop.project').disabled = !this.checked;
       $('fxcop.project').focus();
+      BS.VisibilityHandlers.updateVisibility($('fxcop.files'));
+      BS.VisibilityHandlers.updateVisibility($('fxcop.project'));
     </c:set>
     <th>
       <props:radioButtonProperty name="fxcop.what"
