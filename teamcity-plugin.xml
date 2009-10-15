@@ -3,7 +3,7 @@
   <info>
     <name>FxCop</name>
     <display-name>FxCop support</display-name>
-    <version>1.0.0</version>
+    <version>@version@</version>
   </info>
   <deployment use-separate-classloader="false" />  
 </teamcity-plugin>

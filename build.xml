@@ -1,67 +1,47 @@
-<project name="FxCop Support" default="dist" basedir=".">
-  <property name="plugin" value="fxcop"/>
-  <property name="dist" value="${basedir}/dist"/>
-  <property name="lib" value="${basedir}/lib"/>
+<project name="fxcop-build" default="dist" basedir=".">
 
-  <import file="${plugin}.xml"/>
+  <property file="build.properties"/>
+  <property name="plugin.name" value="fxcop"/>
+  <property name="javac2.home" value="${basedir}/lib-compile"/>
 
-  <property name="path.variable.teamcitydistribution" value="${teamcity.dist}" />
+  <import file="teamcity-common.xml"/>
+  <import file="fxcop.xml"/>
+
+  <target name="package" depends="define.version">
+    <package.teamcity.plugin name="${plugin.name}"
+                             server.output="${fxcop-server.output.dir}"
+                             server.lib.dir="lib"
+                             server.lib.includes="*.jar"
+                             
+                             common.output="${fxcop-common.output.dir}"
+                             agent.output="${fxcop-agent.output.dir}"
+                             
+                             plugin.descriptor.file="${basedir}/teamcity-plugin.xml"
+                             plugin.version="${plugin.version}"/>
+  </target>
+
+  <target name="define.version" depends="define.version.if.under.teamcity">
+    <tstamp>
+      <format property="current.time" pattern="yyyyMMddHHmm"/>
+    </tstamp>
+    <property name="plugin.version" value="SNAPSHOT-${current.time}"/>
+  </target>
+
+  <target name="define.version.if.under.teamcity" if="build.number">
+    <property name="plugin.version" value="${build.number}"/>
+  </target>
+
+  <target name="dist" depends="check.teamcitydistribution,all,package"/>
 
   <target name="deploy" depends="dist">
-    <copy file="${dist}/${plugin}-plugin.zip" todir="${teamcity.dist}/webapps/ROOT/WEB-INF/plugins" />
+    <deploy.teamcity.plugin name="${plugin.name}"/>
   </target>
-
-  <target name="dist">
-    <echo message="Using TeamCity from ${path.variable.teamcitydistribution}" />
-    
-    <antcall target="all" />
-
-    <delete dir="${dist}"/>
-    <mkdir dir="${dist}/unpacked"/>
-
-    <jar destfile="${dist}/unpacked/${plugin}-common.jar" basedir="${basedir}/out/production/${plugin}-common"/>
-    <jar destfile="${dist}/unpacked/${plugin}-server.jar" basedir="${basedir}/out/production/${plugin}-server">
-         <fileset dir="${plugin}-server/resources" />
-    </jar>
-    <jar destfile="${dist}/unpacked/${plugin}-agent.jar" basedir="${basedir}/out/production/${plugin}-agent"/>
-    <zip destfile="${dist}/${plugin}-agent.zip">
-      <zipfileset dir="${dist}/unpacked" prefix="${plugin}/lib">
-        <include name="${plugin}-agent.jar"/>
-        <include name="${plugin}-common.jar"/>
-      </zipfileset>
-    </zip>
-
-    <zip destfile="${dist}/${plugin}-plugin.zip">
-      <zipfileset dir="${dist}" prefix="agent">
-        <include name="${plugin}-agent.zip"/>
-      </zipfileset>
-      <zipfileset dir="${basedir}" prefix="">
-        <include name="teamcity-plugin.xml"/>
-      </zipfileset>
-      <zipfileset dir="${dist}/unpacked" prefix="server">
-        <include name="${plugin}-server.jar"/>
-        <include name="${plugin}-common.jar"/>
-      </zipfileset>
-    </zip>
-    <delete file="${dist}/${plugin}-agent.zip"/>
-
-    <zip basedir="${basedir}" destfile="${dist}/${plugin}-src.zip">
-      <exclude name="**/.svn/**"/>
-      <exclude name="*.iws"/>
-      <exclude name="test-output/**"/>
-      <exclude name="lib/**"/>
-      <exclude name="out/**"/>
-      <exclude name="dist/**"/>
-      <exclude name="deps/**"/>
-    </zip>
-  </target>
-
+  
   <taskdef name="testng" classname="org.testng.TestNGAntTask" classpath="${basedir}/lib/testng-jdk15.jar"/>
 
   <target name="test" depends="all">
-
     <testng haltonfailure="no" failureProperty="failure_found" listener="org.testng.reporters.TestHTMLReporter"
-            outputdir="${basedir}/test-output" classpathref="${plugin}-tests.runtime.module.classpath"
+            outputdir="${basedir}/test-output" classpathref="fxcop-tests.runtime.module.classpath"
             dumpcommand="true"
             workingdir="${basedir}">
 
@@ -74,4 +54,5 @@
       </xmlfileset>
     </testng>
   </target>
-</project>
+
+</project>        

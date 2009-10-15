@@ -3,7 +3,7 @@ FxCop inspections support for TeamCity
 Installation
 ============
 
-FxCop support bundled with TeamCity 4.
+FxCop support bundled with TeamCity 4 and higher.
 
 Current sources provided as reference for plugin writers.
 
