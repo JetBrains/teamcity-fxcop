@@ -27,6 +27,7 @@ public interface FxCopConstants {
 
   String SETTINGS_WHAT_TO_INSPECT = "fxcop.what";
   String SETTINGS_FILES = "fxcop.files";
+  String SETTINGS_FILES_EXCLUDE = "fxcop.files_exclude";
   String SETTINGS_PROJECT = "fxcop.project";
   String SETTINGS_ADDITIONAL_OPTIONS = "fxcop.addon_options";
   String SETTINGS_REPORT_XSLT = "fxcop.report_xslt";

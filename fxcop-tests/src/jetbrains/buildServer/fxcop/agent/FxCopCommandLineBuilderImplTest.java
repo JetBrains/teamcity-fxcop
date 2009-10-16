@@ -17,12 +17,14 @@
 package jetbrains.buildServer.fxcop.agent;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import jetbrains.buildServer.BaseTestCase;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
+import jetbrains.buildServer.util.StringUtil;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -43,7 +45,12 @@ public class FxCopCommandLineBuilderImplTest extends BaseTestCase {
   }
 
   private void assertCmdArgs(final String expected) throws Exception {
-    final List<String> args = FxCopCommandLineBuilder.getArguments(myRunParameters);
+    final String filesSetting = myRunParameters.get(FxCopConstants.SETTINGS_FILES);
+    final List<String> files = filesSetting != null
+                               ? StringUtil.splitCommandArgumentsAndUnquote(filesSetting)
+                               : new ArrayList<String>();
+
+    final List<String> args = FxCopCommandLineBuilder.getArguments(myRunParameters, files);
 
     StringBuilder result = new StringBuilder();
     for (String chunk : args) {

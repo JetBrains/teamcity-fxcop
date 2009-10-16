@@ -19,7 +19,9 @@ package jetbrains.buildServer.fxcop.agent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -28,13 +30,16 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildFinishedStatus;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
 import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.runner.CommandLineBuildService;
 import jetbrains.buildServer.agent.runner.ProgramCommandLine;
 import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine;
+import jetbrains.buildServer.agent.util.AntPatternFileFinder;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
+import jetbrains.buildServer.messages.DefaultMessagesInfo;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.PropertiesUtil;
 import jetbrains.buildServer.util.StringUtil;
@@ -171,7 +176,7 @@ public class FxCopBuildService extends CommandLineBuildService {
         boolean failOnAnalysisErrors = isParameterEnabled(
           getBuild().getRunnerParameters(),
           FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR);
-        
+
         if (failOnAnalysisErrors) {
           failMessage = exitCodeStr.toString();
         } else {
@@ -212,8 +217,56 @@ public class FxCopBuildService extends CommandLineBuildService {
 
   @NotNull
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
-    return new SimpleProgramCommandLine(getBuild(),
-                                        FxCopCommandLineBuilder.getExecutablePath(getBuild().getRunnerParameters()),
-                                        FxCopCommandLineBuilder.getArguments(getBuild().getRunnerParameters()));
+    final AgentRunningBuild build = getBuild();
+    final Map<String, String> runParameters = build.getRunnerParameters();
+
+    List<String> files = new ArrayList<String>();
+    final String what = runParameters.get(FxCopConstants.SETTINGS_WHAT_TO_INSPECT);
+    if (FxCopConstants.WHAT_TO_INSPECT_FILES.equals(what)) {
+      try {
+        files = matchFiles(build);
+      } catch (IOException e) {
+        throw new RunBuildException("I/O error while collecting files", e);
+      }
+    }
+
+    return new SimpleProgramCommandLine(build,
+                                        FxCopCommandLineBuilder.getExecutablePath(runParameters),
+                                        FxCopCommandLineBuilder.getArguments(runParameters, files));
+  }
+
+  private static List<String> matchFiles(AgentRunningBuild build) throws IOException {
+    final Map<String, String> runParameters = build.getRunnerParameters();
+
+    final File[] files = AntPatternFileFinder.findFiles(
+      build.getCheckoutDirectory(),
+      splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES)),
+      splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES_EXCLUDE)));
+
+    build.getBuildLogger().logMessage(DefaultMessagesInfo.createTextMessage("Matched assembly files:"));
+
+    final List<String> result = new ArrayList<String>(files.length);
+    for (File file : files) {
+      final String relativeName = FileUtil.getRelativePath(build.getWorkingDirectory(), file);
+
+      result.add(relativeName);
+      build.getBuildLogger().logMessage(DefaultMessagesInfo.createTextMessage("  " + relativeName));
+    }
+
+    if (files.length == 0) {
+      build.getBuildLogger().logMessage(DefaultMessagesInfo.createTextMessage("  none"));
+    }
+
+    return result;
+  }
+
+  private static String[] splitFileWildcards(final String string) {
+    if (string != null) {
+      final String filesStringWithSpaces = string.replace('\n', ' ').replace('\r', ' ').replace('\\', '/');
+      final List<String> split = StringUtil.splitCommandArgumentsAndUnquote(filesStringWithSpaces);
+      return split.toArray(new String[split.size()]);
+    }
+
+    return new String[0];
   }
 }

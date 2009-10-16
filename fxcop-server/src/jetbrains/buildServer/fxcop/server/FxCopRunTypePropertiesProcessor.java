@@ -29,10 +29,9 @@ public class FxCopRunTypePropertiesProcessor implements PropertiesProcessor {
   public Collection<InvalidProperty> process(Map<String, String> properties) {
     List<InvalidProperty> result = new Vector<InvalidProperty>();
 
-    final String files = properties.get(
-      FxCopConstants.SETTINGS_FILES);
-    final String project = properties.get(
-      FxCopConstants.SETTINGS_PROJECT);
+    final String files = properties.get(FxCopConstants.SETTINGS_FILES);
+    final String project = properties.get(FxCopConstants.SETTINGS_PROJECT);
+
     if (PropertiesUtil.isEmptyOrNull(project) && PropertiesUtil.isEmptyOrNull(files)) {
       result.add(
         new InvalidProperty(

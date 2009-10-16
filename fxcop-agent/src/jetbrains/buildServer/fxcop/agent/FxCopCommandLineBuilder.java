@@ -37,7 +37,7 @@ public class FxCopCommandLineBuilder {
   }
 
   @NotNull
-  public static List<String> getArguments(Map<String, String> runParameters) throws RunBuildException {
+  public static List<String> getArguments(Map<String, String> runParameters, List<String> files) throws RunBuildException {
     List<String> arguments = new Vector<String>();
 
     arguments.add("/forceoutput");
@@ -74,12 +74,7 @@ public class FxCopCommandLineBuilder {
         arguments.add("/project:" + project);
       }
     } else if (FxCopConstants.WHAT_TO_INSPECT_FILES.equals(what)) {
-      final String filesString = runParameters.get(FxCopConstants.SETTINGS_FILES);
-
-      if (filesString != null) {
-        String filesStringWithSpaces = filesString.replace('\n', ' ').replace('\r', ' '); 
-        final List<String> files = StringUtil.splitCommandArgumentsAndUnquote(filesStringWithSpaces);
-
+      if (files != null) {
         for (String file : files) {
           arguments.add("/f:" + file);
         }

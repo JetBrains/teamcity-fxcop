@@ -39,25 +39,33 @@
                                  checked="${propertiesBean.properties['fxcop.what'] == 'files'}"/>
       <label for="mod-files">Assemblies:</label></th>
     <td><span>
-        <props:multilineProperty name="fxcop.files"
-                                 linkTitle="Type assemblies names or wildcards"
-                                 cols="40" rows="6"
-                                 onkeydown="$('webDAV_false').checked = true;$('webDAV_true').checked = false;"
-                                 expanded="true"
-                                 disabled="${propertiesBean.properties['fxcop.what'] != 'files'}"/>
+      <props:multilineProperty name="fxcop.files"
+                               linkTitle="Type assembly files or wildcards"
+                               cols="40" rows="5"
+                               expanded="true"
+                               disabled="${propertiesBean.properties['fxcop.what'] != 'files'}"/>
+      <props:multilineProperty name="fxcop.files_exclude"
+                               linkTitle="Exclude assembly files by wildcard"
+                               cols="40" rows="3"
+                               expanded="true"
+                               disabled="${propertiesBean.properties['fxcop.what'] != 'files'}"/>
       </span>
       <span class="smallNote">Assembly file names relative to checkout root separated by spaces.<br/>
-        Windows wildcards are allowed.<br/>
+        Ant-like wildcards are allowed.<br/>
         Example: bin\*.dll</span>
-      <span class="error" id="error_fxcop.files"></span></td>
+      <span class="error" id="error_fxcop.files"></span>
+      <span class="error" id="error_fxcop.files_exclude"></span>
+    </td>
   </tr>
 
   <tr>
     <c:set var="onclick">
       $('fxcop.files').disabled = this.checked;
+      $('fxcop.files_exclude').disabled = this.checked;
       $('fxcop.project').disabled = !this.checked;
       $('fxcop.project').focus();
       BS.VisibilityHandlers.updateVisibility($('fxcop.files'));
+      BS.VisibilityHandlers.updateVisibility($('fxcop.files_exclude'));
       BS.VisibilityHandlers.updateVisibility($('fxcop.project'));
     </c:set>
     <th>

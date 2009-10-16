@@ -27,6 +27,8 @@
     <c:otherwise>
       Assemblies to inspect:
       <strong><props:displayValue name="fxcop.files" emptyValue="not specified"/></strong>
+      Assemblies to exclude:
+      <strong><props:displayValue name="fxcop.files_exclude" emptyValue="not specified"/></strong>
     </c:otherwise>
   </c:choose>
 </div>
