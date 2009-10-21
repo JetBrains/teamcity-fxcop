@@ -10,8 +10,6 @@
   <target name="package" depends="define.version">
     <package.teamcity.plugin name="${plugin.name}"
                              server.output="${fxcop-server.output.dir}"
-                             server.lib.dir="lib"
-                             server.lib.includes="*.jar"
                              
                              common.output="${fxcop-common.output.dir}"
                              agent.output="${fxcop-agent.output.dir}"

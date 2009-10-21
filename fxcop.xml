@@ -29,6 +29,8 @@
     <exclude name="**/*.pyc/**"/>
     <exclude name="**/*.pyo/**"/>
     <exclude name="**/.git/**"/>
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/_svn/**"/>
   </patternset>
   <patternset id="library.patterns">
     <include name="*.zip"/>
@@ -48,6 +50,9 @@
     <include name="**/?*.html"/>
     <include name="**/?*.dtd"/>
     <include name="**/?*.tld"/>
+    <include name="**/?*.jsp"/>
+    <include name="**/?*.gif"/>
+    <include name="**/?*.png"/>
   </patternset>
   
   
@@ -78,9 +83,9 @@
   </path>
   
   <path id="library.test-sup.classpath">
+    <pathelement location="${basedir}/lib/testng-jdk15.jar"/>
     <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/jmock-SNAPSHOT.jar"/>
     <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/junit-3.8.2.jar"/>
-    <pathelement location="${basedir}/lib/testng-jdk15.jar"/>
   </path>
   
   <path id="library.xml.classpath">
@@ -195,7 +200,8 @@
     <path refid="library.api-common.classpath"/>
     <path refid="library.api-agent.classpath"/>
     <path refid="library.xml.classpath"/>
-    <path refid="fxcop-common.runtime.module.classpath"/>
+    <pathelement location="${fxcop-common.output.dir}"/>
+    <pathelement location="${fxcop-common.testoutput.dir}"/>
     <path refid="library.jni.classpath"/>
   </path>
   
@@ -269,7 +275,8 @@
     <pathelement location="${fxcop-server.output.dir}"/>
     <pathelement location="${fxcop-server.testoutput.dir}"/>
     <path refid="library.api-server.classpath"/>
-    <path refid="fxcop-common.runtime.module.classpath"/>
+    <pathelement location="${fxcop-common.output.dir}"/>
+    <pathelement location="${fxcop-common.testoutput.dir}"/>
     <path refid="library.api-common.classpath"/>
   </path>
   
@@ -285,6 +292,7 @@
   <path id="fxcop-server.module.sourcepath">
     <dirset dir="${module.fxcop-server.basedir}/fxcop-server">
       <include name="src"/>
+      <include name="resources"/>
     </dirset>
   </path>
   
@@ -303,6 +311,10 @@
     
     <copy todir="${fxcop-server.output.dir}">
       <fileset dir="${module.fxcop-server.basedir}/fxcop-server/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.fxcop-server.basedir}/fxcop-server/resources">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
@@ -349,11 +361,14 @@
     <pathelement location="${fxcop-tests.testoutput.dir}"/>
     <path refid="library.api-common.classpath"/>
     <path refid="library.api-agent.classpath"/>
-    <path refid="fxcop-agent.runtime.module.classpath"/>
-    <path refid="library.test-sup.classpath"/>
+    <pathelement location="${fxcop-agent.output.dir}"/>
+    <pathelement location="${fxcop-agent.testoutput.dir}"/>
     <path refid="library.xml.classpath"/>
+    <pathelement location="${fxcop-common.output.dir}"/>
+    <pathelement location="${fxcop-common.testoutput.dir}"/>
+    <path refid="library.jni.classpath"/>
+    <path refid="library.test-sup.classpath"/>
     <path refid="library.api-server.classpath"/>
-    <path refid="fxcop-common.runtime.module.classpath"/>
   </path>
   
   
