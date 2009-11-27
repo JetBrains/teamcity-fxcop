@@ -26,6 +26,7 @@
     <c:set var="onclick">
       $('fxcop.project').disabled = this.checked;
       $('fxcop.files').disabled = !this.checked;
+      $('fxcop.files_exclude').disabled = !this.checked;
       $('fxcop.files').focus();
       BS.VisibilityHandlers.updateVisibility($('fxcop.files'));
       BS.VisibilityHandlers.updateVisibility($('fxcop.project'));
