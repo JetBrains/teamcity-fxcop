@@ -100,10 +100,9 @@ public class FxCopBuildService extends CommandLineBuildService {
       limitReached = true;
     }
 
-    final String buildStatus = generateBuildStatus(errors, warnings);
-    getLogger().message("##teamcity[buildStatus status='" +
-                        (limitReached ? "FAILURE" : "SUCCESS") +
-                        "' text='" + buildStatus + "']");
+    if (limitReached) {
+      getLogger().message("##teamcity[buildStatus status='FAILURE' " + "text='" + generateBuildStatus(errors, warnings) + "']");
+    }
   }
 
   private String generateBuildStatus(int errors, int warnings) {
