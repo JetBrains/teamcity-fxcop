@@ -69,7 +69,7 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
     // Use .fxcop file association
 
     final String fxcopClass =
-      myAccessor.tryReadRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Win32RegistryAccessor.Arch.X_86, ".fxcop", "");
+      myAccessor.readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Win32RegistryAccessor.Arch.X86, ".fxcop", "");
     if (fxcopClass == null) {
       LOG.info(".fxcop file association wasn't found in CLASSES_ROOT");
       return null;
@@ -78,8 +78,7 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
     LOG.info("Found FxCop class in CLASSES_ROOT: " + fxcopClass);
 
     final String fxcopStartCmd = myAccessor
-      .tryReadRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Win32RegistryAccessor.Arch.X_86, fxcopClass + "\\shell\\open\\command",
-                           "");
+      .readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Win32RegistryAccessor.Arch.X86, fxcopClass + "\\shell\\open\\command", "");
     if (fxcopStartCmd == null) {
       return null;
     }
