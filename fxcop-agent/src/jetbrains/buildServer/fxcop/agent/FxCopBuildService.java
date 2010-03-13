@@ -47,7 +47,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class FxCopBuildService extends CommandLineBuildService {
   private final ArtifactsWatcher myArtifactsWatcher;
-  private InspectionReporter myInspectionReporter;
+  private final InspectionReporter myInspectionReporter;
 
   public FxCopBuildService(ArtifactsWatcher artifactsWatcher, final InspectionReporter inspectionReporter) {
     myArtifactsWatcher = artifactsWatcher;
@@ -237,10 +237,10 @@ public class FxCopBuildService extends CommandLineBuildService {
   private static List<String> matchFiles(AgentRunningBuild build) throws IOException {
     final Map<String, String> runParameters = build.getRunnerParameters();
 
-    final File[] files = AntPatternFileFinder.findFiles(
-      build.getCheckoutDirectory(),
+    final AntPatternFileFinder finder = new AntPatternFileFinder(
       splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES)),
-      splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES_EXCLUDE)));
+      splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES_EXCLUDE)), false);
+    final File[] files = finder.findFiles(build.getCheckoutDirectory());
 
     build.getBuildLogger().logMessage(DefaultMessagesInfo.createTextMessage("Matched assembly files:"));
 
