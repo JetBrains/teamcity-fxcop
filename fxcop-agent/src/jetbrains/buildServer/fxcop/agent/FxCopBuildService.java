@@ -16,6 +16,7 @@
 
 package jetbrains.buildServer.fxcop.agent;
 
+import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -239,7 +240,8 @@ public class FxCopBuildService extends CommandLineBuildService {
 
     final AntPatternFileFinder finder = new AntPatternFileFinder(
       splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES)),
-      splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES_EXCLUDE)), false);
+      splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES_EXCLUDE)),
+      SystemInfo.isFileSystemCaseSensitive);
     final File[] files = finder.findFiles(build.getCheckoutDirectory());
 
     build.getBuildLogger().logMessage(DefaultMessagesInfo.createTextMessage("Matched assembly files:"));
