@@ -87,7 +87,7 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
 
     final String fxcopBinary = extractFxCopBinary(fxcopStartCmd);
     if (fxcopBinary == null) {
-      LOG.error("Can't extract fxcop binary from: " + fxcopStartCmd);
+      LOG.warn("Can't extract fxcop binary from: " + fxcopStartCmd);
       return null;
     }
 
@@ -95,7 +95,7 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
 
     final File fxcopBinaryFile = new File(fxcopBinary);
     if (!fxcopBinaryFile.exists()) {
-      LOG.error("FxCopCmd was found in the registry but non-existent on disk");
+      LOG.warn("FxCopCmd was found in the registry but non-existent on disk");
       return null;
     }
 
