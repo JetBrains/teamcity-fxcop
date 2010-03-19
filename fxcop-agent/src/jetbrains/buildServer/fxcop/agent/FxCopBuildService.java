@@ -228,6 +228,10 @@ public class FxCopBuildService extends CommandLineBuildService {
       } catch (IOException e) {
         throw new RunBuildException("I/O error while collecting files", e);
       }
+
+      if (files.size() == 0) {
+        throw new RunBuildException("No files matched the pattern");        
+      }
     }
 
     return new SimpleProgramCommandLine(build,
