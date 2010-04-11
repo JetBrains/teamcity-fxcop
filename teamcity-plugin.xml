@@ -4,6 +4,10 @@
     <name>FxCop</name>
     <display-name>FxCop support</display-name>
     <version>@version@</version>
+    <vendor>
+      <name>JetBrains, s.r.o.</name>
+      <url>http://www.jetbrains.com/teamcity</url>
+    </vendor>
   </info>
   <deployment use-separate-classloader="false" />  
 </teamcity-plugin>
