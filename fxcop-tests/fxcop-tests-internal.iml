@@ -16,6 +16,7 @@
     <orderEntry type="module" module-name="fxcop-common-internal" />
     <orderEntry type="module" module-name="fxcop-server-internal" />
     <orderEntry type="module" module-name="runtime-util" />
+    <orderEntry type="module" module-name="test-api" />
   </component>
   <component name="copyright">
     <Base>
