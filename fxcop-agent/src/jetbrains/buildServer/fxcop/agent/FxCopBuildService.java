@@ -41,14 +41,13 @@ import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine;
 import jetbrains.buildServer.agent.util.AntPatternFileFinder;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.messages.DefaultMessagesInfo;
+import jetbrains.buildServer.messages.ErrorData;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.PropertiesUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopBuildService extends CommandLineBuildService {
-  private static final String FXCOP_ERROR_TYPE = "FXCOP_ERROR";
-
   private final ArtifactsWatcher myArtifactsWatcher;
   private final InspectionReporter myInspectionReporter;
 
@@ -204,7 +203,7 @@ public class FxCopBuildService extends CommandLineBuildService {
     }
 
     if (failMessage != null) {
-      getLogger().error(FXCOP_ERROR_TYPE, failMessage);
+      getLogger().error(ErrorData.FXCOP_ERROR_TYPE, failMessage);
     }
 
     return failMessage != null
