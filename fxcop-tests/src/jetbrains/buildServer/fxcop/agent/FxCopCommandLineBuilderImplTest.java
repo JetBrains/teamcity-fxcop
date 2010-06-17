@@ -115,8 +115,8 @@ public class FxCopCommandLineBuilderImplTest extends BaseTestCase {
 
   public void testAddonOptions() throws Exception {
     myRunParameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_PROJECT);
-    myRunParameters.put(FxCopConstants.SETTINGS_ADDITIONAL_OPTIONS, "bla-bla qqq");
-    assertCmdArgs("[bla-bla] [qqq] ");
+    myRunParameters.put(FxCopConstants.SETTINGS_ADDITIONAL_OPTIONS, "bla-bla qqq /d:\"JJJ KKK\"");
+    assertCmdArgs("[bla-bla] [qqq] [/d:\"JJJ KKK\"] ");
   }
 
   public void testSearchInGAC() throws Exception {
