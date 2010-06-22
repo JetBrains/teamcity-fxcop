@@ -203,7 +203,7 @@ public class FxCopBuildService extends CommandLineBuildService {
     }
 
     if (failMessage != null) {
-      getLogger().error(ErrorData.FXCOP_ERROR_TYPE, failMessage);
+      getLogger().error(ErrorData.FXCOP_ERROR_TYPE, failMessage, null);
     }
 
     return failMessage != null
