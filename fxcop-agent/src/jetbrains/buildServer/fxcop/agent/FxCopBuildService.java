@@ -48,6 +48,8 @@ import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopBuildService extends CommandLineBuildService {
+  private static final String FXCOP_ERROR_TYPE = "FXCOP_ERROR";
+
   private final ArtifactsWatcher myArtifactsWatcher;
   private final InspectionReporter myInspectionReporter;
 
@@ -203,7 +205,7 @@ public class FxCopBuildService extends CommandLineBuildService {
     }
 
     if (failMessage != null) {
-      getLogger().error(ErrorData.FXCOP_ERROR_TYPE, failMessage, null);
+      getLogger().error(FXCOP_ERROR_TYPE, failMessage, null);
     }
 
     return failMessage != null
