@@ -106,7 +106,7 @@ public class FxCopBuildService extends CommandLineBuildService {
     }
 
     if (limitReached) {
-      getLogger().message(new BuildStatus(generateBuildStatus(errors, warnings), Status.FAILURE).toString());
+      getLogger().message(new BuildStatus(generateBuildStatus(errors, warnings), Status.FAILURE).asString());
     }
   }
 
