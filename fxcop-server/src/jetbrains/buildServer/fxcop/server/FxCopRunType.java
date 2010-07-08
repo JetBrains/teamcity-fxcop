@@ -22,6 +22,7 @@ import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
+import org.jetbrains.annotations.NotNull;
 
 public class FxCopRunType extends RunType {
   public FxCopRunType(final RunTypeRegistry runTypeRegistry) {
@@ -51,6 +52,7 @@ public class FxCopRunType extends RunType {
     return map;
   }
 
+  @NotNull
   public String getType() {
     return FxCopConstants.RUNNER_TYPE;
   }
