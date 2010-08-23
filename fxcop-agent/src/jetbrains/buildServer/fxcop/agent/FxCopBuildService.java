@@ -31,13 +31,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildFinishedStatus;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
 import jetbrains.buildServer.agent.inspections.InspectionReporter;
-import jetbrains.buildServer.agent.runner.CommandLineBuildService;
+import jetbrains.buildServer.agent.runner.BuildServiceAdapter;
 import jetbrains.buildServer.agent.runner.ProgramCommandLine;
-import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine;
 import jetbrains.buildServer.agent.util.AntPatternFileFinder;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.messages.DefaultMessagesInfo;
@@ -48,28 +46,29 @@ import jetbrains.buildServer.util.PropertiesUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class FxCopBuildService extends CommandLineBuildService {
+public class FxCopBuildService extends BuildServiceAdapter {
   private static final String FXCOP_ERROR_TYPE = "FXCOP_ERROR";
 
   private final ArtifactsWatcher myArtifactsWatcher;
   private final InspectionReporter myInspectionReporter;
 
-  public FxCopBuildService(ArtifactsWatcher artifactsWatcher, final InspectionReporter inspectionReporter) {
+  public FxCopBuildService(final ArtifactsWatcher artifactsWatcher, final InspectionReporter inspectionReporter) {
     myArtifactsWatcher = artifactsWatcher;
     myInspectionReporter = inspectionReporter;
   }
 
   @Override
   public void beforeProcessStarted() throws RunBuildException {
-    getBuild().getBuildLogger().progressMessage("Running FxCop");
+    getLogger().progressMessage("Running FxCop");
 
     final File outDir = getOutputDirectory();
     FileUtil.delete(outDir);
+    //noinspection ResultOfMethodCallIgnored
     outDir.mkdirs();
   }
 
   private File getOutputDirectory() {
-    return new File(getBuild().getWorkingDirectory(), FxCopConstants.OUTPUT_DIR);
+    return new File(getWorkingDirectory(), FxCopConstants.OUTPUT_DIR);
   }
 
   private File getOutputFile(String shortName) {
@@ -77,8 +76,8 @@ public class FxCopBuildService extends CommandLineBuildService {
   }
 
   private void ImportInspectionResults() throws Exception {
-    final String workingRoot = getBuild().getWorkingDirectory().toString();
-    final Map<String, String> runParameters = getBuild().getRunnerParameters();
+    final String workingRoot = getWorkingDirectory().toString();
+    final Map<String, String> runParameters = getRunnerParameters();
 
     getLogger().progressMessage("Importing inspection results");
 
@@ -115,7 +114,7 @@ public class FxCopBuildService extends CommandLineBuildService {
   }
 
   private void GenerateHtmlReport() throws TransformerException, IOException {
-    final String fxcopReportXslt = getBuild().getRunnerParameters().get(FxCopConstants.SETTINGS_REPORT_XSLT);
+    final String fxcopReportXslt = getRunnerParameters().get(FxCopConstants.SETTINGS_REPORT_XSLT);
     if (StringUtil.isEmptyOrSpaces(fxcopReportXslt)) {
       getLogger().message("Skipped html report generation since not requested");
       return;
@@ -178,7 +177,7 @@ public class FxCopBuildService extends CommandLineBuildService {
           errors.contains(FxCopReturnCode.UNKNOWN_ERROR) ||
           errors.contains(FxCopReturnCode.OUTPUT_ERROR)) {
         boolean failOnAnalysisErrors = isParameterEnabled(
-          getBuild().getRunnerParameters(),
+          getRunnerParameters(),
           FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR);
 
         if (failOnAnalysisErrors) {
@@ -220,15 +219,15 @@ public class FxCopBuildService extends CommandLineBuildService {
   }
 
   @NotNull
+  @Override
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
-    final AgentRunningBuild build = getBuild();
-    final Map<String, String> runParameters = build.getRunnerParameters();
+    final Map<String, String> runParameters = getRunnerParameters();
 
     List<String> files = new ArrayList<String>();
     final String what = runParameters.get(FxCopConstants.SETTINGS_WHAT_TO_INSPECT);
     if (FxCopConstants.WHAT_TO_INSPECT_FILES.equals(what)) {
       try {
-        files = matchFiles(build);
+        files = matchFiles();
       } catch (IOException e) {
         throw new RunBuildException("I/O error while collecting files", e);
       }
@@ -238,32 +237,31 @@ public class FxCopBuildService extends CommandLineBuildService {
       }
     }
 
-    return new SimpleProgramCommandLine(build,
-                                        FxCopCommandLineBuilder.getExecutablePath(runParameters),
-                                        FxCopCommandLineBuilder.getArguments(runParameters, files));
+    return createProgramCommandline(FxCopCommandLineBuilder.getExecutablePath(runParameters),
+                                    FxCopCommandLineBuilder.getArguments(runParameters, files));
   }
 
-  private static List<String> matchFiles(AgentRunningBuild build) throws IOException {
-    final Map<String, String> runParameters = build.getRunnerParameters();
+  private List<String> matchFiles() throws IOException {
+    final Map<String, String> runParameters = getRunnerParameters();
 
     final AntPatternFileFinder finder = new AntPatternFileFinder(
       splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES)),
       splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES_EXCLUDE)),
       SystemInfo.isFileSystemCaseSensitive);
-    final File[] files = finder.findFiles(build.getCheckoutDirectory());
+    final File[] files = finder.findFiles(getCheckoutDirectory());
 
-    build.getBuildLogger().logMessage(DefaultMessagesInfo.createTextMessage("Matched assembly files:"));
+    getLogger().logMessage(DefaultMessagesInfo.createTextMessage("Matched assembly files:"));
 
     final List<String> result = new ArrayList<String>(files.length);
     for (File file : files) {
-      final String relativeName = FileUtil.getRelativePath(build.getWorkingDirectory(), file);
+      final String relativeName = FileUtil.getRelativePath(getWorkingDirectory(), file);
 
       result.add(relativeName);
-      build.getBuildLogger().logMessage(DefaultMessagesInfo.createTextMessage("  " + relativeName));
+      getLogger().logMessage(DefaultMessagesInfo.createTextMessage("  " + relativeName));
     }
 
     if (files.length == 0) {
-      build.getBuildLogger().logMessage(DefaultMessagesInfo.createTextMessage("  none"));
+      getLogger().logMessage(DefaultMessagesInfo.createTextMessage("  none"));
     }
 
     return result;
