@@ -38,8 +38,8 @@ public class FxCopFileProcessor {
     TARGET, RESOURCE, NAMESPACE, TYPE, MEMBER, ACCESSOR
   }
 
-  private Stack<String> myMessageInspectionId = new Stack<String>();
-  private Stack<EntityType> myCurrentEntity = new Stack<EntityType>();
+  private final Stack<String> myMessageInspectionId = new Stack<String>();
+  private final Stack<EntityType> myCurrentEntity = new Stack<EntityType>();
   private String myCurrentTarget;
   private String myCurrentResource;
   private String myCurrentNamespace;
@@ -51,7 +51,7 @@ public class FxCopFileProcessor {
 
   private final File myFxCopReport;
   private final SimpleBuildLogger myLogger;
-  private final String mySourceFilePrefix;
+  private final String mySourceFilePrefixLower;
   private final InspectionReporter myReporter;
   private HierarchicalStreamReader myStream = null;
 
@@ -63,7 +63,7 @@ public class FxCopFileProcessor {
                             @NotNull final InspectionReporter reporter) {
     myFxCopReport = fxcopReport;
     myLogger = logger;
-    mySourceFilePrefix = sourceFilePrefix;
+    mySourceFilePrefixLower = sourceFilePrefix.toLowerCase();
     myReporter = reporter;
   }
 
@@ -191,8 +191,8 @@ public class FxCopFileProcessor {
       } else {
         String reportPath = path;
 
-        if (reportPath.toLowerCase().startsWith(mySourceFilePrefix.toLowerCase())) {
-          reportPath = reportPath.substring(mySourceFilePrefix.length());
+        if (reportPath.toLowerCase().startsWith(mySourceFilePrefixLower)) {
+          reportPath = reportPath.substring(mySourceFilePrefixLower.length());
         }
 
         reportPath = reportPath.replace('/', '|').replace("\\", "|");

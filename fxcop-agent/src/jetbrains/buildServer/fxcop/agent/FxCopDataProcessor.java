@@ -29,19 +29,19 @@ public class FxCopDataProcessor implements DataProcessor {
   private final CurrentBuildTracker myCurrentBuild;
   private final InspectionReporter myReporter;
 
-  public FxCopDataProcessor(final CurrentBuildTracker currentBuild,
-                            final InspectionReporter reporter) {
+  public FxCopDataProcessor(@NotNull final CurrentBuildTracker currentBuild,
+                            @NotNull final InspectionReporter reporter) {
     myCurrentBuild = currentBuild;
     myReporter = reporter;
   }
 
   public void processData(@NotNull final File path, final Map<String, String> arguments) throws Exception {
     final AgentRunningBuild currentBuild = myCurrentBuild.getCurrentBuild();
-    final String workingRoot = currentBuild.getWorkingDirectory().toString();
+    final String checkoutDir = currentBuild.getCheckoutDirectory().toString();
 
     final SimpleBuildLogger logger = currentBuild.getBuildLogger();
     final FxCopFileProcessor fileProcessor =
-      new FxCopFileProcessor(path, workingRoot, logger, myReporter);
+      new FxCopFileProcessor(path, checkoutDir, logger, myReporter);
 
     myReporter.markBuildAsInspectionsBuild();
     fileProcessor.processReport();
