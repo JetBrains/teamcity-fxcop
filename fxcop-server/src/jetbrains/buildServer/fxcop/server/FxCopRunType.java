@@ -22,6 +22,7 @@ import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
+import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopRunType extends RunType {
@@ -29,22 +30,27 @@ public class FxCopRunType extends RunType {
     runTypeRegistry.registerRunType(this);
   }
 
+  @Override
   public PropertiesProcessor getRunnerPropertiesProcessor() {
     return new FxCopRunTypePropertiesProcessor();
   }
 
+  @Override
   public String getDescription() {
     return FxCopConstants.RUNNER_DESCRIPTION;
   }
 
+  @Override
   public String getEditRunnerParamsJspFilePath() {
     return "fxcopRunParams.jsp";
   }
 
+  @Override
   public String getViewRunnerParamsJspFilePath() {
     return "viewFxcopRunParams.jsp";
   }
 
+  @Override
   public Map<String, String> getDefaultRunnerProperties() {
     Map<String, String> map = new HashMap<String, String>();
     setUpDefaultParams(map);
@@ -52,11 +58,13 @@ public class FxCopRunType extends RunType {
     return map;
   }
 
+  @Override
   @NotNull
   public String getType() {
     return FxCopConstants.RUNNER_TYPE;
   }
 
+  @Override
   public String getDisplayName() {
     return FxCopConstants.RUNNER_DISPLAY_NAME;
   }
@@ -69,5 +77,18 @@ public class FxCopRunType extends RunType {
       FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_FILES);
     parameters.put(FxCopConstants.SETTINGS_SEARCH_IN_GAC, "true");
     parameters.put(FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR, "true");
+  }
+
+  @NotNull
+  @Override
+  public String getShortDescription(@NotNull final Map<String, String> runnerParams) {
+    StringBuilder result = new StringBuilder();
+    String what = runnerParams.get(FxCopConstants.SETTINGS_WHAT_TO_INSPECT);
+    if (what == null || "files".equals(what)) {
+      result.append("Assemblies: ").append(StringUtil.emptyIfNull(runnerParams.get(FxCopConstants.SETTINGS_FILES)));
+    } else {
+      result.append("FxCop project: ").append(StringUtil.emptyIfNull(runnerParams.get(FxCopConstants.SETTINGS_PROJECT)));
+    }
+    return result.toString();
   }
 }
