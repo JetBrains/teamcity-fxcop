@@ -205,7 +205,7 @@ public class FxCopBuildService extends BuildServiceAdapter {
     }
 
     if (failMessage != null) {
-      getLogger().error(FXCOP_ERROR_TYPE, failMessage, null);
+      getLogger().internalError(FXCOP_ERROR_TYPE, failMessage, null);
     }
 
     return failMessage != null
