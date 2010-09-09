@@ -13,7 +13,6 @@
         <webroots>
           <root url="file://$MODULE_DIR$/resources/buildServerResources" relative="/plugins/FxCop" />
         </webroots>
-        <context-artifact name="web-deployment" />
       </configuration>
     </facet>
   </component>
