@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jetbrains.buildServer.fxcop.agent.loggers;
+package jetbrains.buildServer.fxcop.agent;
 
 import jetbrains.buildServer.agent.SimpleBuildLogger;
 import org.jetbrains.annotations.NotNull;

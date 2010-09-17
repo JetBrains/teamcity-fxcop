@@ -36,7 +36,6 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter {
 
   private final Win32RegistryAccessor myAccessor;
 
-
   public FxCopPropertiesExtension(@NotNull final EventDispatcher<AgentLifeCycleListener> events, final Win32RegistryAccessor accessor) {
     myAccessor = accessor;
     events.addListener(this);

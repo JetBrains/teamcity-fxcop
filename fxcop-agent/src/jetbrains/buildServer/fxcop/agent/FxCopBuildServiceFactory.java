@@ -61,5 +61,4 @@ public class FxCopBuildServiceFactory implements CommandLineBuildServiceFactory,
   public AgentBuildRunnerInfo getBuildRunnerInfo() {
     return this;
   }
-
 }

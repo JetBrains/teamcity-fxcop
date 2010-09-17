@@ -31,17 +31,18 @@ import org.testng.annotations.Test;
 @Test
 public class FxCopCommandLineBuilderImplTest extends BaseTestCase {
   private Map<String, String> myRunParameters;
-  private final String myExpectedPostfix =
-    "[/out:" + FxCopConstants.OUTPUT_DIR +
-    File.separator + FxCopConstants.OUTPUT_FILE + "] ";
-  private final String myExpectedPrefix =
-    "[/forceoutput] ";
+  private File myXmlReportFile;
+  private String myExpectedPostfix;
+  private final String myExpectedPrefix = "[/forceoutput] ";
 
   @BeforeMethod
   @Override
   protected void setUp() throws Exception {
-    myRunParameters = new HashMap<String, String>();
     super.setUp();
+
+    myRunParameters = new HashMap<String, String>();
+    myXmlReportFile = new File("C:\\a\\b");
+    myExpectedPostfix = "[/out:" + myXmlReportFile.getPath() + "] ";
   }
 
   private void assertCmdArgs(final String expected) throws Exception {
@@ -50,7 +51,8 @@ public class FxCopCommandLineBuilderImplTest extends BaseTestCase {
                                ? StringUtil.splitCommandArgumentsAndUnquote(filesSetting)
                                : new ArrayList<String>();
 
-    final List<String> args = FxCopCommandLineBuilder.getArguments(myRunParameters, files);
+    final FxCopCommandLineBuilder commandLineBuilder = new FxCopCommandLineBuilder(myRunParameters, myXmlReportFile);
+    final List<String> args = commandLineBuilder.getArguments(files);
 
     StringBuilder result = new StringBuilder();
     for (String chunk : args) {
@@ -59,14 +61,21 @@ public class FxCopCommandLineBuilderImplTest extends BaseTestCase {
     assertEquals(myExpectedPrefix + expected + myExpectedPostfix, result.toString());
   }
 
-  public void testCmd1() throws RunBuildException {
-    myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "a");
-    assertEquals("a" + File.separator + "FxCopCmd.exe", FxCopCommandLineBuilder.getExecutablePath(myRunParameters));
+  private void assertExecutablePath(final String expected) throws Exception {
+    final FxCopCommandLineBuilder commandLineBuilder = new FxCopCommandLineBuilder(myRunParameters, myXmlReportFile);
+    final String executable = commandLineBuilder.getExecutablePath();
+
+    assertEquals(expected, executable);
   }
 
-  public void testCmd2() throws RunBuildException {
+  public void testCmd1() throws Exception {
+    myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "a");
+    assertExecutablePath("a" + File.separator + "FxCopCmd.exe");
+  }
+
+  public void testCmd2() throws Exception {
     myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "/c/d/");
-    assertEquals(new File("/c/d", "FxCopCmd.exe").getPath(), FxCopCommandLineBuilder.getExecutablePath(myRunParameters));
+    assertExecutablePath(new File("/c/d", "FxCopCmd.exe").getPath());
   }
 
   @Test(expectedExceptions = RunBuildException.class)

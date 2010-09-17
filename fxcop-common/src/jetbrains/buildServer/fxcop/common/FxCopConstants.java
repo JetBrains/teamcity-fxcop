@@ -45,8 +45,6 @@ public interface FxCopConstants {
   String RUNNER_DISPLAY_NAME = "FxCop";
   String RUNNER_DESCRIPTION = "FxCop static code analysis tool runner (.NET)";
 
-  String OUTPUT_DIR = "05A1B22A-DE6E-49ae-AA30-DC52A074EF22";
-  
   String REPORT_FILE = "fxcop-report.html";
   String OUTPUT_FILE = "fxcop-result.xml";
 }

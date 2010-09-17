@@ -1,5 +1,7 @@
 <project name="fxcop-build" default="dist" basedir=".">
 
+  <property file=".local.properties"/>
+
   <property file="build.properties"/>
   <property name="plugin.name" value="fxcop"/>
   <property name="javac2.home" value="${basedir}/lib-compile"/>
@@ -29,7 +31,7 @@
     <property name="plugin.version" value="${build.number}"/>
   </target>
 
-  <target name="dist" depends="check.teamcitydistribution,all,package"/>
+  <target name="dist" depends="check.teamcitydistribution,build.modules,package"/>
 
   <target name="deploy" depends="dist">
     <deploy.teamcity.plugin name="${plugin.name}"/>

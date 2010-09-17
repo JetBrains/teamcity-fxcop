@@ -47,42 +47,48 @@ import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopBuildService extends BuildServiceAdapter {
-  private static final String FXCOP_ERROR_TYPE = "FXCOP_ERROR";
-
   private final ArtifactsWatcher myArtifactsWatcher;
   private final InspectionReporter myInspectionReporter;
+  private File myOutputDirectory;
+  private File myXmlReportFile;
+  private File myHtmlReportFile;
 
   public FxCopBuildService(final ArtifactsWatcher artifactsWatcher, final InspectionReporter inspectionReporter) {
     myArtifactsWatcher = artifactsWatcher;
     myInspectionReporter = inspectionReporter;
+
+  }
+
+  @Override
+  public void afterInitialized() throws RunBuildException {
+    super.afterInitialized();
+
+    try {
+      myOutputDirectory = FileUtil.createTempFile(getBuildTempDirectory(), "fxcop-output-", "", false);
+      if (!myOutputDirectory.mkdirs()) {
+        throw new RuntimeException("Unable to create temp output directory " + myOutputDirectory);
+      }
+
+      myXmlReportFile = new File(myOutputDirectory, FxCopConstants.OUTPUT_FILE);
+      myHtmlReportFile = new File(myOutputDirectory, FxCopConstants.REPORT_FILE);
+    } catch (IOException e) {
+      throw new RuntimeException("Unable to create temp file", e);
+    }
   }
 
   @Override
   public void beforeProcessStarted() throws RunBuildException {
     getLogger().progressMessage("Running FxCop");
-
-    final File outDir = getOutputDirectory();
-    FileUtil.delete(outDir);
-    //noinspection ResultOfMethodCallIgnored
-    outDir.mkdirs();
   }
 
-  private File getOutputDirectory() {
-    return new File(getWorkingDirectory(), FxCopConstants.OUTPUT_DIR);
-  }
-
-  private File getOutputFile(String shortName) {
-    return new File(getOutputDirectory(), shortName);
-  }
-
-  private void ImportInspectionResults() throws Exception {
+  private void importInspectionResults() throws Exception {
     final String workingRoot = getWorkingDirectory().toString();
     final Map<String, String> runParameters = getRunnerParameters();
 
     getLogger().progressMessage("Importing inspection results");
 
     final FxCopFileProcessor fileProcessor =
-      new FxCopFileProcessor(getOutputFile(FxCopConstants.OUTPUT_FILE),
+      new FxCopFileProcessor(myXmlReportFile,
                              workingRoot, getLogger(), myInspectionReporter);
 
     fileProcessor.processReport();
@@ -113,7 +119,7 @@ public class FxCopBuildService extends BuildServiceAdapter {
     return "Errors: " + errors + ", warnings: " + warnings;
   }
 
-  private void GenerateHtmlReport() throws TransformerException, IOException {
+  private void generateHtmlReport() throws TransformerException, IOException {
     final String fxcopReportXslt = getRunnerParameters().get(FxCopConstants.SETTINGS_REPORT_XSLT);
     if (StringUtil.isEmptyOrSpaces(fxcopReportXslt)) {
       getLogger().message("Skipped html report generation since not requested");
@@ -128,15 +134,12 @@ public class FxCopBuildService extends BuildServiceAdapter {
 
     getLogger().progressMessage("Generating HTML report");
 
-    final File reportFile = getOutputFile(FxCopConstants.REPORT_FILE);
-
-    Source xmlSource = new StreamSource(getOutputFile(FxCopConstants.OUTPUT_FILE));
+    Source xmlSource = new StreamSource(myXmlReportFile);
     Source xsltSource = new StreamSource(xsltFile);
-    final FileOutputStream reportFileStream = new FileOutputStream(reportFile);
+    final FileOutputStream reportFileStream = new FileOutputStream(myHtmlReportFile);
 
     try {
-      TransformerFactory transformerFactory =
-        TransformerFactory.newInstance();
+      TransformerFactory transformerFactory = TransformerFactory.newInstance();
       Transformer trans = transformerFactory.newTransformer(xsltSource);
 
       trans.transform(xmlSource, new StreamResult(reportFileStream));
@@ -144,7 +147,7 @@ public class FxCopBuildService extends BuildServiceAdapter {
       reportFileStream.close();
     }
 
-    myArtifactsWatcher.addNewArtifactsPath(FxCopConstants.OUTPUT_DIR + "/*.html");
+    myArtifactsWatcher.addNewArtifactsPath(myOutputDirectory.getPath() + "/*.html");
   }
 
   @NotNull
@@ -176,9 +179,7 @@ public class FxCopBuildService extends BuildServiceAdapter {
           errors.contains(FxCopReturnCode.RULE_LIBRARY_LOAD_ERROR) ||
           errors.contains(FxCopReturnCode.UNKNOWN_ERROR) ||
           errors.contains(FxCopReturnCode.OUTPUT_ERROR)) {
-        boolean failOnAnalysisErrors = isParameterEnabled(
-          getRunnerParameters(),
-          FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR);
+        boolean failOnAnalysisErrors = isParameterEnabled(FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR);
 
         if (failOnAnalysisErrors) {
           failMessage = exitCodeStr.toString();
@@ -188,12 +189,12 @@ public class FxCopBuildService extends BuildServiceAdapter {
       }
     }
 
-    if (getOutputFile(FxCopConstants.OUTPUT_FILE).exists()) {
-      myArtifactsWatcher.addNewArtifactsPath(FxCopConstants.OUTPUT_DIR + "/*.xml");
+    if (myXmlReportFile.exists()) {
+      myArtifactsWatcher.addNewArtifactsPath(myXmlReportFile.getPath());
 
       try {
-        ImportInspectionResults();
-        GenerateHtmlReport();
+        importInspectionResults();
+        generateHtmlReport();
       } catch (Exception e) {
         getLogger().error("Exception while importing fxcop results: " + e);
         failMessage = "FxCop results import error";
@@ -205,7 +206,7 @@ public class FxCopBuildService extends BuildServiceAdapter {
     }
 
     if (failMessage != null) {
-      getLogger().internalError(FXCOP_ERROR_TYPE, failMessage, null);
+      getLogger().buildFailureDescription(failMessage);
     }
 
     return failMessage != null
@@ -213,13 +214,13 @@ public class FxCopBuildService extends BuildServiceAdapter {
            : BuildFinishedStatus.FINISHED_SUCCESS;
   }
 
-  private static boolean isParameterEnabled(final Map<String, String> runParameters, final String key) {
-    return runParameters.containsKey(key) && runParameters.get(key)
-      .equals(Boolean.TRUE.toString());
+  private boolean isParameterEnabled(final String key) {
+    final Map<String, String> runnerParameters = getRunnerParameters();
+
+    return runnerParameters.containsKey(key) && runnerParameters.get(key).equals(Boolean.TRUE.toString());
   }
 
   @NotNull
-  @Override
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
     final Map<String, String> runParameters = getRunnerParameters();
 
@@ -233,12 +234,12 @@ public class FxCopBuildService extends BuildServiceAdapter {
       }
 
       if (files.size() == 0) {
-        throw new RunBuildException("No files matched the pattern");        
+        throw new RunBuildException("No files matched the pattern");
       }
     }
 
-    return createProgramCommandline(FxCopCommandLineBuilder.getExecutablePath(runParameters),
-                                    FxCopCommandLineBuilder.getArguments(runParameters, files));
+    final FxCopCommandLineBuilder commandLineBuilder = new FxCopCommandLineBuilder(runParameters, myXmlReportFile);
+    return createProgramCommandline(commandLineBuilder.getExecutablePath(), commandLineBuilder.getArguments(files));
   }
 
   private List<String> matchFiles() throws IOException {

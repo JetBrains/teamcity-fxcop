@@ -42,7 +42,7 @@ public class FxCopRunType extends RunType {
 
   @Override
   public String getEditRunnerParamsJspFilePath() {
-    return "fxcopRunParams.jsp";
+    return "editFxCopRunParams.jsp";
   }
 
   @Override

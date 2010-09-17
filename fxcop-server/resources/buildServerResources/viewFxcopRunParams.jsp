@@ -16,55 +16,57 @@
 
 <%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
+<jsp:useBean id="constants" class="jetbrains.buildServer.fxcop.server.FxCopConstantsBean"/>
 
 <div class="parameter">
   <c:choose>
-    <c:when test="${propertiesBean.properties['fxcop.what'] == 'project'}">
+    <c:when test="${propertiesBean.properties[constants.whatToInspectKey] == constants.whatToInspectProjectValue}">
       FxCop project file:
-      <strong><props:displayValue name="fxcop.project" emptyValue="not specified"/></strong>
+      <strong><props:displayValue name="${constants.projectKey}" emptyValue="not specified"/></strong>
     </c:when>
     <c:otherwise>
       Assemblies to inspect:
-      <strong><props:displayValue name="fxcop.files" emptyValue="not specified"/></strong>
+      <strong><props:displayValue name="${constants.filesKey}" emptyValue="not specified"/></strong>
       Assemblies to exclude:
-      <strong><props:displayValue name="fxcop.files_exclude" emptyValue="not specified"/></strong>
+      <strong><props:displayValue name="${constants.filesExcludeKey}" emptyValue="not specified"/></strong>
     </c:otherwise>
   </c:choose>
 </div>
 
 <div class="parameter">
-  Additional FxCopCmd options: <strong><props:displayValue name="fxcop.addon_options" emptyValue="not specified"/></strong>
+  Additional FxCopCmd options: <strong><props:displayValue name="${constants.addtionalOptionsKey}" emptyValue="not specified"/></strong>
 </div>
 
 <div class="parameter">
-  Ignore generated code: <strong><props:displayCheckboxValue name="fxcop.ignore_generated_code"/></strong>
+  Ignore generated code: <strong><props:displayCheckboxValue name="${constants.ignoreGeneratedCodeKey}"/></strong>
 </div>
 
 <div class="parameter">
-  Search dependencies in GAC: <strong><props:displayCheckboxValue name="fxcop.search_in_gac"/></strong>
+  Search dependencies in GAC: <strong><props:displayCheckboxValue name="${constants.searchInGacKey}"/></strong>
 </div>
 
 <div class="parameter">
-  Search dependencies in directories: <strong><props:displayValue name="fxcop.search_in_dirs" emptyValue="empty list" /></strong>
+  Search dependencies in directories: <strong><props:displayValue name="${constants.searchDirsKey}" emptyValue="empty list" /></strong>
 </div>
 
 <div class="parameter">
-  Errors limit: <strong><props:displayValue name="fxcop.fail.error.limit" emptyValue="not specified"/></strong>
+  Errors limit: <strong><props:displayValue name="${constants.errorLimitKey}" emptyValue="not specified"/></strong>
 </div>
 
 <div class="parameter">
-  Warnings limit: <strong><props:displayValue name="fxcop.fail.warning.limit" emptyValue="not specified"/></strong>
+  Warnings limit: <strong><props:displayValue name="${constants.warningKey}" emptyValue="not specified"/></strong>
 </div>
 
 <div class="parameter">
-  Fail on analysis errors: <strong><props:displayCheckboxValue name="fxcop.fail_on_analysis_error"/></strong>
+  Fail on analysis errors: <strong><props:displayCheckboxValue name="${constants.failOnAnalysisErrorKey}"/></strong>
 </div>
 
 <div class="parameter">
-  Report XSLT file: <strong><props:displayValue name="fxcop.report_xslt" emptyValue="not specified"/></strong>
+  Report XSLT file: <strong><props:displayValue name="${constants.reportXsltKey}" emptyValue="not specified"/></strong>
 </div>
 
 <div class="parameter">
-  FxCop installation root: <strong><props:displayValue name="fxcop.root" emptyValue="not specified"/></strong>
+  FxCop installation root: <strong><props:displayValue name="${constants.rootKey}" emptyValue="not specified"/></strong>
 </div>

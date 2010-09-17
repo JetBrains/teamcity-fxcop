@@ -2,7 +2,6 @@
 <project name="fxcop" default="all">
   
   
-  <property file="fxcop.properties"/>
   <!-- Uncomment the following property if no tests compilation is needed -->
   <!-- 
   <property name="skip.tests" value="true"/>
@@ -28,13 +27,18 @@
     <exclude name="**/.git/**"/>
     <exclude name="**/*.hprof/**"/>
     <exclude name="**/_svn/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.sbas/**"/>
+    <exclude name="**/.IJI.*/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
   </patternset>
   <patternset id="library.patterns">
-    <include name="*.zip"/>
     <include name="*.war"/>
-    <include name="*.egg"/>
     <include name="*.ear"/>
+    <include name="*.zip"/>
     <include name="*.swc"/>
+    <include name="*.egg"/>
     <include name="*.jar"/>
   </patternset>
   <patternset id="compiler.resources">
@@ -72,17 +76,13 @@
   <path id="library.api-server.classpath">
     <pathelement location="${path.variable.teamcitydistribution}/devPackage/server-api.jar"/>
     <pathelement location="${path.variable.teamcitydistribution}/lib/servlet-api.jar"/>
-  </path>
-  
-  <path id="library.jni.classpath">
-    <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/jniwrap-3.6.1.jar"/>
-    <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/winpack.jar"/>
+    <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/standard.jar"/>
   </path>
   
   <path id="library.test-sup.classpath">
-    <pathelement location="${basedir}/lib/testng-jdk15.jar"/>
     <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/jmock-SNAPSHOT.jar"/>
     <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/junit-3.8.2.jar"/>
+    <pathelement location="${basedir}/lib/testng-jdk15.jar"/>
   </path>
   
   <path id="library.xml.classpath">
@@ -91,9 +91,6 @@
     <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/xpp3_min-1.1.4c.jar"/>
     <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/xstream-1.3.1.jar"/>
   </path>
-  
-  
-  <!-- Application Server Libraries -->
   
   <!-- Modules -->
   
@@ -113,13 +110,23 @@
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
   
+  <path id="fxcop-common.module.production.classpath">
+    <path refid="library.api-common.classpath"/>
+  </path>
+  
+  <path id="fxcop-common.runtime.production.module.classpath">
+    <pathelement location="${fxcop-common.output.dir}"/>
+    <path refid="library.api-common.classpath"/>
+  </path>
+  
   <path id="fxcop-common.module.classpath">
+    <pathelement location="${fxcop-common.output.dir}"/>
     <path refid="library.api-common.classpath"/>
   </path>
   
   <path id="fxcop-common.runtime.module.classpath">
-    <pathelement location="${fxcop-common.output.dir}"/>
     <pathelement location="${fxcop-common.testoutput.dir}"/>
+    <pathelement location="${fxcop-common.output.dir}"/>
     <path refid="library.api-common.classpath"/>
   </path>
   
@@ -146,7 +153,7 @@
     <javac destdir="${fxcop-common.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.fxcop-common}"/>
       <bootclasspath refid="fxcop-common.module.bootclasspath"/>
-      <classpath refid="fxcop-common.module.classpath"/>
+      <classpath refid="fxcop-common.module.production.classpath"/>
       <src refid="fxcop-common.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.fxcop-common"/>
     </javac>
@@ -167,6 +174,58 @@
   </target>
   
   
+  <!-- Module teamcity-webroot -->
+  
+  <dirname property="module.teamcity-webroot.basedir" file="${ant.file}"/>
+  
+  
+  
+  <property name="compiler.args.teamcity-webroot" value="${compiler.args}"/>
+  
+  <property name="teamcity-webroot.output.dir" value="${module.teamcity-webroot.basedir}/out/production/teamcity-webroot"/>
+  <property name="teamcity-webroot.testoutput.dir" value="${module.teamcity-webroot.basedir}/out/test/teamcity-webroot"/>
+  
+  <path id="teamcity-webroot.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="teamcity-webroot.module.production.classpath"/>
+  
+  <path id="teamcity-webroot.runtime.production.module.classpath">
+    <pathelement location="${teamcity-webroot.output.dir}"/>
+  </path>
+  
+  <path id="teamcity-webroot.module.classpath">
+    <pathelement location="${teamcity-webroot.output.dir}"/>
+  </path>
+  
+  <path id="teamcity-webroot.runtime.module.classpath">
+    <pathelement location="${teamcity-webroot.testoutput.dir}"/>
+    <pathelement location="${teamcity-webroot.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.teamcity-webroot">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.teamcity-webroot">
+    <patternset refid="excluded.from.module.teamcity-webroot"/>
+  </patternset>
+  
+  
+  <target name="compile.module.teamcity-webroot" depends="compile.module.teamcity-webroot.production,compile.module.teamcity-webroot.tests" description="Compile module teamcity-webroot"/>
+  
+  <target name="compile.module.teamcity-webroot.production" description="Compile module teamcity-webroot; production classes"/>
+  
+  <target name="compile.module.teamcity-webroot.tests" depends="compile.module.teamcity-webroot.production" description="compile module teamcity-webroot; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.teamcity-webroot" description="cleanup module">
+    <delete dir="${teamcity-webroot.output.dir}"/>
+    <delete dir="${teamcity-webroot.testoutput.dir}"/>
+  </target>
+  
+  
   <!-- Module fxcop-agent -->
   
   <dirname property="module.fxcop-agent.basedir" file="${ant.file}"/>
@@ -182,24 +241,37 @@
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
   
-  <path id="fxcop-agent.module.classpath">
+  <path id="fxcop-agent.module.production.classpath">
     <path refid="library.api-common.classpath"/>
     <path refid="library.api-agent.classpath"/>
     <path refid="library.xml.classpath"/>
     <pathelement location="${fxcop-common.output.dir}"/>
+  </path>
+  
+  <path id="fxcop-agent.runtime.production.module.classpath">
+    <pathelement location="${fxcop-agent.output.dir}"/>
+    <path refid="library.api-common.classpath"/>
+    <path refid="library.api-agent.classpath"/>
+    <path refid="library.xml.classpath"/>
+    <path refid="fxcop-common.runtime.production.module.classpath"/>
+  </path>
+  
+  <path id="fxcop-agent.module.classpath">
+    <pathelement location="${fxcop-agent.output.dir}"/>
+    <path refid="library.api-common.classpath"/>
+    <path refid="library.api-agent.classpath"/>
+    <path refid="library.xml.classpath"/>
     <pathelement location="${fxcop-common.testoutput.dir}"/>
-    <path refid="library.jni.classpath"/>
+    <pathelement location="${fxcop-common.output.dir}"/>
   </path>
   
   <path id="fxcop-agent.runtime.module.classpath">
-    <pathelement location="${fxcop-agent.output.dir}"/>
     <pathelement location="${fxcop-agent.testoutput.dir}"/>
+    <pathelement location="${fxcop-agent.output.dir}"/>
     <path refid="library.api-common.classpath"/>
     <path refid="library.api-agent.classpath"/>
     <path refid="library.xml.classpath"/>
-    <pathelement location="${fxcop-common.output.dir}"/>
-    <pathelement location="${fxcop-common.testoutput.dir}"/>
-    <path refid="library.jni.classpath"/>
+    <path refid="fxcop-common.runtime.module.classpath"/>
   </path>
   
   
@@ -225,7 +297,7 @@
     <javac destdir="${fxcop-agent.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.fxcop-agent}"/>
       <bootclasspath refid="fxcop-agent.module.bootclasspath"/>
-      <classpath refid="fxcop-agent.module.classpath"/>
+      <classpath refid="fxcop-agent.module.production.classpath"/>
       <src refid="fxcop-agent.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.fxcop-agent"/>
     </javac>
@@ -261,19 +333,32 @@
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
   
-  <path id="fxcop-server.module.classpath">
+  <path id="fxcop-server.module.production.classpath">
     <path refid="library.api-server.classpath"/>
     <pathelement location="${fxcop-common.output.dir}"/>
+    <path refid="library.api-common.classpath"/>
+  </path>
+  
+  <path id="fxcop-server.runtime.production.module.classpath">
+    <pathelement location="${fxcop-server.output.dir}"/>
+    <path refid="library.api-server.classpath"/>
+    <path refid="fxcop-common.runtime.production.module.classpath"/>
+    <path refid="library.api-common.classpath"/>
+  </path>
+  
+  <path id="fxcop-server.module.classpath">
+    <pathelement location="${fxcop-server.output.dir}"/>
+    <path refid="library.api-server.classpath"/>
     <pathelement location="${fxcop-common.testoutput.dir}"/>
+    <pathelement location="${fxcop-common.output.dir}"/>
     <path refid="library.api-common.classpath"/>
   </path>
   
   <path id="fxcop-server.runtime.module.classpath">
-    <pathelement location="${fxcop-server.output.dir}"/>
     <pathelement location="${fxcop-server.testoutput.dir}"/>
+    <pathelement location="${fxcop-server.output.dir}"/>
     <path refid="library.api-server.classpath"/>
-    <pathelement location="${fxcop-common.output.dir}"/>
-    <pathelement location="${fxcop-common.testoutput.dir}"/>
+    <path refid="fxcop-common.runtime.module.classpath"/>
     <path refid="library.api-common.classpath"/>
   </path>
   
@@ -301,7 +386,7 @@
     <javac destdir="${fxcop-server.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.fxcop-server}"/>
       <bootclasspath refid="fxcop-server.module.bootclasspath"/>
-      <classpath refid="fxcop-server.module.classpath"/>
+      <classpath refid="fxcop-server.module.production.classpath"/>
       <src refid="fxcop-server.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.fxcop-server"/>
     </javac>
@@ -341,31 +426,50 @@
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
   
-  <path id="fxcop-tests.module.classpath">
+  <path id="fxcop-tests.module.production.classpath">
     <path refid="library.api-common.classpath"/>
     <path refid="library.api-agent.classpath"/>
     <pathelement location="${fxcop-agent.output.dir}"/>
-    <pathelement location="${fxcop-agent.testoutput.dir}"/>
     <path refid="library.test-sup.classpath"/>
     <path refid="library.xml.classpath"/>
     <path refid="library.api-server.classpath"/>
     <pathelement location="${fxcop-common.output.dir}"/>
+  </path>
+  
+  <path id="fxcop-tests.runtime.production.module.classpath">
+    <pathelement location="${fxcop-tests.output.dir}"/>
+    <path refid="library.api-common.classpath"/>
+    <path refid="library.api-agent.classpath"/>
+    <path refid="fxcop-agent.runtime.production.module.classpath"/>
+    <path refid="library.test-sup.classpath"/>
+    <path refid="library.xml.classpath"/>
+    <path refid="library.api-server.classpath"/>
+    <path refid="fxcop-common.runtime.production.module.classpath"/>
+  </path>
+  
+  <path id="fxcop-tests.module.classpath">
+    <pathelement location="${fxcop-tests.output.dir}"/>
+    <path refid="library.api-common.classpath"/>
+    <path refid="library.api-agent.classpath"/>
+    <pathelement location="${fxcop-agent.testoutput.dir}"/>
+    <pathelement location="${fxcop-agent.output.dir}"/>
+    <path refid="library.test-sup.classpath"/>
+    <path refid="library.xml.classpath"/>
+    <path refid="library.api-server.classpath"/>
     <pathelement location="${fxcop-common.testoutput.dir}"/>
+    <pathelement location="${fxcop-common.output.dir}"/>
   </path>
   
   <path id="fxcop-tests.runtime.module.classpath">
-    <pathelement location="${fxcop-tests.output.dir}"/>
     <pathelement location="${fxcop-tests.testoutput.dir}"/>
+    <pathelement location="${fxcop-tests.output.dir}"/>
     <path refid="library.api-common.classpath"/>
     <path refid="library.api-agent.classpath"/>
-    <pathelement location="${fxcop-agent.output.dir}"/>
-    <pathelement location="${fxcop-agent.testoutput.dir}"/>
-    <path refid="library.xml.classpath"/>
-    <pathelement location="${fxcop-common.output.dir}"/>
-    <pathelement location="${fxcop-common.testoutput.dir}"/>
-    <path refid="library.jni.classpath"/>
+    <path refid="fxcop-agent.runtime.module.classpath"/>
     <path refid="library.test-sup.classpath"/>
+    <path refid="library.xml.classpath"/>
     <path refid="library.api-server.classpath"/>
+    <path refid="fxcop-common.runtime.module.classpath"/>
   </path>
   
   
@@ -377,7 +481,7 @@
     <patternset refid="excluded.from.module.fxcop-tests"/>
   </patternset>
   
-  <path id="fxcop-tests.module.sourcepath">
+  <path id="fxcop-tests.module.test.sourcepath">
     <dirset dir="${module.fxcop-tests.basedir}/fxcop-tests">
       <include name="src"/>
     </dirset>
@@ -386,25 +490,25 @@
   
   <target name="compile.module.fxcop-tests" depends="compile.module.fxcop-tests.production,compile.module.fxcop-tests.tests" description="Compile module fxcop-tests"/>
   
-  <target name="compile.module.fxcop-tests.production" depends="compile.module.fxcop-agent,compile.module.fxcop-common" description="Compile module fxcop-tests; production classes">
-    <mkdir dir="${fxcop-tests.output.dir}"/>
-    <javac destdir="${fxcop-tests.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+  <target name="compile.module.fxcop-tests.production" depends="compile.module.fxcop-agent,compile.module.fxcop-common" description="Compile module fxcop-tests; production classes"/>
+  
+  <target name="compile.module.fxcop-tests.tests" depends="compile.module.fxcop-tests.production" description="compile module fxcop-tests; test classes" unless="skip.tests">
+    <mkdir dir="${fxcop-tests.testoutput.dir}"/>
+    <javac destdir="${fxcop-tests.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.fxcop-tests}"/>
       <bootclasspath refid="fxcop-tests.module.bootclasspath"/>
       <classpath refid="fxcop-tests.module.classpath"/>
-      <src refid="fxcop-tests.module.sourcepath"/>
+      <src refid="fxcop-tests.module.test.sourcepath"/>
       <patternset refid="excluded.from.compilation.fxcop-tests"/>
     </javac>
     
-    <copy todir="${fxcop-tests.output.dir}">
+    <copy todir="${fxcop-tests.testoutput.dir}">
       <fileset dir="${module.fxcop-tests.basedir}/fxcop-tests/src">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
     </copy>
   </target>
-  
-  <target name="compile.module.fxcop-tests.tests" depends="compile.module.fxcop-tests.production" description="compile module fxcop-tests; test classes" unless="skip.tests"/>
   
   <target name="clean.module.fxcop-tests" description="cleanup module">
     <delete dir="${fxcop-tests.output.dir}"/>
@@ -415,9 +519,37 @@
     <!-- Perform any build initialization in this target -->
   </target>
   
-  <target name="clean" depends="clean.module.fxcop-common, clean.module.fxcop-agent, clean.module.fxcop-server, clean.module.fxcop-tests" description="cleanup all"/>
+  <target name="clean" depends="clean.module.fxcop-common, clean.module.teamcity-webroot, clean.module.fxcop-agent, clean.module.fxcop-server, clean.module.fxcop-tests, clean.artifact.webroot:_fake_dont_remove_" description="cleanup all"/>
   
-  <target name="build.modules" depends="init, clean, compile.module.fxcop-common, compile.module.fxcop-agent, compile.module.fxcop-server, compile.module.fxcop-tests" description="build all modules"/>
+  <target name="build.modules" depends="init, clean, compile.module.fxcop-common, compile.module.teamcity-webroot, compile.module.fxcop-agent, compile.module.fxcop-server, compile.module.fxcop-tests" description="build all modules"/>
   
-  <target name="all" depends="build.modules" description="build all"/>
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.webroot:_fake_dont_remove_" value="${basedir}/out/artifacts/webroot__fake_dont_remove_"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="clean.artifact.webroot:_fake_dont_remove_" description="clean webroot:_fake_dont_remove_ artifact output">
+    <delete dir="${artifact.output.webroot:_fake_dont_remove_}"/>
+  </target>
+  
+  <target name="artifact.webroot:_fake_dont_remove_" depends="init.artifacts" description="Build &apos;webroot:_fake_dont_remove_&apos; artifact">
+    <mkdir dir="${artifact.output.webroot:_fake_dont_remove_}"/>
+    <copy todir="${artifact.output.webroot:_fake_dont_remove_}">
+      <fileset dir="${path.variable.teamcitydistribution}/webapps/ROOT"/>
+    </copy>
+    <mkdir dir="${artifact.output.webroot:_fake_dont_remove_}/plugins"/>
+    <mkdir dir="${artifact.output.webroot:_fake_dont_remove_}/plugins/FxCop"/>
+    <copy todir="${artifact.output.webroot:_fake_dont_remove_}/plugins/FxCop">
+      <fileset dir="${basedir}/fxcop-server/resources/buildServerResources"/>
+    </copy>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.webroot:_fake_dont_remove_" description="Build all artifacts">
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
 </project>
