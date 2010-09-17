@@ -16,6 +16,7 @@
 
 package jetbrains.buildServer.fxcop.agent;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -72,7 +73,12 @@ public class FxCopBuildService extends BuildServiceAdapter {
       myXmlReportFile = new File(myOutputDirectory, FxCopConstants.OUTPUT_FILE);
       myHtmlReportFile = new File(myOutputDirectory, FxCopConstants.REPORT_FILE);
     } catch (IOException e) {
-      throw new RuntimeException("Unable to create temp file", e);
+      final String message = "Unable to create temporary file in " +
+          getBuildTempDirectory() + " for fxcop: " +
+          e.getMessage();
+
+      Logger.getInstance(getClass().getName()).error(message, e);
+      throw new RunBuildException(message);
     }
   }
 
