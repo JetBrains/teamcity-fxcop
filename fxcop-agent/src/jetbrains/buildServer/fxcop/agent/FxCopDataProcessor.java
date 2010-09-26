@@ -16,32 +16,25 @@
 
 package jetbrains.buildServer.fxcop.agent;
 
-import java.io.File;
-import java.util.Map;
-import jetbrains.buildServer.agent.AgentRunningBuild;
-import jetbrains.buildServer.agent.CurrentBuildTracker;
-import jetbrains.buildServer.agent.DataProcessor;
-import jetbrains.buildServer.agent.SimpleBuildLogger;
+import jetbrains.buildServer.agent.*;
 import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopDataProcessor implements DataProcessor {
-  private final CurrentBuildTracker myCurrentBuild;
   private final InspectionReporter myReporter;
 
-  public FxCopDataProcessor(@NotNull final CurrentBuildTracker currentBuild,
-                            @NotNull final InspectionReporter reporter) {
-    myCurrentBuild = currentBuild;
+  public FxCopDataProcessor(@NotNull final InspectionReporter reporter) {
     myReporter = reporter;
   }
 
-  public void processData(@NotNull final File path, final Map<String, String> arguments) throws Exception {
-    final AgentRunningBuild currentBuild = myCurrentBuild.getCurrentBuild();
+  public void processData(@NotNull final DataProcessorContext context) throws Exception {
+    final AgentRunningBuild currentBuild = context.getBuild();
+
     final String checkoutDir = currentBuild.getCheckoutDirectory().toString();
 
     final SimpleBuildLogger logger = currentBuild.getBuildLogger();
     final FxCopFileProcessor fileProcessor =
-      new FxCopFileProcessor(path, checkoutDir, logger, myReporter);
+      new FxCopFileProcessor(context.getFile(), checkoutDir, logger, myReporter);
 
     myReporter.markBuildAsInspectionsBuild();
     fileProcessor.processReport();
