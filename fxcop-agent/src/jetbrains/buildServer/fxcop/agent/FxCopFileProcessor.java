@@ -63,7 +63,7 @@ public class FxCopFileProcessor {
                             @NotNull final InspectionReporter reporter) {
     myFxCopReport = fxcopReport;
     myLogger = logger;
-    mySourceFilePrefixLower = sourceFilePrefix.toLowerCase();
+    mySourceFilePrefixLower = sourceFilePrefix.toLowerCase().replace('\\', '/');
     myReporter = reporter;
   }
 
@@ -189,7 +189,7 @@ public class FxCopFileProcessor {
       if (StringUtil.isEmptyOrSpaces(path)) {
         inspectionFile += " :: " + file;
       } else {
-        String reportPath = path;
+        String reportPath = path.replace('\\', '/');
 
         if (reportPath.toLowerCase().startsWith(mySourceFilePrefixLower)) {
           reportPath = reportPath.substring(mySourceFilePrefixLower.length());

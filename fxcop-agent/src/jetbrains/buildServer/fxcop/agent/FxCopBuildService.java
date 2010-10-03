@@ -88,7 +88,7 @@ public class FxCopBuildService extends BuildServiceAdapter {
   }
 
   private void importInspectionResults() throws Exception {
-    final String workingRoot = getWorkingDirectory().toString();
+    final String workingRoot = getCheckoutDirectory().toString();
     final Map<String, String> runParameters = getRunnerParameters();
 
     getLogger().progressMessage("Importing inspection results");
@@ -244,8 +244,30 @@ public class FxCopBuildService extends BuildServiceAdapter {
       }
     }
 
+    final List<String> finalFiles = files;
+
     final FxCopCommandLineBuilder commandLineBuilder = new FxCopCommandLineBuilder(runParameters, myXmlReportFile);
-    return createProgramCommandline(commandLineBuilder.getExecutablePath(), commandLineBuilder.getArguments(files));
+    return new ProgramCommandLine() {
+      @NotNull
+      public String getExecutablePath() throws RunBuildException {
+        return commandLineBuilder.getExecutablePath();
+      }
+
+      @NotNull
+      public String getWorkingDirectory() throws RunBuildException {
+        return getCheckoutDirectory().getPath();
+      }
+
+      @NotNull
+      public List<String> getArguments() throws RunBuildException {
+        return commandLineBuilder.getArguments(finalFiles);
+      }
+
+      @NotNull
+      public Map<String, String> getEnvironment() throws RunBuildException {
+        return getBuildParameters().getEnvironmentVariables();
+      }
+    };
   }
 
   private List<String> matchFiles() throws IOException {
