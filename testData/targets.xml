@@ -57,7 +57,7 @@
             <Accessor Name="#System.Collections.ICollection.get_SyncRoot()" Kind="Method" Static="False" Accessibility="Private" ExternallyVisible="True">
              <Messages>
               <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Status="Active" Created="2008-07-27 15:52:03Z" FixCategory="NonBreaking">
-               <Issue Certainty="95" Level="Error" Path="C:\Work\Decompiler\DupLib\src\Util" File="Set.cs" Line="220">Make 'Set&lt;T&gt;' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of 'ICollection.SyncRoot.get()' and is visible to derived classes.</Issue>
+               <Issue Certainty="95" Level="Error" Path="C:\Work/Decompiler\DupLib\src/Util" File="Set.cs" Line="220">Make 'Set&lt;T&gt;' sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of 'ICollection.SyncRoot.get()' and is visible to derived classes.</Issue>
               </Message>
              </Messages>
             </Accessor>
