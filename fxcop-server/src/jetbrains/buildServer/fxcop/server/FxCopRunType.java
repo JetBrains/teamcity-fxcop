@@ -81,13 +81,13 @@ public class FxCopRunType extends RunType {
 
   @NotNull
   @Override
-  public String getShortDescription(@NotNull final Map<String, String> runnerParams) {
+  public String describeParameters(@NotNull final Map<String, String> parameters) {
     StringBuilder result = new StringBuilder();
-    String what = runnerParams.get(FxCopConstants.SETTINGS_WHAT_TO_INSPECT);
+    String what = parameters.get(FxCopConstants.SETTINGS_WHAT_TO_INSPECT);
     if (what == null || "files".equals(what)) {
-      result.append("Assemblies: ").append(StringUtil.emptyIfNull(runnerParams.get(FxCopConstants.SETTINGS_FILES)));
+      result.append("Assemblies: ").append(StringUtil.emptyIfNull(parameters.get(FxCopConstants.SETTINGS_FILES)));
     } else {
-      result.append("FxCop project: ").append(StringUtil.emptyIfNull(runnerParams.get(FxCopConstants.SETTINGS_PROJECT)));
+      result.append("FxCop project: ").append(StringUtil.emptyIfNull(parameters.get(FxCopConstants.SETTINGS_PROJECT)));
     }
     return result.toString();
   }
