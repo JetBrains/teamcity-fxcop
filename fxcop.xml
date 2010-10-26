@@ -65,7 +65,6 @@
   
   <path id="library.api-common.classpath">
     <pathelement location="${path.variable.teamcitydistribution}/devPackage/common-api.jar"/>
-    <pathelement location="${path.variable.teamcitydistribution}/devPackage/runtime-util.jar"/>
     <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/annotations.jar"/>
     <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/junit-3.8.2.jar"/>
     <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/log4j-1.2.12.jar"/>
