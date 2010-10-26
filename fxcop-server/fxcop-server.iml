@@ -9,7 +9,6 @@
         <webroots>
           <root url="file://$MODULE_DIR$/resources/buildServerResources" relative="/plugins/FxCop" />
         </webroots>
-        <context-artifact name="webroot:_fake_dont_remove_" />
       </configuration>
     </facet>
   </component>
