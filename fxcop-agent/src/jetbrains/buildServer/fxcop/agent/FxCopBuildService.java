@@ -93,6 +93,8 @@ public class FxCopBuildService extends BuildServiceAdapter {
 
     getLogger().progressMessage("Importing inspection results");
 
+    myInspectionReporter.markBuildAsInspectionsBuild();
+
     final FxCopFileProcessor fileProcessor =
       new FxCopFileProcessor(myXmlReportFile,
                              workingRoot, getLogger(), myInspectionReporter);
