@@ -27,21 +27,23 @@ import jetbrains.buildServer.web.openapi.ViewLogTab;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopReportTab extends ViewLogTab {
-  private static String TAB_TITLE = "FxCop";
-  private static String TAB_CODE = "fxcopReportTab";
+  private static final String TAB_TITLE = "FxCop";
+  private static final String TAB_CODE = "fxcopReportTab";
   
-  private static String TAB_STARTPAGE = FxCopConstants.REPORT_FILE;
+  private static final String TAB_STARTPAGE = FxCopConstants.REPORT_FILE;
 
   public FxCopReportTab(final PagePlaces pagePlaces, final SBuildServer server) {
     super(TAB_TITLE, TAB_CODE, pagePlaces, server);
     setIncludeUrl("/artifactsViewer.jsp");
   }
 
+  @Override
   protected void fillModel(final Map model, final HttpServletRequest request, final SBuild build) {
     model.put("basePath", "");
     model.put("startPage", TAB_STARTPAGE);
   }
 
+  @Override
   public boolean isAvailable(@NotNull final HttpServletRequest request) {
     final SBuild build = getBuild(request);
     if (build == null) return false;
