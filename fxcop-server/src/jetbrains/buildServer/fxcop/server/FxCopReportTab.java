@@ -19,9 +19,9 @@ package jetbrains.buildServer.fxcop.server;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
+import jetbrains.buildServer.serverSide.BuildArtifactsViewMode;
 import jetbrains.buildServer.serverSide.SBuild;
 import jetbrains.buildServer.serverSide.SBuildServer;
-import jetbrains.buildServer.serverSide.artifacts.ArtifactsInfo;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.ViewLogTab;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +38,7 @@ public class FxCopReportTab extends ViewLogTab {
   }
 
   @Override
+  @SuppressWarnings({"unchecked"})
   protected void fillModel(final Map model, final HttpServletRequest request, final SBuild build) {
     model.put("basePath", "");
     model.put("startPage", TAB_STARTPAGE);
@@ -48,10 +49,6 @@ public class FxCopReportTab extends ViewLogTab {
     final SBuild build = getBuild(request);
     if (build == null) return false;
 
-    final String projectId = build.getProjectId();
-    if (projectId == null) return false;
-
-    final ArtifactsInfo info = new ArtifactsInfo(build);
-    return info.getSize(TAB_STARTPAGE) >= 0;
+    return build.getArtifacts(BuildArtifactsViewMode.VIEW_ALL).getArtifact(TAB_STARTPAGE) != null;
   }
 }
