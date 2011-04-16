@@ -49,6 +49,6 @@ public class FxCopReportTab extends ViewLogTab {
     final SBuild build = getBuild(request);
     if (build == null) return false;
 
-    return build.getArtifacts(BuildArtifactsViewMode.VIEW_ALL).getArtifact(TAB_STARTPAGE) != null;
+    return build.getArtifacts(BuildArtifactsViewMode.VIEW_ALL).getArtifactWithContent(TAB_STARTPAGE) != null;
   }
 }
