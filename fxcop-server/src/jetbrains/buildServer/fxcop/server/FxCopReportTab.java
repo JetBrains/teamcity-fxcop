@@ -19,6 +19,7 @@ package jetbrains.buildServer.fxcop.server;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
+import jetbrains.buildServer.serverSide.BuildArtifact;
 import jetbrains.buildServer.serverSide.BuildArtifactsViewMode;
 import jetbrains.buildServer.serverSide.SBuild;
 import jetbrains.buildServer.serverSide.SBuildServer;
@@ -49,6 +50,7 @@ public class FxCopReportTab extends ViewLogTab {
     final SBuild build = getBuild(request);
     if (build == null) return false;
 
-    return build.getArtifacts(BuildArtifactsViewMode.VIEW_ALL).getArtifactWithContent(TAB_STARTPAGE) != null;
+    final BuildArtifact artifact = build.getArtifacts(BuildArtifactsViewMode.VIEW_ALL).getArtifact(TAB_STARTPAGE);
+    return artifact != null && !artifact.isDirectory();
   }
 }
