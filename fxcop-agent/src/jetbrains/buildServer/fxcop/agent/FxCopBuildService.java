@@ -40,7 +40,6 @@ import jetbrains.buildServer.agent.runner.ProgramCommandLine;
 import jetbrains.buildServer.agent.util.AntPatternFileFinder;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.messages.DefaultMessagesInfo;
-import jetbrains.buildServer.messages.Status;
 import jetbrains.buildServer.messages.serviceMessages.BuildStatus;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.PropertiesUtil;
@@ -119,7 +118,7 @@ public class FxCopBuildService extends BuildServiceAdapter {
     }
 
     if (limitReached) {
-      getLogger().message(new BuildStatus(generateBuildStatus(errors, warnings), Status.FAILURE).asString());
+      getLogger().message(new BuildStatus(generateBuildStatus(errors, warnings), "FAILURE").asString());
     }
   }
 
