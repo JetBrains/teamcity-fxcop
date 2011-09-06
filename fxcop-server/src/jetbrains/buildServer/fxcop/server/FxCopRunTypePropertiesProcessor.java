@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
+import jetbrains.buildServer.parameters.ReferencesResolverUtil;
 import jetbrains.buildServer.serverSide.InvalidProperty;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.util.PropertiesUtil;
@@ -39,8 +40,7 @@ public class FxCopRunTypePropertiesProcessor implements PropertiesProcessor {
           "Files or project option must be specified"));
     }
 
-    final String fxcopRoot = properties.get(
-      FxCopConstants.SETTINGS_FXCOP_ROOT);
+    final String fxcopRoot = properties.get(FxCopConstants.SETTINGS_FXCOP_ROOT);
     if (PropertiesUtil.isEmptyOrNull(fxcopRoot)) {
       result.add(
         new InvalidProperty(
@@ -48,16 +48,18 @@ public class FxCopRunTypePropertiesProcessor implements PropertiesProcessor {
           "FxCop installation root must be specified"));
     }
 
-    if (!PropertiesUtil.isEmptyOrNull(properties.get(FxCopConstants.SETTINGS_ERROR_LIMIT))) {
-      Integer value = PropertiesUtil.parseInt(properties.get(FxCopConstants.SETTINGS_ERROR_LIMIT));
-      if (value == null || value < 0) {
+    final String limitValue = properties.get(FxCopConstants.SETTINGS_ERROR_LIMIT);
+    if (!PropertiesUtil.isEmptyOrNull(limitValue)) {
+      Integer value = PropertiesUtil.parseInt(limitValue);
+      if (!ReferencesResolverUtil.containsReference(limitValue) && (value == null || value < 0)) {
         result.add(new InvalidProperty(FxCopConstants.SETTINGS_ERROR_LIMIT, "Errors limit must be a positive number or zero"));
       }
     }
 
-    if (!PropertiesUtil.isEmptyOrNull(properties.get(FxCopConstants.SETTINGS_WARNING_LIMIT))) {
-      Integer value = PropertiesUtil.parseInt(properties.get(FxCopConstants.SETTINGS_WARNING_LIMIT));
-      if (value == null || value < 0) {
+    final String warnValue = properties.get(FxCopConstants.SETTINGS_WARNING_LIMIT);
+    if (!PropertiesUtil.isEmptyOrNull(warnValue)) {
+      Integer value = PropertiesUtil.parseInt(warnValue);
+      if (!ReferencesResolverUtil.containsReference(warnValue) && (value == null || value < 0)) {
         result.add(new InvalidProperty(FxCopConstants.SETTINGS_WARNING_LIMIT, "Warnings limit must be a positive number or zero"));
       }
     }
