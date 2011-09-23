@@ -213,6 +213,7 @@ public class FxCopBuildService extends BuildServiceAdapter {
     }
 
     if (failMessage != null) {
+      getLogger().error(failMessage);
       getLogger().buildFailureDescription(failMessage);
     }
 
