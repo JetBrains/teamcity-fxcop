@@ -26,7 +26,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="server-openapi" />
-    <orderEntry type="module" module-name="utils" />
     <orderEntry type="module" module-name="web-openapi" />
     <orderEntry type="module" module-name="fxcop-common-internal" />
   </component>
