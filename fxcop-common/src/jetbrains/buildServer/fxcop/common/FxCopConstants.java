@@ -16,11 +16,9 @@
 
 package jetbrains.buildServer.fxcop.common;
 
-import jetbrains.buildServer.agent.Constants;
-
 public interface FxCopConstants {
-  String FXCOP_ROOT_PROPERTY = Constants.SYSTEM_PREFIX + "FxCopRoot";
-  String FXCOPCMD_FILE_VERSION_PROPERTY = Constants.SYSTEM_PREFIX + "FxCopCmdFileVersion";
+  String FXCOP_ROOT_PROPERTY = "system.FxCopRoot";
+  String FXCOPCMD_FILE_VERSION_PROPERTY = "system.FxCopCmdFileVersion";
 
   String RUNNER_TYPE = "FxCop";
   String FXCOPCMD_BINARY = "FxCopCmd.exe";
