@@ -64,7 +64,7 @@
       </root>
     </artifact>
     <artifact build-on-make="true" name="deploy">
-      <output-path>$TeamCityPluginsHome$</output-path>
+      <output-path>$USER_HOME$/.BuildServer/plugins</output-path>
       <root id="root">
         <element id="artifact" artifact-name="plugin-zip" />
       </root>
