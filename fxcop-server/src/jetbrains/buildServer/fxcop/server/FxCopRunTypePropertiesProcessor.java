@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
-import jetbrains.buildServer.parameters.ReferencesResolverUtil;
 import jetbrains.buildServer.serverSide.InvalidProperty;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.util.PropertiesUtil;
@@ -46,22 +45,6 @@ public class FxCopRunTypePropertiesProcessor implements PropertiesProcessor {
         new InvalidProperty(
           FxCopConstants.SETTINGS_FXCOP_ROOT,
           "FxCop installation root must be specified"));
-    }
-
-    final String limitValue = properties.get(FxCopConstants.SETTINGS_ERROR_LIMIT);
-    if (!PropertiesUtil.isEmptyOrNull(limitValue)) {
-      Integer value = PropertiesUtil.parseInt(limitValue);
-      if (!ReferencesResolverUtil.containsReference(limitValue) && (value == null || value < 0)) {
-        result.add(new InvalidProperty(FxCopConstants.SETTINGS_ERROR_LIMIT, "Errors limit must be a positive number or zero"));
-      }
-    }
-
-    final String warnValue = properties.get(FxCopConstants.SETTINGS_WARNING_LIMIT);
-    if (!PropertiesUtil.isEmptyOrNull(warnValue)) {
-      Integer value = PropertiesUtil.parseInt(warnValue);
-      if (!ReferencesResolverUtil.containsReference(warnValue) && (value == null || value < 0)) {
-        result.add(new InvalidProperty(FxCopConstants.SETTINGS_WARNING_LIMIT, "Warnings limit must be a positive number or zero"));
-      }
     }
 
     return result;

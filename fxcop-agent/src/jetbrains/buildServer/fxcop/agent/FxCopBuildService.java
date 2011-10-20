@@ -40,9 +40,7 @@ import jetbrains.buildServer.agent.runner.ProgramCommandLine;
 import jetbrains.buildServer.agent.util.AntPatternFileFinder;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.messages.DefaultMessagesInfo;
-import jetbrains.buildServer.messages.serviceMessages.BuildStatus;
 import jetbrains.buildServer.util.FileUtil;
-import jetbrains.buildServer.util.PropertiesUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -88,42 +86,12 @@ public class FxCopBuildService extends BuildServiceAdapter {
 
   private void importInspectionResults() throws Exception {
     final String workingRoot = getCheckoutDirectory().toString();
-    final Map<String, String> runParameters = getRunnerParameters();
 
     getLogger().progressMessage("Importing inspection results");
 
     myInspectionReporter.markBuildAsInspectionsBuild();
-
-    final FxCopFileProcessor fileProcessor =
-      new FxCopFileProcessor(myXmlReportFile,
-                             workingRoot, getLogger(), myInspectionReporter);
-
+    final FxCopFileProcessor fileProcessor = new FxCopFileProcessor(myXmlReportFile, workingRoot, getLogger(), myInspectionReporter);
     fileProcessor.processReport();
-
-    final int errors = fileProcessor.getErrorsCount();
-    final int warnings = fileProcessor.getWarningsCount();
-
-    boolean limitReached = false;
-
-    final Integer errorLimit = PropertiesUtil.parseInt(runParameters.get(FxCopConstants.SETTINGS_ERROR_LIMIT));
-    if (errorLimit != null && errors > errorLimit) {
-      getLogger().error("Errors limit reached: found " + errors + " errors, limit " + errorLimit);
-      limitReached = true;
-    }
-
-    final Integer warningLimit = PropertiesUtil.parseInt(runParameters.get(FxCopConstants.SETTINGS_WARNING_LIMIT));
-    if (warningLimit != null && warnings > warningLimit) {
-      getLogger().error("Warnings limit reached: found " + warnings + " warnings, limit " + warningLimit);
-      limitReached = true;
-    }
-
-    if (limitReached) {
-      getLogger().message(new BuildStatus(generateBuildStatus(errors, warnings), "FAILURE").asString());
-    }
-  }
-
-  private String generateBuildStatus(int errors, int warnings) {
-    return "Errors: " + errors + ", warnings: " + warnings;
   }
 
   private void generateHtmlReport() throws TransformerException, IOException {

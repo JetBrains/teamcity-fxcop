@@ -135,21 +135,6 @@
 <l:settingsGroup title="Build success criteria">
 
   <tr>
-    <th><label for="${constants.errorLimitKey}">Errors limit:</label></th>
-    <td><props:textProperty name="${constants.errorLimitKey}" style="width:6em;" maxlength="12"/>
-      <span class="error" id="error_${constants.errorLimitKey}"></span>
-      <span class="smallNote">Fail the build if the specified number of errors is exceeded.</span>
-    </td>
-  </tr>
-
-  <tr>
-    <th class="noBorder"><label for="${constants.warningKey}">Warnings limit:</label></th>
-    <td class="noBorder"><props:textProperty name="${constants.warningKey}" style="width:6em;" maxlength="12"/>
-      <span class="error" id="error_${constants.warningKey}"></span>
-      <span class="smallNote">Fail the build if the specified number of warnings is exceeded. Leave blank if there is no limit.</span></td>
-  </tr>
-
-  <tr>
     <th><label for="${constants.failOnAnalysisErrorKey}">Fail on analysis errors</label></th>
     <td>
       <props:checkboxProperty name="${constants.failOnAnalysisErrorKey}"/>

@@ -31,6 +31,17 @@
     <property name="plugin.version" value="${build.number}"/>
   </target>
 
+  <target name="replace-tokens-in-teamcity-plugin-xml" depends="define.version">
+    <property name="home" value="${artifact.output.path}"/>
+    <echo message="replacing tokens in teamcity-plugin.xml file under ${home}"/>
+    <replace dir="${home}" summary="true">
+      <include name="**/teamcity-plugin.xml"/>
+      <replacefilter token="@Plugin_Version@" value="${plugin.version}"/>
+      <replacefilter token="@Plugin_Vendor@" value="JetBrains, s.r.o."/>
+      <replacefilter token="@Plugin_Vendor_Url@" value="http://www.jetbrains.com"/>
+    </replace>
+  </target>
+
   <target name="dist" depends="check.teamcitydistribution,build.modules,package"/>
 
   <target name="deploy" depends="dist">

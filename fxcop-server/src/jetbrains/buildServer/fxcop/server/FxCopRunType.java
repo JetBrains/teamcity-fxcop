@@ -23,10 +23,14 @@ import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
 import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopRunType extends RunType {
-  public FxCopRunType(final RunTypeRegistry runTypeRegistry) {
+  private PluginDescriptor myPluginDescriptor;
+
+  public FxCopRunType(final RunTypeRegistry runTypeRegistry, final PluginDescriptor pluginDescriptor) {
+    myPluginDescriptor = pluginDescriptor;
     runTypeRegistry.registerRunType(this);
   }
 
@@ -42,19 +46,18 @@ public class FxCopRunType extends RunType {
 
   @Override
   public String getEditRunnerParamsJspFilePath() {
-    return "editFxCopRunParams.jsp";
+    return myPluginDescriptor.getPluginResourcesPath("editFxCopRunParams.jsp");
   }
 
   @Override
   public String getViewRunnerParamsJspFilePath() {
-    return "viewFxcopRunParams.jsp";
+    return myPluginDescriptor.getPluginResourcesPath("viewFxcopRunParams.jsp");
   }
 
   @Override
   public Map<String, String> getDefaultRunnerProperties() {
     Map<String, String> map = new HashMap<String, String>();
     setUpDefaultParams(map);
-
     return map;
   }
 

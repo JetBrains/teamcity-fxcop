@@ -36,8 +36,6 @@ public interface FxCopConstants {
   String SETTINGS_SEARCH_IN_GAC = "fxcop.search_in_gac";
   String SETTINGS_IGNORE_GENERATED_CODE = "fxcop.ignore_generated_code";
   String SETTINGS_FAIL_ON_ANALYSIS_ERROR = "fxcop.fail_on_analysis_error";
-  String SETTINGS_ERROR_LIMIT = "fxcop.fail.error.limit";
-  String SETTINGS_WARNING_LIMIT = "fxcop.fail.warning.limit";
 
   String WHAT_TO_INSPECT_FILES = "files";
   String WHAT_TO_INSPECT_PROJECT = "project";

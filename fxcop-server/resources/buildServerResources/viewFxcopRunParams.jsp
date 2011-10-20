@@ -52,14 +52,6 @@
 </div>
 
 <div class="parameter">
-  Errors limit: <strong><props:displayValue name="${constants.errorLimitKey}" emptyValue="not specified"/></strong>
-</div>
-
-<div class="parameter">
-  Warnings limit: <strong><props:displayValue name="${constants.warningKey}" emptyValue="not specified"/></strong>
-</div>
-
-<div class="parameter">
   Fail on analysis errors: <strong><props:displayCheckboxValue name="${constants.failOnAnalysisErrorKey}"/></strong>
 </div>
 

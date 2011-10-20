@@ -5,8 +5,8 @@
     <display-name>FxCop support</display-name>
     <version>@Plugin_Version@</version>
     <vendor>
-      <name>JetBrains, s.r.o.</name>
-      <url>http://www.jetbrains.com</url>
+      <name>@Plugin_Vendor@</name>
+      <url>@Plugin_Vendor_Url@</url>
     </vendor>
   </info>
   <deployment use-separate-classloader="false" />  

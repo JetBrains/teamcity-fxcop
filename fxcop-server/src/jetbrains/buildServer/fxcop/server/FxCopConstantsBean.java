@@ -68,14 +68,4 @@ public class FxCopConstantsBean {
   public String getFailOnAnalysisErrorKey() {
     return FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR;
   }
-
-  @NotNull
-  public String getErrorLimitKey() {
-    return FxCopConstants.SETTINGS_ERROR_LIMIT;
-  }
-
-  @NotNull
-  public String getWarningKey() {
-    return FxCopConstants.SETTINGS_WARNING_LIMIT;
-  }
 }
