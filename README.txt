@@ -11,11 +11,8 @@ Current sources provided as reference for plugin writers.
 Development notes
 =================
 
-How to update fxcop.xml
------------------------
-
-1) IDEA->Build->Generate Ant Build:
-   - "Generate single-file and build"
-   - "Overwrite previously generated files"
-   - Uncheck "Enable UI forms compilation" and "Use JDSK definitions from project files"
-2) remove <property file="fxcop.properties"/> line from fxcop.xml
+1) Use 'deploy' artifact to build plugin and deploy it to local server instance
+2) Use 'IntelliJ IDEA Project' runner to build plugin inside of TeamCity
+	- Set 'Path to the project' - fxcop.ipr
+	- Set 'Artifacts to build' - plugin-zip (to build correctly packed plugin)
+	- Set 'Run configurations to execute' - Run Tests (to run all plugin tests)
