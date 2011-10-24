@@ -42,13 +42,13 @@
     <td><span>
       <props:multilineProperty name="${constants.filesKey}"
                                linkTitle="Type assembly files or wildcards"
-                               cols="40" rows="5"
+                               cols="55" rows="5"
                                expanded="true"
                                disabled="${propertiesBean.properties[constants.whatToInspectKey] != constants.whatToInspectFilesValue}"/>
       <props:multilineProperty name="${constants.filesExcludeKey}"
                                linkTitle="Exclude assembly files by wildcard"
-                               cols="40" rows="3"
-                               expanded="true"
+                               cols="55" rows="5"
+                               expanded="false"
                                disabled="${propertiesBean.properties[constants.whatToInspectKey] != constants.whatToInspectFilesValue}"/>
       </span>
       <span class="smallNote">Assembly file names relative to checkout root separated by spaces.<br/>
