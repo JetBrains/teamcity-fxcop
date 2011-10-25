@@ -9,6 +9,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="runtime-util" />
+    <orderEntry type="module" module-name="common" />
   </component>
   <component name="copyright">
     <Base>
