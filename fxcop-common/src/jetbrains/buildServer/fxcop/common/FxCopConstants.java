@@ -30,6 +30,7 @@ public interface FxCopConstants {
   String SETTINGS_ADDITIONAL_OPTIONS = "fxcop.addon_options";
   String SETTINGS_REPORT_XSLT = "fxcop.report_xslt";
   String SETTINGS_FXCOP_ROOT = "fxcop.root";
+  String SETTINGS_FXCOP_VERSION = "fxcop.version";
   String SETTINGS_SEARCH_DIRS = "fxcop.search_in_dirs";
   String SETTINGS_SEARCH_IN_GAC = "fxcop.search_in_gac";
   String SETTINGS_IGNORE_GENERATED_CODE = "fxcop.ignore_generated_code";

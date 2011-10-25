@@ -21,6 +21,14 @@
 <jsp:useBean id="constants" class="jetbrains.buildServer.fxcop.server.FxCopConstantsBean"/>
 
 <div class="parameter">
+  FxCop installation root: <strong><props:displayValue name="${constants.rootKey}" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
+  FxCop version: <strong><props:displayValue name="${constants.versionKey}" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
   <c:choose>
     <c:when test="${propertiesBean.properties[constants.whatToInspectKey] == constants.whatToInspectProjectValue}">
       FxCop project file:
@@ -57,8 +65,4 @@
 
 <div class="parameter">
   Report XSLT file: <strong><props:displayValue name="${constants.reportXsltKey}" emptyValue="not specified"/></strong>
-</div>
-
-<div class="parameter">
-  FxCop installation root: <strong><props:displayValue name="${constants.rootKey}" emptyValue="not specified"/></strong>
 </div>

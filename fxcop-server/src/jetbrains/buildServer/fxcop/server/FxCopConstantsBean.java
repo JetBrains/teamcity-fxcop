@@ -1,6 +1,7 @@
 package jetbrains.buildServer.fxcop.server;
 
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
+import jetbrains.buildServer.fxcop.common.FxCopVersion;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopConstantsBean {
@@ -50,6 +51,11 @@ public class FxCopConstantsBean {
   }
 
   @NotNull
+  public String getVersionKey() {
+    return FxCopConstants.SETTINGS_FXCOP_VERSION;
+  }
+
+  @NotNull
   public String getSearchDirsKey() {
     return FxCopConstants.SETTINGS_SEARCH_DIRS;
   }
@@ -67,5 +73,10 @@ public class FxCopConstantsBean {
   @NotNull
   public String getFailOnAnalysisErrorKey() {
     return FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR;
+  }
+
+  @NotNull
+  public FxCopVersion[] getAvaliableVersions() {
+    return FxCopVersion.values();
   }
 }

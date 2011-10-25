@@ -17,9 +17,37 @@
 <%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
 <%@ taglib prefix="l" tagdir="/WEB-INF/tags/layout" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="bs" tagdir="/WEB-INF/tags" %>
 
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 <jsp:useBean id="constants" class="jetbrains.buildServer.fxcop.server.FxCopConstantsBean"/>
+
+<l:settingsGroup title="FxCop Settings">
+
+  <tr>
+    <th><label for="${constants.rootKey}">FxCop installation root: <l:star/></label></th>
+    <td><props:textProperty name="${constants.rootKey}" className="longField"/>
+      <span class="error" id="error_${constants.rootKey}"></span>
+      <span class="smallNote">Place to call FxCopCmd.exe from.<br/>
+                              Defaults to '%system.FxCopRoot%' (autodetection on agent side)</span>
+    </td>
+  </tr>
+
+  <tr>
+    <th><label for="${constants.versionKey}">FxCop version: <bs:help file="FxCop" anchor="FxCopVersion"/></label></th>
+    <td>
+      <props:selectProperty name="${constants.versionKey}">
+        <c:forEach var="item" items="${constants.avaliableVersions}">
+          <props:option value="${item.versionName}"><c:out value="${item.displayName}"/></props:option>
+        </c:forEach>
+      </props:selectProperty>
+      <span class="error" id="error_${constants.versionKey}"></span>
+      <span class="smallNote">Specify FxCop version required by the build. As a result agent requirement will be created. <br/>
+                              Select 'Not specified' to use any FxCop version autodetected on agent side.</span>
+    </td>
+  </tr>
+
+</l:settingsGroup>
 
 <l:settingsGroup title="What to inspect">
   <tr>
@@ -142,19 +170,6 @@
       <span class="smallNote">Fails build on analysis errors from FxCop such as:<br/>
         ANALYSIS_ERROR ASSEMBLY_LOAD_ERROR ASSEMBLY_REFERENCES_ERROR PROJECT_LOAD_ERROR RULE_LIBRARY_LOAD_ERROR UNKNOWN_ERROR OUTPUT_ERROR
       </span>
-    </td>
-  </tr>
-
-</l:settingsGroup>
-
-<l:settingsGroup title="FxCop location">
-
-  <tr>
-    <th><label for="${constants.rootKey}">FxCop installation root: <l:star/></label></th>
-    <td><props:textProperty name="${constants.rootKey}" className="longField"/>
-      <span class="error" id="error_${constants.rootKey}"></span>
-      <span class="smallNote">Place to call FxCopCmd.exe from.<br/>
-                              Defaults to '%system.FxCopRoot%' (autodetection on agent side)</span>
     </td>
   </tr>
 

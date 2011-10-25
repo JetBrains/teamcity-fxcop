@@ -16,9 +16,13 @@
 
 package jetbrains.buildServer.fxcop.server;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
+import jetbrains.buildServer.fxcop.common.FxCopVersion;
+import jetbrains.buildServer.requirements.Requirement;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
@@ -93,5 +97,21 @@ public class FxCopRunType extends RunType {
       result.append("FxCop project: ").append(StringUtil.emptyIfNull(parameters.get(FxCopConstants.SETTINGS_PROJECT)));
     }
     return result.toString();
+  }
+
+  @Override
+  public List<Requirement> getRunnerSpecificRequirements(@NotNull final Map<String, String> runParameters) {
+    List<Requirement> list = new ArrayList<Requirement>();
+    final String specifiedFxCopVersion = runParameters.get(FxCopConstants.SETTINGS_FXCOP_VERSION);
+    if(specifiedFxCopVersion != null){
+      for(FxCopVersion version : FxCopVersion.values()){
+        if(version.getVersionName().equals(specifiedFxCopVersion)) {
+          final Requirement requirement = version.createRequirement();
+          if(requirement != null) list.add(requirement);
+          break;
+        }
+      }
+    }
+    return list;
   }
 }
