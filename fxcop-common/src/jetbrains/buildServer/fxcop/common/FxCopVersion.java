@@ -20,20 +20,20 @@ public enum FxCopVersion {
     }
   },
   v1_35("1.35", "1.35"),
-  v1_36("1.36", "1.36"),
+  v1_36("9.0", "1.36"),
   v10_0("10.0", "10.0");
 
-  private final String myVersionName;
+  private final String myTechnicalVersionPrefix;
   private final String myDisplayName;
 
-  FxCopVersion(final String versionName, final String displayName) {
-    myVersionName = versionName;
+  FxCopVersion(final String technicalVersionPrefix, final String displayName) {
+    myTechnicalVersionPrefix = technicalVersionPrefix;
     myDisplayName = displayName;
   }
 
   @NotNull
-  public String getVersionName() {
-    return myVersionName;
+  public String getTechnicalVersionPrefix() {
+    return myTechnicalVersionPrefix;
   }
 
   @NotNull
@@ -43,6 +43,6 @@ public enum FxCopVersion {
 
   @Nullable
   public Requirement createRequirement(){
-    return new Requirement(FxCopConstants.FXCOPCMD_FILE_VERSION_PROPERTY, getVersionName(), RequirementType.STARTS_WITH);
+    return new Requirement(FxCopConstants.FXCOPCMD_FILE_VERSION_PROPERTY, getTechnicalVersionPrefix(), RequirementType.STARTS_WITH);
   }
 }

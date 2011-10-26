@@ -38,7 +38,7 @@
     <td>
       <props:selectProperty name="${constants.versionKey}">
         <c:forEach var="item" items="${constants.avaliableVersions}">
-          <props:option value="${item.versionName}"><c:out value="${item.displayName}"/></props:option>
+          <props:option value="${item.technicalVersionPrefix}"><c:out value="${item.displayName}"/></props:option>
         </c:forEach>
       </props:selectProperty>
       <span class="error" id="error_${constants.versionKey}"></span>

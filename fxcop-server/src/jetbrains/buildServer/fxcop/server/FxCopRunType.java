@@ -105,7 +105,7 @@ public class FxCopRunType extends RunType {
     final String specifiedFxCopVersion = runParameters.get(FxCopConstants.SETTINGS_FXCOP_VERSION);
     if(specifiedFxCopVersion != null){
       for(FxCopVersion version : FxCopVersion.values()){
-        if(version.getVersionName().equals(specifiedFxCopVersion)) {
+        if(version.getTechnicalVersionPrefix().equals(specifiedFxCopVersion)) {
           final Requirement requirement = version.createRequirement();
           if(requirement != null) list.add(requirement);
           break;
