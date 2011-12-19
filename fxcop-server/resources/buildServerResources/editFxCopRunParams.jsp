@@ -69,11 +69,13 @@
       <label for="mod-files">Assemblies:</label></th>
     <td><span>
       <props:multilineProperty name="${constants.filesKey}"
+                               className="longField"
                                linkTitle="Type assembly files or wildcards"
                                cols="55" rows="5"
                                expanded="true"
                                disabled="${propertiesBean.properties[constants.whatToInspectKey] != constants.whatToInspectFilesValue}"/>
       <props:multilineProperty name="${constants.filesExcludeKey}"
+                               className="longField"
                                linkTitle="Exclude assembly files by wildcard"
                                cols="55" rows="5"
                                expanded="false"
