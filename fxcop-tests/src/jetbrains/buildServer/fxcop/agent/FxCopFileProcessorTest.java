@@ -23,6 +23,7 @@ import jetbrains.buildServer.agent.inspections.InspectionInstance;
 import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.inspections.InspectionTypeInfo;
 import jetbrains.buildServer.agent.inspections.InspectionReporterListener;
+import jetbrains.buildServer.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.Test;
 
@@ -36,21 +37,6 @@ public class FxCopFileProcessorTest extends BaseTestCase {
     }
 
     return file.getAbsolutePath();
-  }
-
-  static private String readFile(@NotNull final File file) throws IOException {
-    final FileInputStream inputStream = new FileInputStream(file);
-    try {
-      final BufferedInputStream bis = new BufferedInputStream(inputStream);
-      final byte[] bytes = new byte[(int)file.length()];
-      bis.read(bytes);
-      bis.close();
-
-      return new String(bytes);
-    }
-    finally {
-      inputStream.close();
-    }
   }
 
   private void runTest(final String fileName) throws Exception {
@@ -70,17 +56,29 @@ public class FxCopFileProcessorTest extends BaseTestCase {
     final FxCopFileProcessor processor = new FxCopFileProcessor(
       new File(prefix), "C:/Work\\Decompiler", logger, reporter);
     processor.processReport();
+    results.append("\r\n");
     results.append("Errors: ").append(processor.getErrorsCount()).append("\r\n");
-    results.append("Warnings: ").append(processor.getWarningsCount()).append("\r\n");
+    results.append("Warnings: ").append(processor.getWarningsCount());
 
+    final String actualData = normalizeText(results.toString());
     final File goldf = new File(goldFile);
-    if (!goldf.exists() || !readFile(goldf).equals(results.toString())) {
+    final String goldData = readNormalizedText(goldf);
+
+    if (!goldf.exists() || !goldData.equals(actualData)) {
       final FileWriter resultsWriter = new FileWriter(resultsFile);
-      resultsWriter.write(results.toString());
+      resultsWriter.write(actualData);
       resultsWriter.close();
 
-      assertEquals(readFile(goldf), results.toString());
+      assertEquals(goldData, actualData);
     }
+  }
+
+  private static String readNormalizedText(@NotNull final File file) throws IOException {
+    return normalizeText(FileUtil.readText(file));
+  }
+
+  private static String normalizeText(@NotNull final String text) {
+    return text.replaceAll("\\r\\n", "\n").replaceAll("\\r", "\n");
   }
 
   private InspectionReporter createFakeReporter(final StringBuilder results) {
