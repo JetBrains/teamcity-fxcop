@@ -99,7 +99,7 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter implements P
       config.addSystemProperty(FxCopConstants.FXCOPCMD_FILE_VERSION_PROPERTY, fileVersion.toString());
       LOG.info("Found FxCopCmd file version: " + fileVersion);
     }
-    config.addSystemProperty(FxCopConstants.FXCOP_ROOT_PROPERTY, fxcopRoot);
+    config.addCustomProperty(FxCopConstants.FXCOP_ROOT_PROPERTY, fxcopRoot);
   }
 
   @Nullable
