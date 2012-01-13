@@ -92,8 +92,8 @@
       $('${constants.filesKey}').disabled = !this.checked;
       $('${constants.filesExcludeKey}').disabled = !this.checked;
       $('${constants.filesKey}').focus();
-      BS.VisibilityHandlers.updateVisibility($('${constants.filesKey}'));
-      BS.VisibilityHandlers.updateVisibility($('${constants.projectKey}'));
+      BS.VisibilityHandlers.updateVisibility('${constants.filesKey}');
+      BS.VisibilityHandlers.updateVisibility('${constants.projectKey}');
     </c:set>
 
     <th>
@@ -131,9 +131,9 @@
       $('${constants.filesExcludeKey}').disabled = this.checked;
       $('${constants.projectKey}').disabled = !this.checked;
       $('${constants.projectKey}').focus();
-      BS.VisibilityHandlers.updateVisibility($('${constants.filesKey}'));
-      BS.VisibilityHandlers.updateVisibility($('${constants.filesExcludeKey}'));
-      BS.VisibilityHandlers.updateVisibility($('${constants.projectKey}'));
+      BS.VisibilityHandlers.updateVisibility('${constants.filesKey}');
+      BS.VisibilityHandlers.updateVisibility('${constants.filesExcludeKey}');
+      BS.VisibilityHandlers.updateVisibility('${constants.projectKey}');
     </c:set>
     <th>
       <props:radioButtonProperty name="${constants.whatToInspectKey}"
