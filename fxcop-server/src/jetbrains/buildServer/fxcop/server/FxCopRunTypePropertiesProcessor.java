@@ -33,18 +33,14 @@ public class FxCopRunTypePropertiesProcessor implements PropertiesProcessor {
     final String project = properties.get(FxCopConstants.SETTINGS_PROJECT);
 
     if (PropertiesUtil.isEmptyOrNull(project) && PropertiesUtil.isEmptyOrNull(files)) {
-      result.add(
-        new InvalidProperty(
-          FxCopConstants.SETTINGS_FILES,
-          "Files or project option must be specified"));
+      result.add(new InvalidProperty(FxCopConstants.SETTINGS_FILES, "Files or project option must be specified"));
     }
 
-    final String fxcopRoot = properties.get(FxCopConstants.SETTINGS_FXCOP_ROOT);
-    if (PropertiesUtil.isEmptyOrNull(fxcopRoot)) {
-      result.add(
-        new InvalidProperty(
-          FxCopConstants.SETTINGS_FXCOP_ROOT,
-          "FxCop installation root must be specified"));
+    if(properties.get(FxCopConstants.SETTINGS_DETECTION_MODE).equals(FxCopConstants.DETECTION_MODE_MANUAL)){
+      final String fxcopRoot = properties.get(FxCopConstants.SETTINGS_FXCOP_ROOT);
+      if (PropertiesUtil.isEmptyOrNull(fxcopRoot)) {
+        result.add(new InvalidProperty(FxCopConstants.SETTINGS_FXCOP_ROOT, "FxCop installation root must be specified"));
+      }
     }
 
     return result;

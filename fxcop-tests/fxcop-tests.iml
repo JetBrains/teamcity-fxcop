@@ -14,6 +14,8 @@
     <orderEntry type="library" name="xml" level="project" />
     <orderEntry type="library" name="api-server" level="project" />
     <orderEntry type="module" module-name="fxcop-common" />
+    <orderEntry type="module" module-name="fxcop-server" />
+    <orderEntry type="library" scope="RUNTIME" name="jdom" level="project" />
   </component>
   <component name="copyright">
     <Base>

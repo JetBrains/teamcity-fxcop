@@ -68,19 +68,35 @@ public class FxCopCommandLineBuilderImplTest extends BaseTestCase {
     assertEquals(expected, executable);
   }
 
-  public void testCmd1() throws Exception {
+  @Test(expectedExceptions = RunBuildException.class)
+  public void testManualDetectModeNoRoot() throws Exception {
+    myRunParameters.put(FxCopConstants.SETTINGS_DETECTION_MODE, FxCopConstants.DETECTION_MODE_MANUAL);
+    assertCmdArgs("");
+  }
+
+  public void testManualDetectModeCmd1() throws Exception {
+    myRunParameters.put(FxCopConstants.SETTINGS_DETECTION_MODE, FxCopConstants.DETECTION_MODE_MANUAL);
     myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "a");
     assertExecutablePath("a" + File.separator + "FxCopCmd.exe");
   }
 
-  public void testCmd2() throws Exception {
+  public void testManualDetectModeCmd2() throws Exception {
+    myRunParameters.put(FxCopConstants.SETTINGS_DETECTION_MODE, FxCopConstants.DETECTION_MODE_MANUAL);
     myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "/c/d/");
     assertExecutablePath(new File("/c/d", "FxCopCmd.exe").getPath());
   }
 
-  @Test(expectedExceptions = RunBuildException.class)
-  public void testNoRoot() throws Exception {
-    assertCmdArgs("");
+  public void testAutoDetectMode_NoCustomRoot() throws Exception {
+    myRunParameters.put(FxCopConstants.SETTINGS_DETECTION_MODE, FxCopConstants.DETECTION_MODE_AUTO);
+    myRunParameters.put(FxCopConstants.FXCOP_ROOT_PROPERTY, "/c/d/");
+    assertExecutablePath(new File("/c/d", "FxCopCmd.exe").getPath());
+  }
+
+  public void testAutoDetectMode_CustomRootSpecified() throws Exception {
+    myRunParameters.put(FxCopConstants.SETTINGS_DETECTION_MODE, FxCopConstants.DETECTION_MODE_AUTO);
+    myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "/c/d/");
+    myRunParameters.put(FxCopConstants.FXCOP_ROOT_PROPERTY, "/b/c/d/");
+    assertExecutablePath(new File("/b/c/d", "FxCopCmd.exe").getPath());
   }
 
   @Test(expectedExceptions = RunBuildException.class)

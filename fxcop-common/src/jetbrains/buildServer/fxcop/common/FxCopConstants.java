@@ -23,7 +23,6 @@ public interface FxCopConstants {
   String RUNNER_TYPE = "FxCop";
   String FXCOPCMD_BINARY = "FxCopCmd.exe";
 
-  String SETTINGS_WHAT_TO_INSPECT = "fxcop.what";
   String SETTINGS_FILES = "fxcop.files";
   String SETTINGS_FILES_EXCLUDE = "fxcop.files_exclude";
   String SETTINGS_PROJECT = "fxcop.project";
@@ -36,6 +35,11 @@ public interface FxCopConstants {
   String SETTINGS_IGNORE_GENERATED_CODE = "fxcop.ignore_generated_code";
   String SETTINGS_FAIL_ON_ANALYSIS_ERROR = "fxcop.fail_on_analysis_error";
 
+  String SETTINGS_DETECTION_MODE = "fxcop.detection_mode";
+  String DETECTION_MODE_AUTO = "auto";
+  String DETECTION_MODE_MANUAL = "manual";
+
+  String SETTINGS_WHAT_TO_INSPECT = "fxcop.what";
   String WHAT_TO_INSPECT_FILES = "files";
   String WHAT_TO_INSPECT_PROJECT = "project";
 

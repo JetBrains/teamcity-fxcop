@@ -96,7 +96,7 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter implements P
     final File fxcopCmd = new File(fxcopRoot, FxCopConstants.FXCOPCMD_BINARY);
     PEVersion fileVersion = PEUtil.getFileVersion(fxcopCmd);
     if (fileVersion != null) {
-      config.addSystemProperty(FxCopConstants.FXCOPCMD_FILE_VERSION_PROPERTY, fileVersion.toString());
+      config.addCustomProperty(FxCopConstants.FXCOPCMD_FILE_VERSION_PROPERTY, fileVersion.toString());
       LOG.info("Found FxCopCmd file version: " + fileVersion);
     }
     config.addCustomProperty(FxCopConstants.FXCOP_ROOT_PROPERTY, fxcopRoot);

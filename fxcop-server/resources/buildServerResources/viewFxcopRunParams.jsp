@@ -20,28 +20,37 @@
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 <jsp:useBean id="constants" class="jetbrains.buildServer.fxcop.server.FxCopConstantsBean"/>
 
-<div class="parameter">
-  FxCop installation root: <strong><props:displayValue name="${constants.rootKey}" emptyValue="not specified"/></strong>
-</div>
+<c:choose>
+  <c:when test="${propertiesBean.properties[constants.detectionModeKey] == constants.detectionModeAuto}">
+    <div class="parameter">
+      FxCop installation root: <strong>autodetected</strong>
+    </div>
+    <div class="parameter">
+      FxCop version: <strong><props:displayValue name="${constants.versionKey}" emptyValue="any detected"/></strong>
+    </div>
+  </c:when>
+  <c:otherwise>
+    <div class="parameter">
+      FxCop installation root: <strong><props:displayValue name="${constants.rootKey}" emptyValue="not specified"/></strong>
+    </div>
+  </c:otherwise>
+</c:choose>
 
-<div class="parameter">
-  FxCop version: <strong><props:displayValue name="${constants.versionKey}" emptyValue="not specified"/></strong>
-</div>
-
-<div class="parameter">
-  <c:choose>
-    <c:when test="${propertiesBean.properties[constants.whatToInspectKey] == constants.whatToInspectProjectValue}">
-      FxCop project file:
-      <strong><props:displayValue name="${constants.projectKey}" emptyValue="not specified"/></strong>
-    </c:when>
-    <c:otherwise>
-      Assemblies to inspect:
-      <strong><props:displayValue name="${constants.filesKey}" emptyValue="not specified"/></strong>
-      Assemblies to exclude:
-      <strong><props:displayValue name="${constants.filesExcludeKey}" emptyValue="not specified"/></strong>
-    </c:otherwise>
-  </c:choose>
-</div>
+<c:choose>
+  <c:when test="${propertiesBean.properties[constants.whatToInspectKey] == constants.whatToInspectProjectValue}">
+    <div class="parameter">
+      FxCop project file: <strong><props:displayValue name="${constants.projectKey}" emptyValue="not specified"/></strong>
+    </div>
+  </c:when>
+  <c:otherwise>
+    <div class="parameter">
+      Assemblies to inspect: <strong><props:displayValue name="${constants.filesKey}" emptyValue="not specified"/></strong>
+    </div>
+    <div class="parameter">
+      Assemblies to exclude: <strong><props:displayValue name="${constants.filesExcludeKey}" emptyValue="not specified"/></strong>
+    </div>
+  </c:otherwise>
+</c:choose>
 
 <div class="parameter">
   Additional FxCopCmd options: <strong><props:displayValue name="${constants.addtionalOptionsKey}" emptyValue="not specified"/></strong>

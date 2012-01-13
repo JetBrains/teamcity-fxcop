@@ -1100,6 +1100,13 @@
       <JAVADOC />
       <SOURCES />
     </library>
+    <library name="jdom">
+      <CLASSES>
+        <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/jdom.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="test-sup">
       <CLASSES>
         <root url="jar://$PROJECT_DIR$/lib/testng-jdk15.jar!/" />

@@ -13,14 +13,14 @@ import org.jetbrains.annotations.Nullable;
  */
 public enum FxCopVersion {
 
-  not_specified("not_specified", "Not Specified") {
+  not_specified("not_specified", "Any Detected") {
     @Override
     public Requirement createRequirement() {
-      return null;
+      return new Requirement(FxCopConstants.FXCOPCMD_FILE_VERSION_PROPERTY, null, RequirementType.EXISTS);
     }
   },
   v1_35("1.35", "1.35"),
-  v1_36("9.0", "1.36"),
+  v1_36("9.0", "1.36 (9.0)"),
   v10_0("10.0", "10.0");
 
   private final String myTechnicalVersionPrefix;

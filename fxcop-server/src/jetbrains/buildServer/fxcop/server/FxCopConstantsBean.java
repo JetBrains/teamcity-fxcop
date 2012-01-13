@@ -79,4 +79,19 @@ public class FxCopConstantsBean {
   public FxCopVersion[] getAvaliableVersions() {
     return FxCopVersion.values();
   }
+
+  @NotNull
+  public String getDetectionModeKey() {
+    return FxCopConstants.SETTINGS_DETECTION_MODE;
+  }
+
+  @NotNull
+  public String getDetectionModeAuto() {
+    return FxCopConstants.DETECTION_MODE_AUTO;
+  }
+
+  @NotNull
+  public String getDetectionModeManual() {
+    return FxCopConstants.DETECTION_MODE_MANUAL;
+  }
 }

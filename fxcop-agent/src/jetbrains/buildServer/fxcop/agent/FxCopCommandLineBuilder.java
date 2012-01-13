@@ -36,7 +36,15 @@ public class FxCopCommandLineBuilder {
 
   @NotNull
   public String getExecutablePath() throws RunBuildException {
-    final String fxcopRootRelative = myRunParameters.get(FxCopConstants.SETTINGS_FXCOP_ROOT);
+    String fxcopRootRelative;
+    final String fxcopDetectionMode = myRunParameters.get(FxCopConstants.SETTINGS_DETECTION_MODE);
+    if(fxcopDetectionMode.equals(FxCopConstants.DETECTION_MODE_AUTO)){
+      fxcopRootRelative = myRunParameters.get(FxCopConstants.FXCOP_ROOT_PROPERTY);
+    }
+    else{
+      fxcopRootRelative = myRunParameters.get(FxCopConstants.SETTINGS_FXCOP_ROOT);
+    }
+
     if (StringUtil.isEmpty(fxcopRootRelative)) {
       throw new RunBuildException("FxCop root not specified in build settings");
     }

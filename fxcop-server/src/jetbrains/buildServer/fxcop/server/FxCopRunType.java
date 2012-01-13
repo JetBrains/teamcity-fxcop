@@ -22,7 +22,9 @@ import java.util.List;
 import java.util.Map;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.fxcop.common.FxCopVersion;
+import jetbrains.buildServer.parameters.impl.ParametersResolverUtil;
 import jetbrains.buildServer.requirements.Requirement;
+import jetbrains.buildServer.requirements.RequirementType;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
@@ -60,9 +62,13 @@ public class FxCopRunType extends RunType {
 
   @Override
   public Map<String, String> getDefaultRunnerProperties() {
-    Map<String, String> map = new HashMap<String, String>();
-    setUpDefaultParams(map);
-    return map;
+    Map<String, String> parameters = new HashMap<String, String>();
+    parameters.put(FxCopConstants.SETTINGS_DETECTION_MODE, FxCopConstants.DETECTION_MODE_AUTO);
+    parameters.put(FxCopConstants.SETTINGS_FXCOP_VERSION, FxCopVersion.not_specified.getDisplayName());
+    parameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_FILES);
+    parameters.put(FxCopConstants.SETTINGS_SEARCH_IN_GAC, "true");
+    parameters.put(FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR, "true");
+    return parameters;
   }
 
   @Override
@@ -76,22 +82,12 @@ public class FxCopRunType extends RunType {
     return FxCopConstants.RUNNER_DISPLAY_NAME;
   }
 
-  private static void setUpDefaultParams(Map<String, String> parameters) {
-    parameters.put(
-      FxCopConstants.SETTINGS_FXCOP_ROOT,
-      "%" + FxCopConstants.FXCOP_ROOT_PROPERTY + "%");
-    parameters.put(
-      FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_FILES);
-    parameters.put(FxCopConstants.SETTINGS_SEARCH_IN_GAC, "true");
-    parameters.put(FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR, "true");
-  }
-
   @NotNull
   @Override
   public String describeParameters(@NotNull final Map<String, String> parameters) {
     StringBuilder result = new StringBuilder();
     String what = parameters.get(FxCopConstants.SETTINGS_WHAT_TO_INSPECT);
-    if (what == null || "files".equals(what)) {
+    if (what == null || FxCopConstants.WHAT_TO_INSPECT_FILES.equals(what)) {
       result.append("Assemblies: ").append(StringUtil.emptyIfNull(parameters.get(FxCopConstants.SETTINGS_FILES)));
     } else {
       result.append("FxCop project: ").append(StringUtil.emptyIfNull(parameters.get(FxCopConstants.SETTINGS_PROJECT)));
@@ -101,17 +97,6 @@ public class FxCopRunType extends RunType {
 
   @Override
   public List<Requirement> getRunnerSpecificRequirements(@NotNull final Map<String, String> runParameters) {
-    List<Requirement> list = new ArrayList<Requirement>();
-    final String specifiedFxCopVersion = runParameters.get(FxCopConstants.SETTINGS_FXCOP_VERSION);
-    if(specifiedFxCopVersion != null){
-      for(FxCopVersion version : FxCopVersion.values()){
-        if(version.getTechnicalVersionPrefix().equals(specifiedFxCopVersion)) {
-          final Requirement requirement = version.createRequirement();
-          if(requirement != null) list.add(requirement);
-          break;
-        }
-      }
-    }
-    return list;
+    return FxCopRequirementsUtil.getFxCopRequirements(runParameters);
   }
 }

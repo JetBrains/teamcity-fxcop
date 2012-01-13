@@ -22,18 +22,54 @@
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 <jsp:useBean id="constants" class="jetbrains.buildServer.fxcop.server.FxCopConstantsBean"/>
 
-<l:settingsGroup title="FxCop Settings">
+<l:settingsGroup title="FxCop Installation">
+
+  <c:if test="${'auto' == propertiesBean.properties[constants.detectionModeKey]}">
+    <c:set var="hidePathInput" value="style='display: none'"/>
+  </c:if>
+
+  <c:if test="${'manual' == propertiesBean.properties[constants.detectionModeKey]}">
+    <c:set var="hideVersionInput" value="style='display: none'"/>
+  </c:if>
 
   <tr>
-    <th><label for="${constants.rootKey}">FxCop installation root: <l:star/></label></th>
-    <td><props:textProperty name="${constants.rootKey}" className="longField"/>
-      <span class="error" id="error_${constants.rootKey}"></span>
-      <span class="smallNote">Place to call FxCopCmd.exe from.<br/>
-                              Defaults to '%system.FxCopRoot%' (autodetection on agent side)</span>
+    <th><label>FxCop detection mode:</label></th>
+    <td>
+      <c:set var="onclick">
+        BS.Util.hide('pathInputSection');
+        BS.Util.show('versionInputSection');
+      </c:set>
+      <props:radioButtonProperty name="${constants.detectionModeKey}"
+                                 id="detectionModeAuto"
+                                 value="${constants.detectionModeAuto}"
+                                 checked="${constants.detectionModeAuto == propertiesBean.properties[constants.detectionModeKey]}"
+                                 onclick="${onclick}" />
+      <label for="detectionModeAuto">Autodetect installation</label>
+
+      <span style="padding-left: 5em">
+        <c:set var="onclick">
+          BS.Util.show('pathInputSection');
+          BS.Util.hide('versionInputSection');
+        </c:set>
+        <props:radioButtonProperty name="${constants.detectionModeKey}"
+                                   id="detectionModeManual"
+                                   value="${constants.detectionModeManual}"
+                                   checked="${constants.detectionModeManual == propertiesBean.properties[constants.detectionModeKey]}"
+                                   onclick="${onclick}"/>
+        <label for="detectionModeManual">Specify installation root</label>
+      </span>
     </td>
   </tr>
 
-  <tr>
+  <tr id="pathInputSection" ${hidePathInput}>
+      <th><label for="${constants.rootKey}">Installation root: <l:star/></label></th>
+      <td><props:textProperty name="${constants.rootKey}" className="longField"/>
+        <span class="error" id="error_${constants.rootKey}"></span>
+        <span class="smallNote">Specify path to FxCopCmd.exe home directory.</span>
+      </td>
+    </tr>
+
+  <tr id="versionInputSection" ${hideVersionInput}>
     <th><label for="${constants.versionKey}">FxCop version: <bs:help file="FxCop" anchor="FxCopVersion"/></label></th>
     <td>
       <props:selectProperty name="${constants.versionKey}">
@@ -43,7 +79,7 @@
       </props:selectProperty>
       <span class="error" id="error_${constants.versionKey}"></span>
       <span class="smallNote">Specify FxCop version required by the build. As a result agent requirement will be created. <br/>
-                              Select 'Not specified' to use any FxCop version autodetected on agent side.</span>
+                              Select 'Any Detected' to use any FxCop version autodetected on agent side.</span>
     </td>
   </tr>
 
@@ -66,7 +102,7 @@
                                  id="mod-files"
                                  onclick="${onclick}"
                                  checked="${propertiesBean.properties[constants.whatToInspectKey] == constants.whatToInspectFilesValue}"/>
-      <label for="mod-files">Assemblies:</label></th>
+      <label for="mod-files">Assemblies: </label></th>
     <td><span>
       <props:multilineProperty name="${constants.filesKey}"
                                className="longField"
