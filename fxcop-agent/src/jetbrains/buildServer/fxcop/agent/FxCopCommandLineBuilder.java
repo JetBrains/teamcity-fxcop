@@ -21,17 +21,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.SimpleBuildLogger;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopCommandLineBuilder {
   private final Map<String, String> myRunParameters;
+  private final Map<String, String> myBuildParameters;
   private final File myXmlReportFile;
+  private final SimpleBuildLogger myLogger;
 
-  public FxCopCommandLineBuilder(final Map<String, String> runParameters, final File xmlReportFile) {
-    myRunParameters = runParameters;
+  public FxCopCommandLineBuilder(final Map<String, String> runnerParameters,
+                                 final Map<String, String> buildParameters,
+                                 final File xmlReportFile,
+                                 final SimpleBuildLogger logger) {
+    myRunParameters = runnerParameters;
+    myBuildParameters = buildParameters;
     myXmlReportFile = xmlReportFile;
+    myLogger = logger;
   }
 
   @NotNull
@@ -39,10 +47,12 @@ public class FxCopCommandLineBuilder {
     String fxcopRootRelative;
     final String fxcopDetectionMode = myRunParameters.get(FxCopConstants.SETTINGS_DETECTION_MODE);
     if(fxcopDetectionMode.equals(FxCopConstants.DETECTION_MODE_AUTO)){
-      fxcopRootRelative = myRunParameters.get(FxCopConstants.FXCOP_ROOT_PROPERTY);
+      fxcopRootRelative = myBuildParameters.get(FxCopConstants.FXCOP_ROOT_PROPERTY);
+      myLogger.message("Used autodetected FxCop home directory");
     }
     else{
       fxcopRootRelative = myRunParameters.get(FxCopConstants.SETTINGS_FXCOP_ROOT);
+      myLogger.message("Used custom FxCop home directory");
     }
 
     if (StringUtil.isEmpty(fxcopRootRelative)) {

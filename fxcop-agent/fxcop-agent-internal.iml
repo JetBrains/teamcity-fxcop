@@ -24,6 +24,7 @@
     <orderEntry type="module" module-name="fxcop-common-internal" />
     <orderEntry type="module" module-name="common-runtime" />
     <orderEntry type="module" module-name="messages" />
+    <orderEntry type="module" module-name="agent" />
   </component>
 </module>
 

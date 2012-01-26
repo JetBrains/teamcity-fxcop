@@ -37,7 +37,7 @@ import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
 import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.runner.BuildServiceAdapter;
 import jetbrains.buildServer.agent.runner.ProgramCommandLine;
-import jetbrains.buildServer.util.AntPatternFileFinder;
+import jetbrains.buildServer.agent.util.AntPatternFileFinder;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.messages.DefaultMessagesInfo;
 import jetbrains.buildServer.util.FileUtil;
@@ -216,7 +216,7 @@ public class FxCopBuildService extends BuildServiceAdapter {
 
     final List<String> finalFiles = files;
 
-    final FxCopCommandLineBuilder commandLineBuilder = new FxCopCommandLineBuilder(runParameters, myXmlReportFile);
+    final FxCopCommandLineBuilder commandLineBuilder = new FxCopCommandLineBuilder(runParameters, getBuildParameters().getAllParameters(),  myXmlReportFile, getLogger());
     return new ProgramCommandLine() {
       @NotNull
       public String getExecutablePath() throws RunBuildException {

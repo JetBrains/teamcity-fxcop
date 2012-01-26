@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import jetbrains.buildServer.BaseTestCase;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.NullBuildProgressLogger;
+import jetbrains.buildServer.agent.SimpleBuildLogger;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.util.StringUtil;
 import org.testng.annotations.BeforeMethod;
@@ -31,9 +33,11 @@ import org.testng.annotations.Test;
 @Test
 public class FxCopCommandLineBuilderImplTest extends BaseTestCase {
   private Map<String, String> myRunParameters;
+  private Map<String, String> myBuildParameters;
   private File myXmlReportFile;
   private String myExpectedPostfix;
   private final String myExpectedPrefix = "[/forceoutput] ";
+  private final SimpleBuildLogger myLogger = new NullBuildProgressLogger();
 
   @BeforeMethod
   @Override
@@ -41,6 +45,7 @@ public class FxCopCommandLineBuilderImplTest extends BaseTestCase {
     super.setUp();
 
     myRunParameters = new HashMap<String, String>();
+    myBuildParameters = new HashMap<String, String>();
     myXmlReportFile = new File("C:\\a\\b");
     myExpectedPostfix = "[/out:" + myXmlReportFile.getPath() + "] ";
   }
@@ -51,7 +56,8 @@ public class FxCopCommandLineBuilderImplTest extends BaseTestCase {
                                ? StringUtil.splitCommandArgumentsAndUnquote(filesSetting)
                                : new ArrayList<String>();
 
-    final FxCopCommandLineBuilder commandLineBuilder = new FxCopCommandLineBuilder(myRunParameters, myXmlReportFile);
+    final FxCopCommandLineBuilder commandLineBuilder = new FxCopCommandLineBuilder(myRunParameters, myBuildParameters, myXmlReportFile,
+                                                                                   myLogger);
     final List<String> args = commandLineBuilder.getArguments(files);
 
     StringBuilder result = new StringBuilder();
@@ -62,7 +68,8 @@ public class FxCopCommandLineBuilderImplTest extends BaseTestCase {
   }
 
   private void assertExecutablePath(final String expected) throws Exception {
-    final FxCopCommandLineBuilder commandLineBuilder = new FxCopCommandLineBuilder(myRunParameters, myXmlReportFile);
+    final FxCopCommandLineBuilder commandLineBuilder = new FxCopCommandLineBuilder(myRunParameters, myBuildParameters, myXmlReportFile,
+                                                                                   myLogger);
     final String executable = commandLineBuilder.getExecutablePath();
 
     assertEquals(expected, executable);
@@ -88,14 +95,14 @@ public class FxCopCommandLineBuilderImplTest extends BaseTestCase {
 
   public void testAutoDetectMode_NoCustomRoot() throws Exception {
     myRunParameters.put(FxCopConstants.SETTINGS_DETECTION_MODE, FxCopConstants.DETECTION_MODE_AUTO);
-    myRunParameters.put(FxCopConstants.FXCOP_ROOT_PROPERTY, "/c/d/");
+    myBuildParameters.put(FxCopConstants.FXCOP_ROOT_PROPERTY, "/c/d/");
     assertExecutablePath(new File("/c/d", "FxCopCmd.exe").getPath());
   }
 
   public void testAutoDetectMode_CustomRootSpecified() throws Exception {
     myRunParameters.put(FxCopConstants.SETTINGS_DETECTION_MODE, FxCopConstants.DETECTION_MODE_AUTO);
     myRunParameters.put(FxCopConstants.SETTINGS_FXCOP_ROOT, "/c/d/");
-    myRunParameters.put(FxCopConstants.FXCOP_ROOT_PROPERTY, "/b/c/d/");
+    myBuildParameters.put(FxCopConstants.FXCOP_ROOT_PROPERTY, "/b/c/d/");
     assertExecutablePath(new File("/b/c/d", "FxCopCmd.exe").getPath());
   }
 
