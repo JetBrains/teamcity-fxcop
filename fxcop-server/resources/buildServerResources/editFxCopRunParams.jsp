@@ -213,7 +213,7 @@
 
   <tr>
     <c:url var="link" value="/admin/editBuildFailureConditions.html?init=1&id=${param['id']}"/>
-    <th colspan="2">You can configure build to fail if it has too many inspection errors or warnings. To do it, add a corresponding
+    <th colspan="2">You can configure a build to fail if it has too many inspection errors or warnings. To do so, add a corresponding
       <c:choose>
         <c:when test="${buildForm.createMode}">build failure condition. <bs:help file="Build+Failure+Conditions"/></c:when>
         <c:otherwise><a href="${link}">build failure condition</a>.</c:otherwise>
