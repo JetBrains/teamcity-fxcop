@@ -1112,6 +1112,7 @@
         <root url="jar://$PROJECT_DIR$/lib/testng-jdk15.jar!/" />
         <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/jmock-SNAPSHOT.jar!/" />
         <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/junit-3.8.2.jar!/" />
+        <root url="jar://$TeamCityDistribution$/devPackage/tests/tests-support.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
