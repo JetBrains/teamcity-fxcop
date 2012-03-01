@@ -28,6 +28,7 @@ import jetbrains.buildServer.util.Bitness;
 import jetbrains.buildServer.util.EventDispatcher;
 import jetbrains.buildServer.util.PEReader.PEUtil;
 import jetbrains.buildServer.util.PEReader.PEVersion;
+import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.Win32RegistryAccessor;
 import jetbrains.buildServer.util.positioning.PositionAware;
 import jetbrains.buildServer.util.positioning.PositionConstraint;
@@ -164,7 +165,7 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter implements P
       return null;
     }
     final String vs2010Path =  configurationParameters.get(VS_2010_PATH);
-    if(vs2010Path == null || vs2010Path.isEmpty()) {
+    if(vs2010Path == null || StringUtil.isEmptyOrSpaces(vs2010Path)) {
       LOG.warn("VS2010_Path configuration parameter value is empty");
       return null;
     }
