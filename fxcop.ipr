@@ -686,11 +686,6 @@
         <ADDITIONAL_INDENT_OPTIONS fileType="haml">
           <option name="INDENT_SIZE" value="2" />
         </ADDITIONAL_INDENT_OPTIONS>
-        <ADDITIONAL_INDENT_OPTIONS fileType="jsp">
-          <option name="INDENT_SIZE" value="2" />
-          <option name="CONTINUATION_INDENT_SIZE" value="4" />
-          <option name="TAB_SIZE" value="8" />
-        </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="sass">
           <option name="INDENT_SIZE" value="2" />
         </ADDITIONAL_INDENT_OPTIONS>
@@ -798,6 +793,13 @@
           <indentOptions>
             <option name="INDENT_SIZE" value="2" />
             <option name="CONTINUATION_INDENT_SIZE" value="2" />
+            <option name="TAB_SIZE" value="8" />
+          </indentOptions>
+        </codeStyleSettings>
+        <codeStyleSettings language="JSP">
+          <indentOptions>
+            <option name="INDENT_SIZE" value="2" />
+            <option name="CONTINUATION_INDENT_SIZE" value="4" />
             <option name="TAB_SIZE" value="8" />
           </indentOptions>
         </codeStyleSettings>
@@ -1086,7 +1088,6 @@
         <root url="jar://$TeamCityDistribution$/devPackage/common-api.jar!/" />
         <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/annotations.jar!/" />
         <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/openapi.jar!/" />
-        <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/junit-3.8.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -1110,9 +1111,9 @@
     <library name="test-sup">
       <CLASSES>
         <root url="jar://$PROJECT_DIR$/lib/testng-jdk15.jar!/" />
-        <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/jmock-SNAPSHOT.jar!/" />
-        <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/junit-3.8.2.jar!/" />
         <root url="jar://$TeamCityDistribution$/devPackage/tests/tests-support.jar!/" />
+        <root url="jar://$TeamCityDistribution$/devPackage/tests/jmock-SNAPSHOT.jar!/" />
+        <root url="jar://$TeamCityDistribution$/devPackage/tests/junit-3.8.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
