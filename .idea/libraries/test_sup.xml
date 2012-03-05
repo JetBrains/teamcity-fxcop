@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="test-sup">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/testng-jdk15.jar!/" />
+      <root url="jar://$TeamCityDistribution$/devPackage/tests/tests-support.jar!/" />
+      <root url="jar://$TeamCityDistribution$/devPackage/tests/jmock-SNAPSHOT.jar!/" />
+      <root url="jar://$TeamCityDistribution$/devPackage/tests/junit-3.8.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

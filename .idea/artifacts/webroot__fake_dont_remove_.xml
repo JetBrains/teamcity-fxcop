@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="webroot:_fake_dont_remove_">
+    <output-path>$PROJECT_DIR$/out/artifacts/webroot__fake_dont_remove_</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="teamcity-webroot/web/Web" />
+      <element id="javaee-facet-resources" facet="fxcop-server/web/Web" />
+    </root>
+  </artifact>
+</component>
