@@ -9,5 +9,5 @@
       <url>@Plugin_Vendor_Url@</url>
     </vendor>
   </info>
-  <deployment use-separate-classloader="false" />  
+  <deployment use-separate-classloader="true" />  
 </teamcity-plugin>

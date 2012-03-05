@@ -1,69 +1,29 @@
 <project name="fxcop-build" default="dist" basedir=".">
 
-  <property file=".local.properties"/>
-
-  <property file="build.properties"/>
-  <property name="plugin.name" value="fxcop"/>
-  <property name="javac2.home" value="${basedir}/lib-compile"/>
-
-  <import file="teamcity-common.xml"/>
-  <import file="fxcop.xml"/>
-
-  <target name="package" depends="define.version">
-    <package.teamcity.plugin name="${plugin.name}"
-                             server.output="${fxcop-server.output.dir}"
-                             
-                             common.output="${fxcop-common.output.dir}"
-                             agent.output="${fxcop-agent.output.dir}"
-                             
-                             plugin.descriptor.file="${basedir}/teamcity-plugin.xml"
-                             plugin.version="${plugin.version}"/>
-  </target>
-
-  <target name="define.version" depends="define.version.if.under.teamcity">
-    <tstamp>
-      <format property="current.time" pattern="yyyyMMddHHmm"/>
-    </tstamp>
-    <property name="plugin.version" value="SNAPSHOT-${current.time}"/>
-  </target>
-
-  <target name="define.version.if.under.teamcity" if="build.number">
-    <property name="plugin.version" value="${build.number}"/>
-  </target>
-
-  <target name="replace-tokens-in-teamcity-plugin-xml" depends="define.version">
+  <target name="replace-tokens-in-teamcity-plugin-xml">
     <property name="home" value="${artifact.output.path}"/>
+
     <echo message="replacing tokens in teamcity-plugin.xml file under ${home}"/>
+
+    <tstamp>
+      <format property="snapshot" pattern="yyyyddMMHHmmss"/>
+    </tstamp>
+
+    <condition property="build.number" value="snapshot-${snapshot}" else="${build.number}">
+      <not>
+        <isset property="build.number"/>
+      </not>
+    </condition>
+
+    <echo message="Setting version to: ${build.number}"/>
+    <!-- update all references in teamcity-plugin.xml files -->
     <replace dir="${home}" summary="true">
       <include name="**/teamcity-plugin.xml"/>
-      <replacefilter token="@Plugin_Version@" value="${plugin.version}"/>
+
+      <replacefilter token="@Plugin_Version@" value="${build.number}"/>
       <replacefilter token="@Plugin_Vendor@" value="JetBrains, s.r.o."/>
       <replacefilter token="@Plugin_Vendor_Url@" value="http://www.jetbrains.com"/>
     </replace>
-  </target>
-
-  <target name="dist" depends="check.teamcitydistribution,build.modules,package"/>
-
-  <target name="deploy" depends="dist">
-    <deploy.teamcity.plugin name="${plugin.name}"/>
-  </target>
-  
-  <taskdef name="testng" classname="org.testng.TestNGAntTask" classpath="${basedir}/lib/testng-jdk15.jar"/>
-
-  <target name="test" depends="all">
-    <testng haltonfailure="no" failureProperty="failure_found" listener="org.testng.reporters.TestHTMLReporter"
-            outputdir="${basedir}/test-output" classpathref="fxcop-tests.runtime.module.classpath"
-            dumpcommand="true"
-            workingdir="${basedir}">
-
-      <jvmarg value="-ea"/>
-
-      <sysproperty key="java.awt.headless" value="true"/>
-
-      <xmlfileset dir="${basedir}">
-        <include name="testng.xml"/>
-      </xmlfileset>
-    </testng>
   </target>
 
 </project>        
