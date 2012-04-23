@@ -31,6 +31,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import jetbrains.buildServer.BuildProblemData;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.BuildFinishedStatus;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
@@ -185,9 +186,12 @@ public class FxCopBuildService extends BuildServiceAdapter {
       getLogger().buildFailureDescription(failMessage);
     }
 
-    return failMessage != null
-           ? BuildFinishedStatus.FINISHED_FAILED
-           : BuildFinishedStatus.FINISHED_SUCCESS;
+    if (failMessage != null) {
+      logBuildProblem(BuildProblemData.createBuildProblemWithPrefix(String.valueOf(exitCode), FxCopConstants.RUNNER_TYPE, failMessage));
+      return BuildFinishedStatus.FINISHED_FAILED;
+    }
+
+    return BuildFinishedStatus.FINISHED_SUCCESS;
   }
 
   private boolean isParameterEnabled(final String key) {
