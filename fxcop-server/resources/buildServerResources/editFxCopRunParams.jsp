@@ -50,6 +50,7 @@
         <c:set var="onclick">
           BS.Util.show('pathInputSection');
           BS.Util.hide('versionInputSection');
+          BS.VisibilityHandlers.updateVisibility('${constants.rootKey}');
         </c:set>
         <props:radioButtonProperty name="${constants.detectionModeKey}"
                                    id="detectionModeManual"
