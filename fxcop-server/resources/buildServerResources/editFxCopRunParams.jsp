@@ -147,6 +147,7 @@
       <span>
         <props:textProperty name="${constants.projectKey}" className="longField"
                             disabled="${propertiesBean.properties[constants.whatToInspectKey] != constants.whatToInspectProjectValue}"/>
+        <bs:vcsTree fieldId="${constants.projectKey}" treeId="${constants.projectKey}"/>
         </span>
       <span class="smallNote">FxCop project file name relative to checkout root</span>
       <span class="error" id="error_${constants.projectKey}"></span></td>
@@ -183,6 +184,7 @@
   <tr>
     <th><label for="${constants.reportXsltKey}">Report XSLT file:</label></th>
     <td><props:textProperty name="${constants.reportXsltKey}" className="longField"/>
+      <bs:vcsTree fieldId="${constants.reportXsltKey}" treeId="${constants.reportXsltKey}"/>
       <span class="error" id="error_${constants.reportXsltKey}"></span>
       <span class="smallNote">XSLT file used to generate HTML report.<br/>
         Leave it empty to skip generation,<br/>
