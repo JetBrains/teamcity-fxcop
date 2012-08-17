@@ -182,11 +182,6 @@ public class FxCopBuildService extends BuildServiceAdapter {
     }
 
     if (failMessage != null) {
-      getLogger().error(failMessage);
-      getLogger().buildFailureDescription(failMessage);
-    }
-
-    if (failMessage != null) {
       logBuildProblem(BuildProblemData.createBuildProblemWithPrefix(String.valueOf(exitCode), FxCopConstants.RUNNER_TYPE, failMessage));
       return BuildFinishedStatus.FINISHED_WITH_PROBLEMS;
     }
