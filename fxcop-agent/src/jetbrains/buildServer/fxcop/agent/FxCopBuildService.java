@@ -38,6 +38,7 @@ import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
 import jetbrains.buildServer.agent.inspections.InspectionReporter;
 import jetbrains.buildServer.agent.runner.BuildServiceAdapter;
 import jetbrains.buildServer.agent.runner.ProgramCommandLine;
+import jetbrains.buildServer.fxcop.common.ArtifactsUtil;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.messages.DefaultMessagesInfo;
 import jetbrains.buildServer.util.AntPatternFileFinder;
@@ -123,7 +124,7 @@ public class FxCopBuildService extends BuildServiceAdapter {
       reportFileStream.close();
     }
 
-    myArtifactsWatcher.addNewArtifactsPath(myOutputDirectory.getPath() + "/*.html");
+    myArtifactsWatcher.addNewArtifactsPath(myOutputDirectory.getPath() + "/*.html" + "=>" + ArtifactsUtil.getInternalArtifactPath(""));
   }
 
   @NotNull
@@ -166,7 +167,7 @@ public class FxCopBuildService extends BuildServiceAdapter {
     }
 
     if (myXmlReportFile.exists()) {
-      myArtifactsWatcher.addNewArtifactsPath(myXmlReportFile.getPath());
+      myArtifactsWatcher.addNewArtifactsPath(myXmlReportFile.getPath() + "=>" + ArtifactsUtil.getInternalArtifactPath(""));
 
       try {
         importInspectionResults();

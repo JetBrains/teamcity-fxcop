@@ -18,6 +18,7 @@ package jetbrains.buildServer.fxcop.server;
 
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import jetbrains.buildServer.fxcop.common.ArtifactsUtil;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.serverSide.SBuild;
 import jetbrains.buildServer.serverSide.SBuildServer;
@@ -30,7 +31,7 @@ public class FxCopReportTab extends ViewLogTab {
   private static final String TAB_TITLE = "FxCop";
   private static final String TAB_CODE = "fxcopReportTab";
   
-  private static final String TAB_STARTPAGE = FxCopConstants.REPORT_FILE;
+  private static final String TAB_STARTPAGE = ArtifactsUtil.getInternalArtifactPath(FxCopConstants.REPORT_FILE);
 
   public FxCopReportTab(@NotNull PagePlaces pagePlaces,
                         @NotNull SBuildServer server) {
