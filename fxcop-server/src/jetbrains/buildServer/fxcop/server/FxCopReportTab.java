@@ -30,8 +30,6 @@ import org.jetbrains.annotations.NotNull;
 public class FxCopReportTab extends ViewLogTab {
   private static final String TAB_TITLE = "FxCop";
   private static final String TAB_CODE = "fxcopReportTab";
-  
-  private static final String TAB_STARTPAGE = ArtifactsUtil.getInternalArtifactPath(FxCopConstants.REPORT_FILE);
 
   public FxCopReportTab(@NotNull PagePlaces pagePlaces,
                         @NotNull SBuildServer server) {
@@ -43,11 +41,16 @@ public class FxCopReportTab extends ViewLogTab {
   protected void fillModel(@NotNull Map<String, Object> model,
                            @NotNull HttpServletRequest request,
                            @NotNull SBuild build) {
-    model.put("startPage", TAB_STARTPAGE);
+    model.put("startPage", getAvailableReportPage(build));
   }
 
   @Override
   protected boolean isAvailable(@NotNull HttpServletRequest request, @NotNull SBuild build) {
-    return super.isAvailable(request, build) && ReportTabUtil.isAvailable(build, TAB_STARTPAGE);
+    return super.isAvailable(request, build) && (ReportTabUtil.isAvailable(build, ArtifactsUtil.getInternalArtifactPath(FxCopConstants.REPORT_FILE))|| ReportTabUtil.isAvailable(build, FxCopConstants.REPORT_FILE));
+  }
+
+  private String getAvailableReportPage(final SBuild build) {
+    final String internalArtifactPath = ArtifactsUtil.getInternalArtifactPath(FxCopConstants.REPORT_FILE);
+    return ReportTabUtil.isAvailable(build, internalArtifactPath) ? internalArtifactPath : FxCopConstants.REPORT_FILE;
   }
 }
