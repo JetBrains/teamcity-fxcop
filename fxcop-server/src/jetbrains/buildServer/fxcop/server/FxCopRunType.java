@@ -92,6 +92,7 @@ public class FxCopRunType extends RunType {
     return result.toString();
   }
 
+  @NotNull
   @Override
   public List<Requirement> getRunnerSpecificRequirements(@NotNull final Map<String, String> runParameters) {
     return FxCopRequirementsUtil.getFxCopRequirements(runParameters);
