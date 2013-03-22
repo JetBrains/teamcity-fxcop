@@ -30,7 +30,7 @@ import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
 
 public class FxCopRunType extends RunType {
-  private PluginDescriptor myPluginDescriptor;
+  private final PluginDescriptor myPluginDescriptor;
 
   public FxCopRunType(final RunTypeRegistry runTypeRegistry, final PluginDescriptor pluginDescriptor) {
     myPluginDescriptor = pluginDescriptor;
@@ -42,6 +42,7 @@ public class FxCopRunType extends RunType {
     return new FxCopRunTypePropertiesProcessor();
   }
 
+  @NotNull
   @Override
   public String getDescription() {
     return FxCopConstants.RUNNER_DESCRIPTION;
@@ -74,6 +75,7 @@ public class FxCopRunType extends RunType {
     return FxCopConstants.RUNNER_TYPE;
   }
 
+  @NotNull
   @Override
   public String getDisplayName() {
     return FxCopConstants.RUNNER_DISPLAY_NAME;
