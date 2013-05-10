@@ -21,6 +21,7 @@
       <entry name="?*.png" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />
+    <bytecodeTargetLevel target="1.5" />
   </component>
   <component name="EclipseCompilerSettings">
     <option name="GENERATE_NO_WARNINGS" value="true" />
