@@ -155,15 +155,15 @@
 
 </l:settingsGroup>
 
-<l:settingsGroup title="FxCop options">
-  <tr>
+<l:settingsGroup title="FxCop options" className="advancedSetting">
+  <tr class="advancedSetting">
     <th><label for="${constants.searchInGacKey}">Search referenced assemblies in GAC</label></th>
     <td>
       <props:checkboxProperty name="${constants.searchInGacKey}"/>
       <span class="error" id="error_${constants.searchInGacKey}"></span>
     </td>
   </tr>
-  <tr>
+  <tr class="advancedSetting">
     <th><label for="${constants.searchDirsKey}">Search referenced assemblies in directories</label></th>
     <td>
       <props:textProperty name="${constants.searchDirsKey}" className="longField"/>
@@ -173,7 +173,7 @@
       Sets /d: options for FxCopCmd</span>
     </td>
   </tr>
-  <tr>
+  <tr class="advancedSetting">
     <th><label for="${constants.ignoreGeneratedCodeKey}">Ignore generated code</label></th>
     <td>
       <props:checkboxProperty name="${constants.ignoreGeneratedCodeKey}"/>
@@ -181,7 +181,7 @@
       <span class="smallNote">Sets /ignoregeneratedcode for FxCopCmd (note: it's supported since FxCop 1.36)</span>
     </td>
   </tr>
-  <tr>
+  <tr class="advancedSetting">
     <th><label for="${constants.reportXsltKey}">Report XSLT file:</label></th>
     <td><props:textProperty name="${constants.reportXsltKey}" className="longField"/>
       <bs:vcsTree fieldId="${constants.reportXsltKey}" treeId="${constants.reportXsltKey}"/>
@@ -192,7 +192,7 @@
         or specify any custom file relative to checkout directory</span>
     </td>
   </tr>
-  <tr>
+  <tr class="advancedSetting">
     <th><label for="${constants.addtionalOptionsKey}">Additional FxCopCmd options: </label></th>
     <td><props:textProperty name="${constants.addtionalOptionsKey}" className="longField"/>
       <span class="error" id="error_${constants.addtionalOptionsKey}"></span>
@@ -203,7 +203,7 @@
 
 <l:settingsGroup title="Build failure conditions">
 
-  <tr>
+  <tr class="advancedSetting">
     <th><label for="${constants.failOnAnalysisErrorKey}">Fail on analysis errors</label></th>
     <td>
       <props:checkboxProperty name="${constants.failOnAnalysisErrorKey}"/>
