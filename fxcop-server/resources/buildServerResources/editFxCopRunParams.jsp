@@ -16,6 +16,7 @@
 
 <%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
 <%@ taglib prefix="l" tagdir="/WEB-INF/tags/layout" %>
+<%@ taglib prefix="admin" tagdir="/WEB-INF/tags/admin" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="bs" tagdir="/WEB-INF/tags" %>
 
@@ -215,11 +216,13 @@
   </tr>
 
   <tr>
-    <c:url var="link" value="/admin/editBuildFailureConditions.html?init=1&id=${param['id']}"/>
     <th colspan="2">You can configure a build to fail if it has too many inspection errors or warnings. To do so, add a corresponding
       <c:choose>
         <c:when test="${buildForm.createMode}">build failure condition. <bs:help file="Build+Failure+Conditions"/></c:when>
-        <c:otherwise><a href="${link}">build failure condition</a>.</c:otherwise>
+        <c:otherwise>
+          <c:set var="editFailureCondLink"><admin:editBuildTypeLink step="buildFailureConditions" buildTypeId="${buildForm.settings.externalId}" withoutLink="true"/></c:set>
+          <a href="${editFailureCondLink}#addFeature=BuildFailureOnMetric">build failure condition</a>.
+        </c:otherwise>
       </c:choose>
     </th>
   </tr>
