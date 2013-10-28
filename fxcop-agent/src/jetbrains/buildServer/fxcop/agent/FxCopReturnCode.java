@@ -32,7 +32,7 @@ public enum FxCopReturnCode {
   BUILD_BREAKING_MESSAGE(0x400),
   UNKNOWN_ERROR(0x1000000);
 
-  private int myCode;
+  private final int myCode;
 
   public int getCode() {
     return myCode;

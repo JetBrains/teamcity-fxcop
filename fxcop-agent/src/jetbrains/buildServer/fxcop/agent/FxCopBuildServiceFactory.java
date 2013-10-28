@@ -30,7 +30,7 @@ public class FxCopBuildServiceFactory implements CommandLineBuildServiceFactory,
   private static final Logger LOG = Logger.getLogger(FxCopBuildServiceFactory.class);
 
   private final ArtifactsWatcher myArtifactsWatcher;
-  private InspectionReporter myInspectionsReporter;
+  private final InspectionReporter myInspectionsReporter;
 
   public FxCopBuildServiceFactory(@NotNull final ArtifactsWatcher artifactsWatcher,
                                   @NotNull final InspectionReporter inspectionsReporter) {
