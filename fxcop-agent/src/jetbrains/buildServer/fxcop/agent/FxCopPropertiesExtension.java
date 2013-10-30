@@ -41,7 +41,7 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter implements P
   private static final Logger LOG = Logger.getLogger(FxCopPropertiesExtension.class);
 
   private static final String VS_2010_PATH = "VS2010_Path";
-  public static final String FXCOP_EXE_RELATIVE_PATH = "..\\..\\Team Tools\\Static Analysis Tools\\FxCop\\FxCopCmd.exe";
+  public static final String FXCOP_EXE_RELATIVE_PATH = "..\\..\\Team Tools\\Static Analysis Tools\\FxCop\\" + FxCopConstants.FXCOPCMD_BINARY;
 
   private final Win32RegistryAccessor myAccessor;
 
@@ -84,7 +84,8 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter implements P
     try {
       fxcopRoot = searchFxCopInVS2010Installation(config);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.warn("Error while searching for FxCop: " + e.toString());
+      LOG.debug("Error while searching for FxCop", e);
       return;
     }
     if (fxcopRoot == null) {
@@ -134,12 +135,12 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter implements P
 
     final File fxcopBinaryFile = new File(fxcopBinary);
     if (!fxcopBinaryFile.exists()) {
-      LOG.warn("FxCopCmd was found in the registry but non-existent on disk");
+      LOG.warn("FxCopCmd was found in the registry but it does not exist on disk at path \"" + fxcopBinaryFile + "\"");
       return null;
     }
 
     final String fxcopRoot = fxcopBinaryFile.getParent();
-    LOG.info("Found FxCop root: " + fxcopRoot);
+    LOG.info("Found FxCop root: \"" + fxcopRoot + "\"");
 
     return fxcopRoot;
   }
@@ -161,25 +162,25 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter implements P
   private String searchFxCopInVS2010Installation(final BuildAgentConfiguration config) throws IOException {
     final Map<String,String> configurationParameters = config.getConfigurationParameters();
     if(!configurationParameters.containsKey(VS_2010_PATH)){
-      LOG.warn("VS2010_Path configuration parameter was not found");
+      LOG.info("VS2010_Path configuration parameter was not found");
       return null;
     }
     final String vs2010Path =  configurationParameters.get(VS_2010_PATH);
     if(vs2010Path == null || StringUtil.isEmptyOrSpaces(vs2010Path)) {
-      LOG.warn("VS2010_Path configuration parameter value is empty");
+      LOG.info("VS2010_Path configuration parameter value is empty");
       return null;
     }
     final File devenvExeHome = new File(vs2010Path);
     if(!devenvExeHome.exists()){
-      LOG.warn("VS 2010 home directory was found in the agent configuration but non-existent on disk. Checked path: " + vs2010Path);
+      LOG.warn("VS2010 home directory was found in the agent configuration but it does not exist on disk at path: \"" + devenvExeHome.getAbsolutePath() + "\"");
       return null;
     }
     final File fxCopExe = new File(devenvExeHome, FXCOP_EXE_RELATIVE_PATH);
     if(!fxCopExe.exists()){
-      LOG.warn("FxCopCmd.exe was not found in VS 2010 installation directory. Checked path: " + fxCopExe);
+      LOG.info("FxCopCmd.exe was not found in VS2010 installation directory at path: \"" + fxCopExe.getAbsolutePath() + "\"");
       return null;
     }
-    LOG.info("FxCopCmd.exe found on path " + fxCopExe);
+    LOG.info("FxCopCmd.exe found at path \"" + fxCopExe.getAbsolutePath() + "\"");
     return fxCopExe.getParentFile().getCanonicalPath();
   }
 }
