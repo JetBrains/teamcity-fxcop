@@ -76,7 +76,7 @@ public class FxCopPropertiesExtension extends AgentLifeCycleAdapter implements P
   @Override
   public void agentInitialized(@NotNull final BuildAgent agent) {
     final BuildAgentConfiguration config = agent.getConfiguration();
-    if (!config.getSystemInfo().isWindows() || config.getConfigurationParameters().containsKey(FxCopConstants.FXCOP_ROOT_PROPERTY)) {
+    if (!config.getSystemInfo().isWindows() || config.getBuildParameters().getAllParameters().containsKey(FxCopConstants.FXCOP_ROOT_PROPERTY)) {
       return;
     }
     //TODO: introduce .net properties searcher in open api and use it here
