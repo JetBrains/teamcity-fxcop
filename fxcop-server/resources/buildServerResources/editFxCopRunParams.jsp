@@ -217,13 +217,8 @@
 
   <tr>
     <th colspan="2">You can configure a build to fail if it has too many inspection errors or warnings. To do so, add a corresponding
-      <c:choose>
-        <c:when test="${buildForm.createMode}">build failure condition. <bs:help file="Build+Failure+Conditions"/></c:when>
-        <c:otherwise>
-          <c:set var="editFailureCondLink"><admin:editBuildTypeLink step="buildFailureConditions" buildTypeId="${buildForm.settings.externalId}" withoutLink="true"/></c:set>
-          <a href="${editFailureCondLink}#addFeature=BuildFailureOnMetric">build failure condition</a>.
-        </c:otherwise>
-      </c:choose>
+      <c:set var="editFailureCondLink"><admin:editBuildTypeLink step="buildFailureConditions" buildTypeId="${buildForm.settings.externalId}" withoutLink="true"/></c:set>
+      <a href="${editFailureCondLink}#addFeature=BuildFailureOnMetric">build failure condition</a>.
     </th>
   </tr>
 
