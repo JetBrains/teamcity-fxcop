@@ -67,7 +67,7 @@
       <th><label for="${constants.rootKey}">Installation root: <l:star/></label></th>
       <td><props:textProperty name="${constants.rootKey}" className="longField"/>
         <span class="error" id="error_${constants.rootKey}"></span>
-        <span class="smallNote">Specify path to FxCopCmd.exe home directory.</span>
+        <span class="smallNote">The path to the FxCopCmd.exe home directory</span>
       </td>
     </tr>
 
@@ -80,8 +80,8 @@
         </c:forEach>
       </props:selectProperty>
       <span class="error" id="error_${constants.versionKey}"></span>
-      <span class="smallNote">Specify FxCop version required by the build. As a result agent requirement will be created. <br/>
-                              Select 'Any Detected' to use any FxCop version autodetected on agent side.</span>
+      <span class="smallNote">The FxCop version required by the build; the agent requirement will be created. <br/>
+                              To use any version auto-detected on the agent side, select 'Any Detected'.</span>
     </td>
   </tr>
 
@@ -119,9 +119,9 @@
                                expanded="false"
                                disabled="${propertiesBean.properties[constants.whatToInspectKey] != constants.whatToInspectFilesValue}"/>
       </span>
-      <span class="smallNote">Assembly file names relative to checkout root separated by spaces.<br/>
-        Ant-like wildcards are allowed.<br/>
-        Example: bin\*.dll</span>
+      <span class="smallNote">Assembly file names relative to the checkout root separated by spaces.<br/>
+        Ant-like wildcards are supported.<br/>
+        Example: bin*.dll</span>
       <span class="error" id="error_${constants.filesKey}"></span>
       <span class="error" id="error_${constants.filesExcludeKey}"></span>
     </td>
@@ -150,7 +150,7 @@
                             disabled="${propertiesBean.properties[constants.whatToInspectKey] != constants.whatToInspectProjectValue}"/>
         <bs:vcsTree fieldId="${constants.projectKey}" treeId="${constants.projectKey}"/>
         </span>
-      <span class="smallNote">FxCop project file name relative to checkout root</span>
+      <span class="smallNote">TheFxCop project file name relative to the checkout root</span>
       <span class="error" id="error_${constants.projectKey}"></span></td>
   </tr>
 
@@ -169,9 +169,8 @@
     <td>
       <props:textProperty name="${constants.searchDirsKey}" className="longField"/>
       <span class="error" id="error_${constants.searchDirsKey}"></span>
-      <span
-          class="smallNote">List of directories (relative to checkout root and separated by spaces) to search referenced assemblies in.<br/>
-      Sets /d: options for FxCopCmd</span>
+      <span class="smallNote">The space-separated list of directories relative to the checkout root. <br/>
+                              Sets /d: options for FxCopCmd</span>
     </td>
   </tr>
   <tr class="advancedSetting">
@@ -187,17 +186,17 @@
     <td><props:textProperty name="${constants.reportXsltKey}" className="longField"/>
       <bs:vcsTree fieldId="${constants.reportXsltKey}" treeId="${constants.reportXsltKey}"/>
       <span class="error" id="error_${constants.reportXsltKey}"></span>
-      <span class="smallNote">XSLT file used to generate HTML report.<br/>
-        Leave it empty to skip generation,<br/>
-        set to '%system.FxCopRoot%/Xml/FxCopReport.xsl' to get standard FxCop report,<br/>
-        or specify any custom file relative to checkout directory</span>
+      <span class="smallNote">The  XSLT file to generate an HTML report.<br/>
+        Leave blank to skip generation,<br/>
+        set to '%system.FxCopRoot%/Xml/FxCopReport.xsl' to get a standard FxCop report,<br/>
+        or specify any custom file relative to the checkout directory.</span>
     </td>
   </tr>
   <tr class="advancedSetting">
     <th><label for="${constants.addtionalOptionsKey}">Additional FxCopCmd options: </label></th>
     <td><props:textProperty name="${constants.addtionalOptionsKey}" className="longField"/>
       <span class="error" id="error_${constants.addtionalOptionsKey}"></span>
-      <span class="smallNote">Additional options to be added to FxCopCmd.exe command line</span>
+      <span class="smallNote">Additional options for FxCopCmd.exe command line</span>
     </td>
   </tr>
 </l:settingsGroup>
@@ -210,7 +209,7 @@
       <props:checkboxProperty name="${constants.failOnAnalysisErrorKey}"/>
       <span class="error" id="error_${constants.failOnAnalysisErrorKey}"></span>
       <span class="smallNote">Fails build on analysis errors from FxCop such as:<br/>
-        ANALYSIS_ERROR ASSEMBLY_LOAD_ERROR ASSEMBLY_REFERENCES_ERROR PROJECT_LOAD_ERROR RULE_LIBRARY_LOAD_ERROR UNKNOWN_ERROR OUTPUT_ERROR
+        ANALYSIS_ERROR ASSEMBLY_LOAD_ERROR, ASSEMBLY_REFERENCES_ERROR, PROJECT_LOAD_ERROR, RULE_LIBRARY_LOAD_ERROR, UNKNOWN_ERROR, OUTPUT_ERROR
       </span>
     </td>
   </tr>
