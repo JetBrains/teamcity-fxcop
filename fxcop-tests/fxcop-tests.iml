@@ -16,6 +16,7 @@
     <orderEntry type="module" module-name="fxcop-server" />
     <orderEntry type="library" scope="RUNTIME" name="jdom" level="project" />
     <orderEntry type="library" scope="TEST" name="test-sup" level="project" />
+    <orderEntry type="library" name="jmock" level="project" />
   </component>
   <component name="copyright">
     <Base>

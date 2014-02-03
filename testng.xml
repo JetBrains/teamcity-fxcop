@@ -4,6 +4,7 @@
     <classes>
       <class name="jetbrains.buildServer.fxcop.agent.FxCopFileProcessorTest"/>
       <class name="jetbrains.buildServer.fxcop.agent.FxCopCommandLineBuilderImplTest"/>
+      <class name="jetbrains.buildServer.fxcop.agent.FxCopSearcherTest"/>
     </classes>
   </test>
 </suite>
