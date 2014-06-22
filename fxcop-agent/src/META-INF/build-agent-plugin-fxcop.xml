@@ -15,9 +15,10 @@
   ~ limitations under the License.
   -->
 
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-
-<beans default-autowire="constructor">
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+       default-autowire="constructor">
   <bean name="FxCopPropertiesExtension" class="jetbrains.buildServer.fxcop.agent.FxCopPropertiesExtension" />
   <bean name="FxCopInspectionsProcessor" class="jetbrains.buildServer.fxcop.agent.FxCopDataProcessor" />
   <bean name="FxCopRunner" class="jetbrains.buildServer.fxcop.agent.FxCopBuildServiceFactory" />
