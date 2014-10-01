@@ -87,7 +87,7 @@
 
 </l:settingsGroup>
 
-<l:settingsGroup title="What to inspect">
+<l:settingsGroup title="What to Inspect">
   <tr>
     <c:set var="onclick">
       $('${constants.projectKey}').disabled = this.checked;
@@ -156,7 +156,7 @@
 
 </l:settingsGroup>
 
-<l:settingsGroup title="FxCop options" className="advancedSetting">
+<l:settingsGroup title="FxCop Options" className="advancedSetting">
   <tr class="advancedSetting">
     <th><label for="${constants.searchInGacKey}">Search referenced assemblies in GAC</label></th>
     <td>
@@ -201,7 +201,7 @@
   </tr>
 </l:settingsGroup>
 
-<l:settingsGroup title="Build failure conditions">
+<l:settingsGroup title="Build Failure Conditions">
 
   <tr class="advancedSetting">
     <th><label for="${constants.failOnAnalysisErrorKey}">Fail on analysis errors</label></th>
