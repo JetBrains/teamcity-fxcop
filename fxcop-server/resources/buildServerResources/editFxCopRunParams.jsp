@@ -87,7 +87,7 @@
 
 </l:settingsGroup>
 
-<l:settingsGroup title="What to Inspect">
+<l:settingsGroup title="What To Inspect">
   <tr>
     <c:set var="onclick">
       $('${constants.projectKey}').disabled = this.checked;
