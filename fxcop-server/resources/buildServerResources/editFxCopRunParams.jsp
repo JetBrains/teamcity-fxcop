@@ -111,19 +111,19 @@
                                linkTitle="Type assembly files or wildcards"
                                cols="55" rows="5"
                                expanded="true"
-                               disabled="${propertiesBean.properties[constants.whatToInspectKey] != constants.whatToInspectFilesValue}"/>
+                               disabled="${propertiesBean.properties[constants.whatToInspectKey] != constants.whatToInspectFilesValue}"
+                               note="${note}"/>
+      <c:set var="note">Assembly file names relative to the checkout root separated by spaces.<br/>
+        Ant-like wildcards are supported.<br/>
+        Example: bin*.dll</c:set>
       <props:multilineProperty name="${constants.filesExcludeKey}"
                                className="longField"
                                linkTitle="Exclude assembly files by wildcard"
                                cols="55" rows="5"
                                expanded="false"
-                               disabled="${propertiesBean.properties[constants.whatToInspectKey] != constants.whatToInspectFilesValue}"/>
+                               disabled="${propertiesBean.properties[constants.whatToInspectKey] != constants.whatToInspectFilesValue}"
+                               note="${note}"/>
       </span>
-      <span class="smallNote">Assembly file names relative to the checkout root separated by spaces.<br/>
-        Ant-like wildcards are supported.<br/>
-        Example: bin*.dll</span>
-      <span class="error" id="error_${constants.filesKey}"></span>
-      <span class="error" id="error_${constants.filesExcludeKey}"></span>
     </td>
   </tr>
 
