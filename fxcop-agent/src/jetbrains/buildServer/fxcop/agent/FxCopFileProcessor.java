@@ -26,6 +26,7 @@ import java.util.Stack;
 import java.util.Vector;
 import jetbrains.buildServer.agent.SimpleBuildLogger;
 import jetbrains.buildServer.agent.inspections.*;
+import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -107,17 +108,27 @@ public class FxCopFileProcessor {
         //handler.setAccessible(true);
         handler.invoke(this);
       } catch (NoSuchMethodException e) {
-        myLogger.message("Won't handle tag " + nodeName);
+        myLogger.message(getMessage(nodeName) + ": Unknown tag '" + nodeName + "'");
       } catch (InvocationTargetException e) {
-        myLogger.error(e.toString());
-        if (e.getTargetException() != null) {
-          myLogger.error(e.getTargetException().toString());                 
+        Loggers.AGENT.debug(getMessage(nodeName), e);
+        String additionalDetails = "";
+        if (!StringUtil.isEmpty(e.getMessage())) {
+          additionalDetails += e.toString();
         }
+        if (e.getTargetException() != null) {
+          additionalDetails += (StringUtil.isEmpty(additionalDetails) ? "" : ", caused by: ") + e.getTargetException().toString();
+        }
+        myLogger.error(getMessage(nodeName) + (StringUtil.isEmpty(additionalDetails) ? "" : ": " + additionalDetails));
       } catch (IllegalAccessException e) {
-        myLogger.error(e.toString());
+        Loggers.AGENT.debug(getMessage(nodeName), e);
+        myLogger.error(getMessage(nodeName) + ":" + e.toString());
       }
       myStream.moveUp();
     }
+  }
+
+  private String getMessage(final String nodeName) {
+    return "Error while processing FxCop report '" + myFxCopReport.getAbsolutePath() + "', tag " + nodeName;
   }
 
   private void handleNamespacesTag() {
@@ -177,10 +188,12 @@ public class FxCopFileProcessor {
     final String level = myStream.getAttribute("Level");
 
     String inspectionMessage = reformatInOneLine(myStream.getValue());
-    if (myCurrentEntity.peek() == EntityType.MEMBER) {
-      inspectionMessage += " (" + myCurrentMember + ")";
-    } else if (myCurrentEntity.peek() == EntityType.ACCESSOR) {
-      inspectionMessage += " (" + myCurrentAccessor + ")";
+    if (!myCurrentEntity.isEmpty()) {
+      if (myCurrentEntity.peek() == EntityType.MEMBER) {
+        inspectionMessage += " (" + myCurrentMember + ")";
+      } else if (myCurrentEntity.peek() == EntityType.ACCESSOR) {
+        inspectionMessage += " (" + myCurrentAccessor + ")";
+      }
     }
     info.setMessage(inspectionMessage);
 
@@ -232,6 +245,9 @@ public class FxCopFileProcessor {
       info.addAttribute(InspectionAttributesId.SEVERITY.toString(), attrValue);
     }
 
+    if (myMessageInspectionId.isEmpty()){
+      throw new IllegalArgumentException("No current message inspection ID while processing entry: path: '" + path + "', file: '" + file + "'. Broken report?");
+    }
     info.setInspectionId(myMessageInspectionId.peek());
 
     myReporter.reportInspection(info);
