@@ -18,6 +18,8 @@ package jetbrains.buildServer.fxcop.agent;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
@@ -40,8 +42,8 @@ public class FxCopSearcher {
   @NotNull
   private static final Logger LOG = Logger.getLogger(FxCopSearcher.class);
 
-  @NotNull
-  static final String VS_2010_PATH = "VS2010_Path";
+  public static final String VS_2010_PATH = "VS2010_Path";
+  private static final Collection<String> KNOWN_VS_PATH_PARAM_NAMES = Arrays.asList("VS2015_Path", "VS2013_Path", VS_2010_PATH);
 
   @NotNull
   public static final String FXCOP_RELATIVE_PATH = "..\\..\\Team Tools\\Static Analysis Tools\\FxCop\\";
@@ -49,31 +51,35 @@ public class FxCopSearcher {
   @NotNull
   public static final String FXCOP_EXE_RELATIVE_PATH = FXCOP_RELATIVE_PATH + FxCopConstants.FXCOPCMD_BINARY;
 
-
+  private static final String FXCOP_PROJECT_FILE_EXT = ".fxcop";
 
   @NotNull
-  final Win32RegistryAccessor myAccessor;
+  final Win32RegistryAccessor myRegistryAccessor;
 
-  public FxCopSearcher(@NotNull final Win32RegistryAccessor accessor) {
-    this.myAccessor = accessor;
+  public FxCopSearcher(@NotNull final Win32RegistryAccessor registryAccessor) {
+    myRegistryAccessor = registryAccessor;
   }
 
   public void search(@NotNull final BuildAgentConfiguration config) {
     //TODO: introduce .net properties searcher in open api and use it here
-    if (!config.getSystemInfo().isWindows()) {
-      return;
-    }
+    if (!config.getSystemInfo().isWindows()) return;
+
     // search config params
     String fxCopRoot = config.getBuildParameters().getAllParameters().get(FxCopConstants.FXCOP_ROOT_PROPERTY);
     if (StringUtil.isEmptyOrSpaces(fxCopRoot)) {
       fxCopRoot = searchFxCopInWinRegistry();
     }
-    if (StringUtil.isEmptyOrSpaces(fxCopRoot)) {
-      try {
-        fxCopRoot = searchFxCopInVS2010Installation(config);
-      } catch (IOException e) {
-        LOG.warn("Error while searching for FxCop: " + e.toString());
-        LOG.debug("Error while searching for FxCop", e);
+
+    if(StringUtil.isEmptyOrSpaces(fxCopRoot)){
+      final Map<String, String> configurationParameters = config.getConfigurationParameters();
+      for (String paramName : KNOWN_VS_PATH_PARAM_NAMES){
+        if(!StringUtil.isEmptyOrSpaces(fxCopRoot)) continue;
+        try {
+          fxCopRoot = searchFxCopInVSInstallation(configurationParameters, paramName);
+        } catch (IOException e) {
+          LOG.warn("Error while searching for FxCop: " + e.toString());
+          LOG.debug("Error while searching for FxCop", e);
+        }
       }
     }
 
@@ -98,7 +104,7 @@ public class FxCopSearcher {
     // Use .fxcop file association
 
     final String fxcopClass =
-      myAccessor.readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, ".fxcop", "");
+      myRegistryAccessor.readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, FXCOP_PROJECT_FILE_EXT, "");
     if (fxcopClass == null) {
       LOG.info(".fxcop file association wasn't found in CLASSES_ROOT");
       return null;
@@ -106,7 +112,7 @@ public class FxCopSearcher {
 
     LOG.info("Found FxCop class in CLASSES_ROOT: " + fxcopClass);
 
-    final String fxcopStartCmd = myAccessor
+    final String fxcopStartCmd = myRegistryAccessor
       .readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, fxcopClass + "\\shell\\open\\command", "");
     if (fxcopStartCmd == null) {
       return null;
@@ -148,25 +154,24 @@ public class FxCopSearcher {
   }
 
   @Nullable
-  private String searchFxCopInVS2010Installation(@NotNull final BuildAgentConfiguration config) throws IOException {
-    final Map<String,String> configurationParameters = config.getConfigurationParameters();
-    if(!configurationParameters.containsKey(VS_2010_PATH)){
-      LOG.info("VS2010_Path configuration parameter was not found");
+  private String searchFxCopInVSInstallation(@NotNull final Map<String,String> configurationParameters, @NotNull final String vsPathParamName) throws IOException {
+    if(!configurationParameters.containsKey(vsPathParamName)){
+      LOG.info(vsPathParamName + " configuration parameter was not found");
       return null;
     }
-    final String vs2010Path =  configurationParameters.get(VS_2010_PATH);
-    if(vs2010Path == null || StringUtil.isEmptyOrSpaces(vs2010Path)) {
-      LOG.info("VS2010_Path configuration parameter value is empty");
+    final String vsPath =  configurationParameters.get(vsPathParamName);
+    if(vsPath == null || StringUtil.isEmptyOrSpaces(vsPath)) {
+      LOG.info(vsPathParamName + " configuration parameter value is empty");
       return null;
     }
-    final File devenvExeHome = new File(vs2010Path);
+    final File devenvExeHome = new File(vsPath);
     if(!devenvExeHome.exists()){
-      LOG.warn("VS2010 home directory was found in the agent configuration but it does not exist on disk at path: \"" + devenvExeHome.getAbsolutePath() + "\"");
+      LOG.warn("VS home directory was found in the agent configuration but it does not exist on disk at path: \"" + devenvExeHome.getAbsolutePath() + "\"");
       return null;
     }
     final File fxCopExe = new File(devenvExeHome, FXCOP_EXE_RELATIVE_PATH);
     if(!fxCopExe.exists()){
-      LOG.info("FxCopCmd.exe was not found in VS2010 installation directory at path: \"" + fxCopExe.getAbsolutePath() + "\"");
+      LOG.info("FxCopCmd.exe was not found in VS installation directory at path: \"" + fxCopExe.getAbsolutePath() + "\"");
       return null;
     }
     LOG.info("FxCopCmd.exe found at path \"" + fxCopExe.getAbsolutePath() + "\"");

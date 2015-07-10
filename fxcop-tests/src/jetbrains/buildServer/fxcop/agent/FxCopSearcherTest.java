@@ -26,7 +26,7 @@ public class FxCopSearcherTest extends BaseTestCase {
 
   private Mockery m;
 
-  private Win32RegistryAccessor myAccessor;
+  private Win32RegistryAccessor myRegistryAccessor;
 
   private BuildAgentConfiguration myConfig;
 
@@ -43,12 +43,12 @@ public class FxCopSearcherTest extends BaseTestCase {
   public void setUp() throws Exception {
     super.setUp();
     m = new Mockery();
-    myAccessor = m.mock(Win32RegistryAccessor.class);
+    myRegistryAccessor = m.mock(Win32RegistryAccessor.class);
     myConfig = m.mock(BuildAgentConfiguration.class);
     myInfo = m.mock(BuildAgentSystemInfo.class);
     myBuildParameters = m.mock(BuildParametersMap.class);
     myFxCopRoot = createTempDir();
-    mySearcher = new FxCopSearcher(myAccessor);
+    mySearcher = new FxCopSearcher(myRegistryAccessor);
   }
 
   @Test
@@ -100,10 +100,10 @@ public class FxCopSearcherTest extends BaseTestCase {
       oneOf(myBuildParameters).getAllParameters();
       will(returnValue(allParams));
 
-      oneOf(myAccessor).readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, ".fxcop", "");
+      oneOf(myRegistryAccessor).readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, ".fxcop", "");
       will(returnValue(".fxcop_placeholder"));
 
-      oneOf(myAccessor).readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, ".fxcop_placeholder\\shell\\open\\command", "");
+      oneOf(myRegistryAccessor).readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, ".fxcop_placeholder\\shell\\open\\command", "");
       will(returnValue(binary.getPath()));
 
       oneOf(myConfig).addCustomProperty(FxCopConstants.FXCOP_ROOT_PROPERTY, myFxCopRoot.getPath());
@@ -148,7 +148,7 @@ public class FxCopSearcherTest extends BaseTestCase {
       oneOf(myBuildParameters).getAllParameters();
       will(returnValue(allParams));
 
-      oneOf(myAccessor).readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, ".fxcop", "");
+      oneOf(myRegistryAccessor).readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, ".fxcop", "");
       will(returnValue(null));
 
       oneOf(myConfig).getConfigurationParameters();
