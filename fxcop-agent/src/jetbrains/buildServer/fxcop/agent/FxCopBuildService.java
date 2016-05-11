@@ -17,7 +17,6 @@
 package jetbrains.buildServer.fxcop.agent;
 
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,7 +40,7 @@ import jetbrains.buildServer.agent.runner.ProgramCommandLine;
 import jetbrains.buildServer.fxcop.common.ArtifactsUtil;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.messages.DefaultMessagesInfo;
-import jetbrains.buildServer.util.AntPatternFileFinder;
+import jetbrains.buildServer.util.pathMatcher.AntPatternFileCollector;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
@@ -203,11 +202,7 @@ public class FxCopBuildService extends BuildServiceAdapter {
     List<String> files = new ArrayList<String>();
     final String what = runParameters.get(FxCopConstants.SETTINGS_WHAT_TO_INSPECT);
     if (FxCopConstants.WHAT_TO_INSPECT_FILES.equals(what)) {
-      try {
-        files = matchFiles();
-      } catch (IOException e) {
-        throw new RunBuildException("I/O error while collecting files", e);
-      }
+      files = matchFiles();
 
       if (files.size() == 0) {
         throw new RunBuildException("No files matched the pattern");
@@ -240,27 +235,26 @@ public class FxCopBuildService extends BuildServiceAdapter {
     };
   }
 
-  private List<String> matchFiles() throws IOException {
+  private List<String> matchFiles() {
     final Map<String, String> runParameters = getRunnerParameters();
 
-    final AntPatternFileFinder finder = new AntPatternFileFinder(
-      splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES)),
-      splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES_EXCLUDE)),
-      SystemInfo.isFileSystemCaseSensitive);
-    final File[] files = finder.findFiles(getCheckoutDirectory());
+    final List<File> files = AntPatternFileCollector.scanDir(getCheckoutDirectory(),
+                                                         splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES)),
+                                                         splitFileWildcards(runParameters.get(FxCopConstants.SETTINGS_FILES_EXCLUDE)), null);
+
 
     getLogger().logMessage(DefaultMessagesInfo.createTextMessage("Matched assembly files:"));
 
-    final List<String> result = new ArrayList<String>(files.length);
-    for (File file : files) {
-      final String relativeName = FileUtil.getRelativePath(getWorkingDirectory(), file);
-
-      result.add(relativeName);
-      getLogger().logMessage(DefaultMessagesInfo.createTextMessage("  " + relativeName));
-    }
-
-    if (files.length == 0) {
+    final List<String> result = new ArrayList<String>(files.size());
+    if (files.size() == 0) {
       getLogger().logMessage(DefaultMessagesInfo.createTextMessage("  none"));
+    } else {
+      for (File file : files) {
+        final String relativeName = FileUtil.getRelativePath(getWorkingDirectory(), file);
+
+        result.add(relativeName);
+        getLogger().logMessage(DefaultMessagesInfo.createTextMessage("  " + relativeName));
+      }
     }
 
     return result;
