@@ -43,7 +43,7 @@ public class FxCopSearcher {
   private static final Logger LOG = Logger.getLogger(FxCopSearcher.class);
 
   public static final String VS_2010_PATH = "VS2010_Path";
-  private static final Collection<String> KNOWN_VS_PATH_PARAM_NAMES = Arrays.asList("VS2015_Path", "VS2013_Path", VS_2010_PATH);
+  private static final Collection<String> KNOWN_VS_PATH_PARAM_NAMES = Arrays.asList("VS2017_Path", "VS2015_Path", "VS2013_Path", VS_2010_PATH);
 
   @NotNull
   public static final String FXCOP_RELATIVE_PATH = "..\\..\\Team Tools\\Static Analysis Tools\\FxCop\\";
