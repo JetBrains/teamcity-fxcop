@@ -21,9 +21,7 @@ import com.thoughtworks.xstream.io.xml.XppReader;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Stack;
-import java.util.Vector;
+import java.util.*;
 import jetbrains.buildServer.agent.SimpleBuildLogger;
 import jetbrains.buildServer.agent.inspections.*;
 import jetbrains.buildServer.log.Loggers;
@@ -239,10 +237,7 @@ public class FxCopFileProcessor {
         myWarningsCount++;
       }
 
-      final Collection<String> attrValue = new Vector<String>();
-      attrValue.add(apiLevel.toString());
-
-      info.addAttribute(InspectionAttributesId.SEVERITY.toString(), attrValue);
+      info.addAttribute(InspectionAttributesId.SEVERITY.toString(), Collections.singleton(apiLevel.toString()));
     }
 
     if (myMessageInspectionId.isEmpty()){
