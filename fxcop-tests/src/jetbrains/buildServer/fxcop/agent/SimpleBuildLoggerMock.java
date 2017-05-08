@@ -17,6 +17,7 @@
 package jetbrains.buildServer.fxcop.agent;
 
 import jetbrains.buildServer.agent.SimpleBuildLogger;
+import jetbrains.buildServer.messages.Status;
 import org.jetbrains.annotations.NotNull;
 
 public class SimpleBuildLoggerMock implements SimpleBuildLogger {
@@ -48,6 +49,11 @@ public class SimpleBuildLoggerMock implements SimpleBuildLogger {
     myText.append("MESSAGE: ");
     myText.append(message);
     myText.append("\n");
+  }
+
+  @Override
+  public void message(final String message, final Status status) {
+    message(message);
   }
 
   public void error(@NotNull final String message) {
