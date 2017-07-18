@@ -147,8 +147,9 @@
     <td>
       <span>
         <props:textProperty name="${constants.projectKey}" className="longField"
-                            disabled="${propertiesBean.properties[constants.whatToInspectKey] != constants.whatToInspectProjectValue}"/>
-        <bs:vcsTree fieldId="${constants.projectKey}" treeId="${constants.projectKey}"/>
+                            disabled="${propertiesBean.properties[constants.whatToInspectKey] != constants.whatToInspectProjectValue}">
+        <jsp:attribute name="afterTextField"><bs:vcsTree fieldId="${constants.projectKey}" treeId="${constants.projectKey}"/></jsp:attribute>
+        </props:textProperty>
         </span>
       <span class="smallNote">TheFxCop project file name relative to the checkout root</span>
       <span class="error" id="error_${constants.projectKey}"></span></td>
@@ -183,8 +184,10 @@
   </tr>
   <tr class="advancedSetting">
     <th><label for="${constants.reportXsltKey}">Report XSLT file:</label></th>
-    <td><props:textProperty name="${constants.reportXsltKey}" className="longField"/>
-      <bs:vcsTree fieldId="${constants.reportXsltKey}" treeId="${constants.reportXsltKey}"/>
+    <td>
+      <props:textProperty name="${constants.reportXsltKey}" className="longField">
+      <jsp:attribute name="afterTextField"><bs:vcsTree fieldId="${constants.reportXsltKey}" treeId="${constants.reportXsltKey}"/></jsp:attribute>
+      </props:textProperty>
       <span class="error" id="error_${constants.reportXsltKey}"></span>
       <span class="smallNote">The  XSLT file to generate an HTML report.<br/>
         Leave blank to skip generation,<br/>
