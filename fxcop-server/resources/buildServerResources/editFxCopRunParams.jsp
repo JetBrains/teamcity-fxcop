@@ -64,7 +64,7 @@
   </tr>
 
   <tr id="pathInputSection" ${hidePathInput}>
-      <th><label for="${constants.rootKey}">Installation root: <l:star/></label></th>
+      <th><label for="${constants.rootKey}">Installation root:<l:star/></label></th>
       <td><props:textProperty name="${constants.rootKey}" className="longField"/>
         <span class="error" id="error_${constants.rootKey}"></span>
         <span class="smallNote">The path to the FxCopCmd.exe home directory</span>
@@ -72,7 +72,7 @@
     </tr>
 
   <tr id="versionInputSection" ${hideVersionInput}>
-    <th><label for="${constants.versionKey}">FxCop version: <bs:help file="FxCop" anchor="FxCopVersion"/></label></th>
+    <th><label for="${constants.versionKey}">FxCop version:<bs:help file="FxCop" anchor="FxCopVersion"/></label></th>
     <td>
       <props:selectProperty name="${constants.versionKey}">
         <c:forEach var="item" items="${constants.avaliableVersions}">
