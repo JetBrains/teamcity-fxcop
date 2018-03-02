@@ -121,6 +121,10 @@ public class FxCopFileProcessor {
       } catch (IllegalAccessException e) {
         Loggers.AGENT.debug(getMessage(nodeName), e);
         myLogger.error(getMessage(nodeName) + ":" + e.toString());
+      } catch (RuntimeException e) {
+        // Java 9
+        if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+        myLogger.message(getMessage(nodeName) + ": Unknown tag '" + nodeName + "'");
       }
       myStream.moveUp();
     }
