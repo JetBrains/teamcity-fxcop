@@ -141,7 +141,7 @@ public class FxCopBuildService extends BuildServiceAdapter {
       getLogger().warning(exitCodeStr.toString());
 
       if (errors.contains(FxCopReturnCode.BUILD_BREAKING_MESSAGE)) {
-        failMessage = "FxCop return code contains 'Build breaking message'\"";
+        failMessage = "FxCop return code contains 'Build breaking message'";
       }
 
       if (errors.contains(FxCopReturnCode.COMMAND_LINE_SWITCH_ERROR)) {
