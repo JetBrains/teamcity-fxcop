@@ -35,7 +35,7 @@ public class FxCopFileProcessorTest extends BaseTestCase {
     File file = new File("testData/" + fileName);
 
     if (!file.exists()) {
-      file = new File("svnrepo/fxcop/testData/" + fileName);
+      file = new File("bundled-plugins/fxcop/testData/" + fileName);
     }
 
     return file.getAbsolutePath();
