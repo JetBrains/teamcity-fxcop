@@ -219,7 +219,17 @@
 
   <tr>
     <th colspan="2">You can configure a build to fail if it has too many inspection errors or warnings. To do so, add a corresponding
-      <c:set var="editFailureCondLink"><admin:editBuildTypeLink step="buildFailureConditions" buildTypeId="${buildForm.settings.externalId}" withoutLink="true"/></c:set>
+      <c:set var="editFailureCondLink">
+        <c:choose>
+          <%--@elvariable id="buildForm" type="jetbrains.buildServer.controllers.admin.projects.EditableBuildTypeSettingsForm"--%>
+          <c:when test="${not empty buildForm.settingsTemplate}">
+            <admin:editTemplateLink step="buildFailureConditions" templateId="${buildForm.settingsTemplate.externalId}" withoutLink="true"/>
+          </c:when>
+          <c:otherwise>
+            <admin:editBuildTypeLink step="buildFailureConditions" buildTypeId="${buildForm.settingsBuildType.externalId}" withoutLink="true"/>
+          </c:otherwise>
+        </c:choose>
+      </c:set>
       <a href="${editFailureCondLink}#addFeature=BuildFailureOnMetric">build failure condition</a>.
     </th>
   </tr>
