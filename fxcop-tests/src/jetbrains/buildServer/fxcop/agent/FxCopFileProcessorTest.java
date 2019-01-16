@@ -31,18 +31,9 @@ import org.testng.annotations.Test;
 
 @Test
 public class FxCopFileProcessorTest extends BaseTestCase {
-  private String getTestDataPath(final String fileName) {
-    File file = new File("testData/" + fileName);
-
-    if (!file.exists()) {
-      file = new File("external-repos/fxcop/testData/" + fileName);
-    }
-
-    return file.getAbsolutePath();
-  }
 
   private void runTest(final String fileName) throws Exception {
-    final String prefix = getTestDataPath(fileName);
+    final String prefix = TestUtils.getTestDataPath(fileName);
     final String logFile = prefix + ".log";
     final String resultsFile = prefix + ".tmp";
     final String goldFile = prefix + ".gold";
