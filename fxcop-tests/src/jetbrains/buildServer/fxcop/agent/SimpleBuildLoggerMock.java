@@ -52,6 +52,13 @@ public class SimpleBuildLoggerMock implements SimpleBuildLogger {
   }
 
   @Override
+  public void debug(final String message) {
+    myText.append("DEBUG: ");
+    myText.append(message);
+    myText.append("\n");
+  }
+
+  @Override
   public void message(final String message, final Status status) {
     message(message);
   }
