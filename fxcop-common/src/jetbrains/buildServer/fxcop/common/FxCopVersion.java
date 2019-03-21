@@ -40,7 +40,8 @@ public enum FxCopVersion {
   v10_0("10.0", "10.0"),
   v12_0("12.0", "12.0"),
   v14_0("14.0", "14.0"),
-  v15_0("15.0", "15.0");
+  v15_0("15.0", "15.0"),
+  v16_0("16.0", "16.0");
 
   private final String myTechnicalVersionPrefix;
   private final String myDisplayName;
