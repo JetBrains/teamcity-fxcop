@@ -13,6 +13,7 @@
         <webroots>
           <root url="file://$MODULE_DIR$/resources/buildServerResources" relative="/plugins/FxCop" />
         </webroots>
+        <sourceRoots />
       </configuration>
     </facet>
   </component>
