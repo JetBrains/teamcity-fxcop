@@ -22,18 +22,20 @@ import jetbrains.buildServer.fxcop.common.ArtifactsUtil;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.serverSide.SBuild;
 import jetbrains.buildServer.serverSide.SBuildServer;
+import jetbrains.buildServer.web.openapi.ArtifactsViewTab;
 import jetbrains.buildServer.web.openapi.PagePlaces;
-import jetbrains.buildServer.web.openapi.ViewLogTab;
+import jetbrains.buildServer.web.openapi.ReportTabsIsolationProtection;
 import jetbrains.buildServer.web.reportTabs.ReportTabUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class FxCopReportTab extends ViewLogTab {
+public class FxCopReportTab extends ArtifactsViewTab {
   private static final String TAB_TITLE = "FxCop";
   private static final String TAB_CODE = "fxcopReportTab";
 
   public FxCopReportTab(@NotNull PagePlaces pagePlaces,
-                        @NotNull SBuildServer server) {
-    super(TAB_TITLE, TAB_CODE, pagePlaces, server);
+                        @NotNull SBuildServer server,
+                        @NotNull ReportTabsIsolationProtection reportTabsIsolationProtection) {
+    super(TAB_TITLE, TAB_CODE, pagePlaces, server, reportTabsIsolationProtection);
     setIncludeUrl("/artifactsViewer.jsp");
   }
 
@@ -41,6 +43,7 @@ public class FxCopReportTab extends ViewLogTab {
   protected void fillModel(@NotNull Map<String, Object> model,
                            @NotNull HttpServletRequest request,
                            @NotNull SBuild build) {
+    super.fillModel(model, request, build);
     model.put("startPage", getAvailableReportPage(build));
   }
 
