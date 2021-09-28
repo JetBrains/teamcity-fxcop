@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dsl-extension kind="buildStep" type="FxCop" generateDslJar="true">
+  <class name="FxCopStep">
+    <description>
+      An [FxCop build step](https://www.jetbrains.com/help/teamcity/?FxCop) is intended for inspecting .NET assemblies
+      and reporting possible design, localization, performance, and security improvements.
+    </description>
+  </class>
+  <function name="fxCop">
+    <description>
+      Add an [FxCop build step](https://www.jetbrains.com/help/teamcity/?FxCop).
+      @see FxCopStep
+    </description>
+  </function>
+  <params>
+
+    <param name="fxcop.detection_mode" dslName="fxCopInstallation" type="compound">
+      <description>
+        When a build agent is started, it detects automatically whether FxCop is installed.
+        If FxCop is detected, TeamCity defines the %system.FxCopRoot% agent system property.
+        You can also use a custom installation of FxCop or the use FxCop checked in your version control.
+      </description>
+
+      <option name="auto" value="auto">
+        <description>
+          Select to use the FxCop installation on an agent.
+        </description>
+        <param name="fxcop.version" dslName="version" type="FxCopVersion">
+          <description>
+            The FxCop version required by the build; the agent requirement will be created.
+            To use any version auto-detected on the agent side, set to 'ANY_DETECTED'.
+          </description>
+        </param>
+      </option>
+
+      <option name="manual" value="manual">
+        <description>
+          Select to use a custom installation of FxCop (not the autodetected one),
+          or if you do not have FxCop installed on the build agent
+          (for example, you can place the FxCop tool in your source control, and check it out with the build sources).
+        </description>
+        <param name="fxcop.root" dslName="installationRoot" mandatory="true">
+          <description>
+            The path to the FxCop installation root on the agent machine or
+            the path to an FxCop executable relative to the Build Checkout Directory.
+          </description>
+        </param>
+      </option>
+
+    </param>
+
+    <param name="fxcop.what" dslName="inspectionSource" type="compound">
+
+      <option name="assemblies" value="files">
+        <param name="fxcop.files" dslName="files" mandatory="true">
+          <description>
+            Enter the paths to the assemblies to be inspected (use Ant-like wildcards to select files by a mask).
+            FxCop will use default settings to inspect them.
+            The paths should be relative to the Build Checkout Directory and separated by spaces.
+
+            Note that there is a limitation to the maximum number of assemblies
+            that can be specified here due to command-line string limitation.
+          </description>
+        </param>
+        <param name="fxcop.files_exclude" dslName="exclude">
+          <description>
+            Exclude wildcards to refine the included assemblies list.
+
+            Assembly file names relative to the checkout root separated by spaces.
+            Ant-like wildcards are supported. Example: bin*.dll
+          </description>
+        </param>
+      </option>
+
+      <option name="project" value="project">
+        <param name="fxcop.project" dslName="projectFile" mandatory="true">
+          <description>
+            The FxCop project file name relative to the checkout root.
+          </description>
+        </param>
+      </option>
+
+    </param>
+
+    <param name="fxcop.search_in_gac" dslName="searchInGAC" type="boolean" trueValue="true" falseValue="">
+      <description>
+        Search the assemblies referenced by targets in Global Assembly Cache.
+      </description>
+    </param>
+
+    <param name="fxcop.search_in_dirs" dslName="searchInDirs">
+      <description>
+        Search the assemblies referenced by targets in the specified directories separated by spaces.
+        Sets /d: options for FxCopCmd
+      </description>
+    </param>
+
+    <param name="fxcop.ignore_generated_code" dslName="ignoreGeneratedCode" type="boolean" trueValue="true" falseValue="">
+      <description>
+        Sets /ignoregeneratedcode for FxCopCmd (note: it's supported since FxCop 1.36).
+        Speeds up inspection.
+      </description>
+    </param>
+
+    <param name="fxcop.report_xslt" dslName="reportXSLTFile">
+      <description>
+        The path to the XSLT transformation file relative to the Build Checkout Directory or absolute on the agent machine.
+        You can use the path to the detected FxCop on the target machine (i.e. %system.FxCopRoot%/Xml/FxCopReport.xsl).
+        When the Report XSLT file option is set, the build runner will apply an XSLT transform to FxCop XML output and
+        display the resulting HTML in a new FxCop tab on the build results page.
+      </description>
+    </param>
+
+    <param name="fxcop.addon_options" dslName="additionalOptions">
+      <description>
+        Additional options for calling FxCopCmd executable.
+        All entered options will be added to the beginning of the command line parameters.
+      </description>
+    </param>
+
+    <param name="fxcop.fail_on_analysis_error" dslName="failOnAnalysisError" type="boolean" trueValue="true" falseValue="">
+      <description>
+        Fails build on analysis errors from FxCop such as:
+        ANALYSIS_ERROR, ASSEMBLY_LOAD_ERROR, ASSEMBLY_REFERENCES_ERROR,
+        PROJECT_LOAD_ERROR, RULE_LIBRARY_LOAD_ERROR, UNKNOWN_ERROR, OUTPUT_ERROR
+      </description>
+    </param>
+
+  </params>
+  <types>
+    <enum name="FxCopVersion">
+      <option name="ANY_DETECTED" value="not_specified"/>
+      <option name="v1_35" value="1.35"/>
+      <option name="v9_0" value="9.0"/>
+      <option name="v10_0" value="10.0"/>
+      <option name="v12_0" value="12.0"/>
+      <option name="v14_0" value="14.0"/>
+      <option name="v15_0" value="15.0"/>
+      <option name="v16_0" value="16.0"/>
+    </enum>
+  </types>
+</dsl-extension>

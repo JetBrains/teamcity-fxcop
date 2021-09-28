@@ -30,6 +30,9 @@
           <element id="module-output" name="fxcop-common" />
         </element>
       </element>
+      <element id="directory" name="kotlin-dsl">
+        <element id="dir-copy" path="$PROJECT_DIR$/kotlin-dsl" />
+      </element>
       <element id="file-copy" path="$PROJECT_DIR$/teamcity-plugin.xml" />
     </root>
   </artifact>
