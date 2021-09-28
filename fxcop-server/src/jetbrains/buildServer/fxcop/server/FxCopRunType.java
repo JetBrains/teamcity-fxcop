@@ -31,15 +31,22 @@ import org.jetbrains.annotations.NotNull;
 
 public class FxCopRunType extends RunType {
   private final PluginDescriptor myPluginDescriptor;
+  private final Map<String, String> myDefaultParameters;
 
   public FxCopRunType(final RunTypeRegistry runTypeRegistry, final PluginDescriptor pluginDescriptor) {
     myPluginDescriptor = pluginDescriptor;
     runTypeRegistry.registerRunType(this);
+    myDefaultParameters = new HashMap<>();
+    myDefaultParameters.put(FxCopConstants.SETTINGS_DETECTION_MODE, FxCopConstants.DETECTION_MODE_AUTO);
+    myDefaultParameters.put(FxCopConstants.SETTINGS_FXCOP_VERSION, FxCopVersion.not_specified.getTechnicalVersionPrefix());
+    myDefaultParameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_FILES);
+    myDefaultParameters.put(FxCopConstants.SETTINGS_SEARCH_IN_GAC, "true");
+    myDefaultParameters.put(FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR, "true");
   }
 
   @Override
   public PropertiesProcessor getRunnerPropertiesProcessor() {
-    return new FxCopRunTypePropertiesProcessor();
+    return new FxCopRunTypePropertiesProcessor(myDefaultParameters);
   }
 
   @NotNull
@@ -60,13 +67,7 @@ public class FxCopRunType extends RunType {
 
   @Override
   public Map<String, String> getDefaultRunnerProperties() {
-    Map<String, String> parameters = new HashMap<String, String>();
-    parameters.put(FxCopConstants.SETTINGS_DETECTION_MODE, FxCopConstants.DETECTION_MODE_AUTO);
-    parameters.put(FxCopConstants.SETTINGS_FXCOP_VERSION, FxCopVersion.not_specified.getDisplayName());
-    parameters.put(FxCopConstants.SETTINGS_WHAT_TO_INSPECT, FxCopConstants.WHAT_TO_INSPECT_FILES);
-    parameters.put(FxCopConstants.SETTINGS_SEARCH_IN_GAC, "true");
-    parameters.put(FxCopConstants.SETTINGS_FAIL_ON_ANALYSIS_ERROR, "true");
-    return parameters;
+    return myDefaultParameters;
   }
 
   @Override
