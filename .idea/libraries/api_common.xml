@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="api-common">
     <CLASSES>
-      <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/log4j-1.2.12.jar!/" />
+      <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/tc-log4j.jar!/" />
       <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/util.jar!/" />
       <root url="jar://$TeamCityDistribution$/devPackage/common-api.jar!/" />
       <root url="jar://$TeamCityDistribution$/devPackage/serviceMessages.jar!/" />
