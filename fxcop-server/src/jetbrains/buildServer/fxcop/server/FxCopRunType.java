@@ -16,7 +16,6 @@
 
 package jetbrains.buildServer.fxcop.server;
 
-import com.google.common.collect.ImmutableSet;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.fxcop.common.FxCopVersion;
 import jetbrains.buildServer.requirements.Requirement;
@@ -27,10 +26,7 @@ import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class FxCopRunType extends RunType {
   private final PluginDescriptor myPluginDescriptor;
@@ -107,6 +103,6 @@ public class FxCopRunType extends RunType {
   @NotNull
   @Override
   public Set<String> getTags() {
-    return ImmutableSet.of("code analysis", ".NET", "Visual Studio");
+    return new HashSet<>(Arrays.asList("code analysis", ".NET", "Visual Studio"));
   }
 }
