@@ -17,12 +17,14 @@
 package jetbrains.buildServer.fxcop.agent;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.SimpleBuildLogger;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
+import jetbrains.buildServer.util.CollectionsUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -64,6 +66,15 @@ public class FxCopCommandLineBuilder {
 
   @NotNull
   public List<String> getArguments(List<String> files) throws RunBuildException {
+    return getArguments(files, true);
+  }
+
+  public String getArgsForLogging(List<String> files) throws RunBuildException {
+    return StringUtil.join(" ", getArguments(files, false));
+  }
+
+  @NotNull
+  private List<String> getArguments(List<String> files, boolean escapeAdditionalProp) throws RunBuildException {
     List<String> arguments = new Vector<String>();
 
     arguments.add("/forceoutput");
@@ -89,7 +100,7 @@ public class FxCopCommandLineBuilder {
     // Additional options
     final String additionalOptions = myRunParameters.get(FxCopConstants.SETTINGS_ADDITIONAL_OPTIONS);
     if (additionalOptions != null) {
-      arguments.addAll(StringUtil.splitCommandArgumentsAndUnquote(additionalOptions));
+      arguments.addAll(escapeAdditionalProp ? StringUtil.splitCommandArgumentsAndUnquote(additionalOptions) : Collections.singletonList(additionalOptions));
     }
 
     // Files to be processed

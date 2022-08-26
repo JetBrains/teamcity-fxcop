@@ -41,6 +41,7 @@ import jetbrains.buildServer.fxcop.common.ArtifactsUtil;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.messages.DefaultMessagesInfo;
 import jetbrains.buildServer.util.FileUtil;
+import jetbrains.buildServer.util.PasswordReplacer;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.pathMatcher.AntPatternFileCollector;
 import org.jetbrains.annotations.NotNull;
@@ -221,6 +222,11 @@ public class FxCopBuildService extends BuildServiceAdapter {
       @NotNull
       public String getWorkingDirectory() throws RunBuildException {
         return getCheckoutDirectory().getPath();
+      }
+
+      @Override
+      public String getCommandLineForLogging(PasswordReplacer passwordReplacer) throws RunBuildException {
+        return getExecutablePath() + " " + commandLineBuilder.getArgsForLogging(finalFiles);
       }
 
       @NotNull
