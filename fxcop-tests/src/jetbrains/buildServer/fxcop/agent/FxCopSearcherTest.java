@@ -50,7 +50,7 @@ public class FxCopSearcherTest extends BaseTestCase {
     myBuildParameters = m.mock(BuildParametersMap.class);
     final String fxCopPath = TestUtils.getTestDataPath("searcher/fxCop");
     myFxCopRoot = FileUtil.getCanonicalFile(new File(fxCopPath));
-    mySearcher = new FxCopSearcher(myRegistryAccessor);
+    mySearcher = new FxCopSearcher(myRegistryAccessor, myConfig);
   }
 
   @Test
@@ -72,12 +72,12 @@ public class FxCopSearcherTest extends BaseTestCase {
 
       oneOf(myBuildParameters).getAllParameters();
       will(returnValue(allParams));
-
-      oneOf(myConfig).addSystemProperty(FxCopConstants.FXCOP_ROOT_NAME, myFxCopRoot.getPath());
-      oneOf(myConfig).addSystemProperty(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME, "8.0.760.198");
     }});
-    mySearcher.search(myConfig);
+    final Map<String, String> systemProperties = new HashMap<>();
+    mySearcher.search(systemProperties);
 
+    assertEquals(myFxCopRoot.getPath(), systemProperties.get(FxCopConstants.FXCOP_ROOT_NAME));
+    assertEquals("8.0.760.198", systemProperties.get(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME));
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -108,11 +108,12 @@ public class FxCopSearcherTest extends BaseTestCase {
 
       oneOf(myRegistryAccessor).readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, ".fxcop_placeholder\\shell\\open\\command", "");
       will(returnValue(binary.getPath()));
-
-      oneOf(myConfig).addSystemProperty(FxCopConstants.FXCOP_ROOT_NAME, myFxCopRoot.getPath());
-      oneOf(myConfig).addSystemProperty(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME, "8.0.760.198");
     }});
-    mySearcher.search(myConfig);
+    final Map<String, String> systemProperties = new HashMap<>();
+    mySearcher.search(systemProperties);
+
+    assertEquals(myFxCopRoot.getPath(), systemProperties.get(FxCopConstants.FXCOP_ROOT_NAME));
+    assertEquals("8.0.760.198", systemProperties.get(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME));
 
   }
 
@@ -155,13 +156,13 @@ public class FxCopSearcherTest extends BaseTestCase {
 
       oneOf(myConfig).getConfigurationParameters();
       will(returnValue(configParams));
-
-      oneOf(myConfig).addSystemProperty(FxCopConstants.FXCOP_ROOT_NAME, fxCopBinary.getParentFile().getCanonicalPath());
-      oneOf(myConfig).addSystemProperty(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME, "8.0.760.198");
-
     }});
 
-    mySearcher.search(myConfig);
+    final Map<String, String> systemProperties = new HashMap<>();
+    mySearcher.search(systemProperties);
+
+    assertEquals(fxCopBinary.getParentFile().getCanonicalPath(), systemProperties.get(FxCopConstants.FXCOP_ROOT_NAME));
+    assertEquals("8.0.760.198", systemProperties.get(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME));
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -203,13 +204,13 @@ public class FxCopSearcherTest extends BaseTestCase {
 
       allowing(myConfig).getConfigurationParameters();
       will(returnValue(configParams));
-
-      oneOf(myConfig).addSystemProperty(FxCopConstants.FXCOP_ROOT_NAME, fxCopBinary.getParentFile().getCanonicalPath());
-      oneOf(myConfig).addSystemProperty(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME, "8.0.760.198");
-
     }});
 
-    mySearcher.search(myConfig);
+    final Map<String, String> systemProperties = new HashMap<>();
+    mySearcher.search(systemProperties);
+
+    assertEquals(fxCopBinary.getParentFile().getCanonicalPath(), systemProperties.get(FxCopConstants.FXCOP_ROOT_NAME));
+    assertEquals("8.0.760.198", systemProperties.get(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME));
   }
 
 
