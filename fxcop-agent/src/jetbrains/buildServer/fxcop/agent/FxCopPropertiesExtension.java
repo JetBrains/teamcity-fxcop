@@ -16,24 +16,24 @@
 
 package jetbrains.buildServer.fxcop.agent;
 
-import java.util.Map;
-import jetbrains.buildServer.ExtensionHolder;
-import jetbrains.buildServer.agent.config.AgentConfigurationAdapter;
-import jetbrains.buildServer.agent.config.AgentConfigurationSnapshot;
+import jetbrains.buildServer.agent.AgentLifeCycleAdapter;
+import jetbrains.buildServer.agent.AgentLifeCycleListener;
+import jetbrains.buildServer.agent.BuildAgent;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
+import jetbrains.buildServer.util.EventDispatcher;
 import jetbrains.buildServer.util.positioning.PositionAware;
 import jetbrains.buildServer.util.positioning.PositionConstraint;
 import org.jetbrains.annotations.NotNull;
 
-public class FxCopPropertiesExtension extends AgentConfigurationAdapter implements PositionAware {
+public class FxCopPropertiesExtension extends AgentLifeCycleAdapter implements PositionAware {
 
   @NotNull
   private final FxCopSearcher mySearcher;
 
-  public FxCopPropertiesExtension(@NotNull final ExtensionHolder extensionHolder,
+  public FxCopPropertiesExtension(@NotNull final EventDispatcher<AgentLifeCycleListener> events,
                                   @NotNull final FxCopSearcher searcher) {
     mySearcher = searcher;
-    extensionHolder.registerExtension(AgentConfigurationSnapshot.class, getClass().getName(), this);
+    events.addListener(this);
   }
 
   @NotNull
@@ -47,7 +47,7 @@ public class FxCopPropertiesExtension extends AgentConfigurationAdapter implemen
   }
 
   @Override
-  public void addSystemProperties(@NotNull Map<String, String> systemProperties) {
-    mySearcher.search(systemProperties);
+  public void agentInitialized(@NotNull final BuildAgent agent) {
+    mySearcher.search(agent.getConfiguration());
   }
 }

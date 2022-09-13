@@ -19,8 +19,8 @@ package jetbrains.buildServer.fxcop.agent;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
+import jetbrains.buildServer.agent.Constants;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.PEReader.PEUtil;
@@ -38,24 +38,22 @@ public class FxCopSearcher {
 
   private static final Logger LOG = Logger.getLogger(FxCopSearcher.class);
   private final List<FxCopSearch> mySearches;
-  @NotNull private final BuildAgentConfiguration myBuildAgentConfiguration;
 
-  public FxCopSearcher(@NotNull final Win32RegistryAccessor registryAccessor, @NotNull BuildAgentConfiguration buildAgentConfiguration) {
+  public FxCopSearcher(@NotNull final Win32RegistryAccessor registryAccessor) {
     mySearches = Arrays.asList(
       new FxCopAgentConfigSearch(),
       new FxCopRegistrySearch(registryAccessor),
       new FxCopVisualStudioSearch(),
       new FxCopMsBuildSearch()
     );
-    myBuildAgentConfiguration = buildAgentConfiguration;
   }
 
-  public void search(@NotNull final Map<String, String> systemProperties) {
+  public void search(@NotNull final BuildAgentConfiguration config) {
     //TODO: introduce .net properties searcher in open api and use it here
-    if (!myBuildAgentConfiguration.getSystemInfo().isWindows()) return;
+    if (!config.getSystemInfo().isWindows()) return;
 
     for (FxCopSearch search : mySearches) {
-      for (File fxCopExe : search.getHintPaths(myBuildAgentConfiguration)) {
+      for (File fxCopExe : search.getHintPaths(config)) {
         if (!fxCopExe.exists()) {
           continue;
         }
@@ -70,8 +68,8 @@ public class FxCopSearcher {
         final String version = fileVersion.toString();
 
         LOG.info(String.format("Found FxCop %s in \"%s\"", version, fxcopRoot));
-        systemProperties.put(FxCopConstants.FXCOP_ROOT_NAME, fxcopRoot);
-        systemProperties.put(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME, fileVersion.toString());
+        config.addSystemProperty(FxCopConstants.FXCOP_ROOT_NAME, fxcopRoot);
+        config.addSystemProperty(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME, fileVersion.toString());
 
         return;
       }
