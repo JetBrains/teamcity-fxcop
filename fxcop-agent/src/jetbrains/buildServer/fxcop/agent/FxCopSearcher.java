@@ -17,9 +17,7 @@
 package jetbrains.buildServer.fxcop.agent;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.util.FileUtil;
@@ -50,9 +48,9 @@ public class FxCopSearcher {
     myBuildAgentConfiguration = buildAgentConfiguration;
   }
 
-  public void search(@NotNull final Map<String, String> systemProperties) {
+  public Map<String, String> search() {
     //TODO: introduce .net properties searcher in open api and use it here
-    if (!myBuildAgentConfiguration.getSystemInfo().isWindows()) return;
+    if (!myBuildAgentConfiguration.getSystemInfo().isWindows()) return Collections.emptyMap();
 
     for (FxCopSearch search : mySearches) {
       for (File fxCopExe : search.getHintPaths(myBuildAgentConfiguration)) {
@@ -70,11 +68,13 @@ public class FxCopSearcher {
         final String version = fileVersion.toString();
 
         LOG.info(String.format("Found FxCop %s in \"%s\"", version, fxcopRoot));
+        final Map<String, String> systemProperties = new HashMap<>();
         systemProperties.put(FxCopConstants.FXCOP_ROOT_NAME, fxcopRoot);
         systemProperties.put(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME, fileVersion.toString());
 
-        return;
+        return systemProperties;
       }
     }
+    return Collections.emptyMap();
   }
 }

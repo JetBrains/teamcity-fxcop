@@ -73,8 +73,7 @@ public class FxCopSearcherTest extends BaseTestCase {
       oneOf(myBuildParameters).getAllParameters();
       will(returnValue(allParams));
     }});
-    final Map<String, String> systemProperties = new HashMap<>();
-    mySearcher.search(systemProperties);
+    final Map<String, String> systemProperties = mySearcher.search();
 
     assertEquals(myFxCopRoot.getPath(), systemProperties.get(FxCopConstants.FXCOP_ROOT_NAME));
     assertEquals("8.0.760.198", systemProperties.get(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME));
@@ -109,8 +108,7 @@ public class FxCopSearcherTest extends BaseTestCase {
       oneOf(myRegistryAccessor).readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, ".fxcop_placeholder\\shell\\open\\command", "");
       will(returnValue(binary.getPath()));
     }});
-    final Map<String, String> systemProperties = new HashMap<>();
-    mySearcher.search(systemProperties);
+    final Map<String, String> systemProperties = mySearcher.search();
 
     assertEquals(myFxCopRoot.getPath(), systemProperties.get(FxCopConstants.FXCOP_ROOT_NAME));
     assertEquals("8.0.760.198", systemProperties.get(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME));
@@ -158,8 +156,7 @@ public class FxCopSearcherTest extends BaseTestCase {
       will(returnValue(configParams));
     }});
 
-    final Map<String, String> systemProperties = new HashMap<>();
-    mySearcher.search(systemProperties);
+    final Map<String, String> systemProperties = mySearcher.search();
 
     assertEquals(fxCopBinary.getParentFile().getCanonicalPath(), systemProperties.get(FxCopConstants.FXCOP_ROOT_NAME));
     assertEquals("8.0.760.198", systemProperties.get(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME));
@@ -206,8 +203,7 @@ public class FxCopSearcherTest extends BaseTestCase {
       will(returnValue(configParams));
     }});
 
-    final Map<String, String> systemProperties = new HashMap<>();
-    mySearcher.search(systemProperties);
+    final Map<String, String> systemProperties = mySearcher.search();
 
     assertEquals(fxCopBinary.getParentFile().getCanonicalPath(), systemProperties.get(FxCopConstants.FXCOP_ROOT_NAME));
     assertEquals("8.0.760.198", systemProperties.get(FxCopConstants.FXCOPCMD_FILE_VERSION_NAME));

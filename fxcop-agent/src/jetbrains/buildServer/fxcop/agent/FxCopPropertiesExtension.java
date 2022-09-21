@@ -16,7 +16,6 @@
 
 package jetbrains.buildServer.fxcop.agent;
 
-import java.util.HashMap;
 import java.util.Map;
 import jetbrains.buildServer.ExtensionHolder;
 import jetbrains.buildServer.agent.config.AgentParametersSupplier;
@@ -48,9 +47,6 @@ public class FxCopPropertiesExtension implements PositionAware, AgentParametersS
 
   @Override
   public Map<String, String> getSystemProperties() {
-    final Map<String, String> systemProperties = new HashMap<>();
-
-    mySearcher.search(systemProperties);
-    return systemProperties;
+    return mySearcher.search();
   }
 }
