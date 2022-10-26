@@ -139,4 +139,22 @@
       <option name="v16_0" value="16.0"/>
     </enum>
   </types>
+  <examples>
+    <example>
+      <description>
+        Runs [FxCop](https://learn.microsoft.com/en-us/previous-versions/dotnet/netframework-3.0/bb429476(v=vs.80)) for the specified assembly files and reports inspections results to the TeamCity server.
+        The location of the FxCop installation on the agent is determined automatically.
+      </description>
+      <code>
+        fxCop {
+          fxCopInstallation = auto {
+            version = FxCopStep.FxCopVersion.v16_0
+          }
+          inspectionSource = assemblies {
+            files = "build/*.dll"
+          }
+        }
+      </code>
+    </example>
+  </examples>
 </dsl-extension>
