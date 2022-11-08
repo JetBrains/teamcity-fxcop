@@ -18,7 +18,9 @@ package jetbrains.buildServer.fxcop.agent;
 
 import java.io.File;
 import java.util.*;
+import jetbrains.buildServer.ExtensionHolder;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
+import jetbrains.buildServer.agent.config.AgentParametersSupplier;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.PEReader.PEUtil;
@@ -38,12 +40,16 @@ public class FxCopSearcher {
   private final List<FxCopSearch> mySearches;
   @NotNull private final BuildAgentConfiguration myBuildAgentConfiguration;
 
-  public FxCopSearcher(@NotNull final Win32RegistryAccessor registryAccessor, @NotNull BuildAgentConfiguration buildAgentConfiguration) {
+  public FxCopSearcher(@NotNull final Win32RegistryAccessor registryAccessor,
+                       @NotNull BuildAgentConfiguration buildAgentConfiguration,
+                       @NotNull ExtensionHolder extensionHolder) {
+    AgentParametersSupplier dotNetParametersSupplier = extensionHolder.getExtension(AgentParametersSupplier.class, FxCopConstants.DOTNET_SUPPLIER_NAME);
+
     mySearches = Arrays.asList(
       new FxCopAgentConfigSearch(),
       new FxCopRegistrySearch(registryAccessor),
-      new FxCopVisualStudioSearch(),
-      new FxCopMsBuildSearch()
+      new FxCopVisualStudioSearch(dotNetParametersSupplier),
+      new FxCopMsBuildSearch(dotNetParametersSupplier)
     );
     myBuildAgentConfiguration = buildAgentConfiguration;
   }

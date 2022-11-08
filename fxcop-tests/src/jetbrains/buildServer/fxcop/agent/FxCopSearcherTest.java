@@ -4,9 +4,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import jetbrains.buildServer.BaseTestCase;
+import jetbrains.buildServer.ExtensionHolder;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.agent.BuildAgentSystemInfo;
 import jetbrains.buildServer.agent.BuildParametersMap;
+import jetbrains.buildServer.agent.config.AgentParametersSupplier;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.util.Bitness;
 import jetbrains.buildServer.util.FileUtil;
@@ -37,6 +39,8 @@ public class FxCopSearcherTest extends BaseTestCase {
 
   private BuildParametersMap myBuildParameters;
 
+  private AgentParametersSupplier myDotNetParametersSupplier;
+
   private File myFxCopRoot;
 
   @Override
@@ -48,9 +52,17 @@ public class FxCopSearcherTest extends BaseTestCase {
     myConfig = m.mock(BuildAgentConfiguration.class);
     myInfo = m.mock(BuildAgentSystemInfo.class);
     myBuildParameters = m.mock(BuildParametersMap.class);
+    ExtensionHolder extensionHolder = m.mock(ExtensionHolder.class);
+    myDotNetParametersSupplier = m.mock(AgentParametersSupplier.class);
     final String fxCopPath = TestUtils.getTestDataPath("searcher/fxCop");
     myFxCopRoot = FileUtil.getCanonicalFile(new File(fxCopPath));
-    mySearcher = new FxCopSearcher(myRegistryAccessor, myConfig);
+
+    m.checking(new Expectations(){{
+      oneOf(extensionHolder).getExtension(AgentParametersSupplier.class, FxCopConstants.DOTNET_SUPPLIER_NAME);
+      will(returnValue(myDotNetParametersSupplier));
+    }});
+
+    mySearcher = new FxCopSearcher(myRegistryAccessor, myConfig, extensionHolder);
   }
 
   @Test
@@ -152,7 +164,7 @@ public class FxCopSearcherTest extends BaseTestCase {
       oneOf(myRegistryAccessor).readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, ".fxcop", "");
       will(returnValue(null));
 
-      oneOf(myConfig).getConfigurationParameters();
+      oneOf(myDotNetParametersSupplier).getParameters();
       will(returnValue(configParams));
     }});
 
@@ -199,7 +211,7 @@ public class FxCopSearcherTest extends BaseTestCase {
       oneOf(myRegistryAccessor).readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, ".fxcop", "");
       will(returnValue(null));
 
-      allowing(myConfig).getConfigurationParameters();
+      allowing(myDotNetParametersSupplier).getParameters();
       will(returnValue(configParams));
     }});
 
