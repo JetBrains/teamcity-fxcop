@@ -52,4 +52,6 @@ public interface FxCopConstants {
 
   String REPORT_FILE = "fxcop-report.html";
   String OUTPUT_FILE = "fxcop-result.xml";
+
+  String DOTNET_SUPPLIER_NAME = "DotNetPropertiesExtensionSupplier";
 }

@@ -18,10 +18,12 @@ package jetbrains.buildServer.fxcop.agent;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
+import jetbrains.buildServer.agent.config.AgentParametersSupplier;
 import jetbrains.buildServer.fxcop.common.FxCopConstants;
 import jetbrains.buildServer.util.CollectionsUtil;
 import jetbrains.buildServer.util.Converter;
@@ -36,11 +38,20 @@ public class FxCopMsBuildSearch implements FxCopSearch {
   static final String FXCOP_RELATIVE_PATH = "../../../Team Tools/Static Analysis Tools/FxCop/";
   private static final String FXCOP_EXE_RELATIVE_PATH = FXCOP_RELATIVE_PATH + FxCopConstants.FXCOPCMD_BINARY;
   private static final Pattern MSBUILD_TOOLS_PATTERN = Pattern.compile("MSBuildTools[^_]+_x(86|64)_Path");
+  private final AgentParametersSupplier myDotNetParametersSupplier;
+
+  public FxCopMsBuildSearch(AgentParametersSupplier dotNetParametersSupplier) {
+    myDotNetParametersSupplier = dotNetParametersSupplier;
+  }
 
   @NotNull
   @Override
   public Collection<File> getHintPaths(@NotNull final BuildAgentConfiguration config) {
-    final Map<String, String> parameters = config.getConfigurationParameters();
+    if (myDotNetParametersSupplier == null){
+      return Collections.emptyList();
+    }
+
+    final Map<String, String> parameters = myDotNetParametersSupplier.getParameters();
     final TreeSet<String> msBuildTools = new TreeSet<String>();
 
     for (String key : parameters.keySet()) {
