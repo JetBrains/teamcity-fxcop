@@ -45,6 +45,10 @@ public class FxCopSearcher {
                        @NotNull ExtensionHolder extensionHolder) {
     AgentParametersSupplier dotNetParametersSupplier = extensionHolder.getExtension(AgentParametersSupplier.class, FxCopConstants.DOTNET_SUPPLIER_NAME);
 
+    if (dotNetParametersSupplier == null){
+      LOG.warn("Failed to find dotNet's parameter supplier. Will not be able to detect FxCop from Visual Studio or MsBuild");
+    }
+
     mySearches = Arrays.asList(
       new FxCopAgentConfigSearch(),
       new FxCopRegistrySearch(registryAccessor),
