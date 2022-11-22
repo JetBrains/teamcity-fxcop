@@ -20,10 +20,12 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
+import jetbrains.buildServer.agent.config.AgentParametersSupplier;
 import jetbrains.buildServer.util.Bitness;
 import jetbrains.buildServer.util.Win32RegistryAccessor;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class FxCopRegistrySearch implements FxCopSearch {
 
@@ -37,7 +39,7 @@ public class FxCopRegistrySearch implements FxCopSearch {
 
   @NotNull
   @Override
-  public Collection<File> getHintPaths(@NotNull final BuildAgentConfiguration config) {
+  public Collection<File> getHintPaths(@NotNull final BuildAgentConfiguration config, @Nullable AgentParametersSupplier dotNetParametersSupplier) {
     // Use .fxcop file association
     final String fxcopClass = myRegistryAccessor.readRegistryText(Win32RegistryAccessor.Hive.CLASSES_ROOT, Bitness.BIT32, FXCOP_PROJECT_FILE_EXT, "");
     if (fxcopClass == null) {
