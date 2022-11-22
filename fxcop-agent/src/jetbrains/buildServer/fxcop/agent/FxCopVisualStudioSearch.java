@@ -30,6 +30,7 @@ import jetbrains.buildServer.util.Converter;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.filters.Filter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Search for fxCop in detected Visual Studio installations.
@@ -38,20 +39,15 @@ public class FxCopVisualStudioSearch implements FxCopSearch {
   static final String FXCOP_RELATIVE_PATH = "../../Team Tools/Static Analysis Tools/FxCop/";
   private static final String FXCOP_EXE_RELATIVE_PATH = FXCOP_RELATIVE_PATH + FxCopConstants.FXCOPCMD_BINARY;
   private static final Pattern VISUAL_STUDIO_PATTERN = Pattern.compile("VS[\\d]+_Path");
-  private final AgentParametersSupplier myDotNetParametersSupplier;
-
-  public FxCopVisualStudioSearch(AgentParametersSupplier dotNetParametersSupplier) {
-    myDotNetParametersSupplier = dotNetParametersSupplier;
-  }
 
   @NotNull
   @Override
-  public Collection<File> getHintPaths(@NotNull final BuildAgentConfiguration config) {
-    if (myDotNetParametersSupplier == null){
+  public Collection<File> getHintPaths(@NotNull final BuildAgentConfiguration config, @Nullable AgentParametersSupplier dotNetParametersSupplier) {
+    if (dotNetParametersSupplier == null){
       return Collections.emptyList();
     }
 
-    final Map<String, String> parameters = myDotNetParametersSupplier.getParameters();
+    final Map<String, String> parameters = dotNetParametersSupplier.getParameters();
     final TreeSet<String> visualStudio = new TreeSet<String>();
 
     for (String key : parameters.keySet()) {
