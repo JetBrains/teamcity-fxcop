@@ -28,7 +28,6 @@ import jetbrains.buildServer.util.PEReader.PEVersion;
 import jetbrains.buildServer.util.Win32RegistryAccessor;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,16 +39,11 @@ public class FxCopSearcher {
   private static final Logger LOG = Logger.getLogger(FxCopSearcher.class);
   private final List<FxCopSearch> mySearches;
   @NotNull private final BuildAgentConfiguration myBuildAgentConfiguration;
-  @Nullable private final AgentParametersSupplier myDotNetParametersSupplier;
+  @NotNull private final ExtensionHolder myExtensionHolder;
 
   public FxCopSearcher(@NotNull final Win32RegistryAccessor registryAccessor,
                        @NotNull BuildAgentConfiguration buildAgentConfiguration,
                        @NotNull ExtensionHolder extensionHolder) {
-    myDotNetParametersSupplier = extensionHolder.getExtension(AgentParametersSupplier.class, FxCopConstants.DOTNET_SUPPLIER_NAME);
-
-    if (myDotNetParametersSupplier == null){
-      LOG.warn("Failed to find dotNet's parameter supplier. Will not be able to detect FxCop from Visual Studio or MsBuild");
-    }
 
     mySearches = Arrays.asList(
       new FxCopAgentConfigSearch(),
@@ -58,14 +52,21 @@ public class FxCopSearcher {
       new FxCopMsBuildSearch()
     );
     myBuildAgentConfiguration = buildAgentConfiguration;
+    myExtensionHolder = extensionHolder;
   }
 
   public Map<String, String> search() {
     //TODO: introduce .net properties searcher in open api and use it here
     if (!myBuildAgentConfiguration.getSystemInfo().isWindows()) return Collections.emptyMap();
 
+    AgentParametersSupplier dotNetParametersSupplier = myExtensionHolder.getExtension(AgentParametersSupplier.class, FxCopConstants.DOTNET_SUPPLIER_NAME);
+
+    if (dotNetParametersSupplier == null){
+      LOG.warn("Failed to find dotNet's parameter supplier. Will not be able to detect FxCop from Visual Studio or MsBuild");
+    }
+
     for (FxCopSearch search : mySearches) {
-      for (File fxCopExe : search.getHintPaths(myBuildAgentConfiguration, myDotNetParametersSupplier)) {
+      for (File fxCopExe : search.getHintPaths(myBuildAgentConfiguration, dotNetParametersSupplier)) {
         if (!fxCopExe.exists()) {
           continue;
         }
