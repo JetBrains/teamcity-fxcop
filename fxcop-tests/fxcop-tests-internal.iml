@@ -16,6 +16,7 @@
     <orderEntry type="module" module-name="runtime-util" />
     <orderEntry type="module" module-name="test-api" />
     <orderEntry type="module" module-name="server-common-api" />
+    <orderEntry type="module" module-name="migration" />
   </component>
   <component name="copyright">
     <Base>
