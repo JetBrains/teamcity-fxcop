@@ -8,7 +8,10 @@
       <root url="jar://$TeamCityDistribution$/devPackage/common-api.jar!/" />
       <root url="jar://$TeamCityDistribution$/devPackage/serviceMessages.jar!/" />
       <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/annotations.jar!/" />
+      <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/annotations-13.0.jar!/" />
       <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/openapi.jar!/" />
+      <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/idea-obsolete-openapi-$TC_VERSION$.jar!/" />
+      <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/logging-$TC_VERSION$.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -4,6 +4,7 @@
       <root url="jar://$TeamCityDistribution$/devPackage/server-api.jar!/" />
       <root url="jar://$TeamCityDistribution$/lib/servlet-api.jar!/" />
       <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/standard.jar!/" />
+      <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/standard-1.1.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
