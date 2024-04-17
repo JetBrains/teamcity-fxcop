@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.jetbrains.teamcity.plugins</groupId>
+  <artifactId>fxcop-plugin</artifactId>
+  <version>${revision}</version>
+  <packaging>pom</packaging>
+
+  <properties>
+    <revision>${PluginVersion}</revision>
+    <PluginVersion>${teamcity.version}</PluginVersion>
+    <teamcity.version>${MAJOR_VERSION}-SNAPSHOT</teamcity.version>
+    <MAJOR_VERSION>2024.07</MAJOR_VERSION>
+    <local.repo.path>local-repo</local.repo.path>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+  </properties>
+
+  <organization>
+    <name>JetBrains</name>
+    <url>https://www.jetbrains.com</url>
+  </organization>
+
+  <modules>
+    <module>fxcop-agent</module>
+    <module>fxcop-server</module>
+    <module>fxcop-common</module>
+    <module>fxcop-webapp</module>
+    <module>fxcop-tests</module>
+  </modules>
+
+  <repositories>
+    <repository>
+      <id>local-teamcity-artifacts</id>
+      <!--suppress UnresolvedMavenProperty -->
+      <url>file://${maven.multiModuleProjectDirectory}/${local.repo.path}</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>teamcity-space</id>
+      <url>https://packages.jetbrains.team/maven/p/tc/maven</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <distributionManagement>
+    <repository>
+      <id>teamcity-space</id>
+      <url>https://packages.jetbrains.team/maven/p/tc/maven</url>
+    </repository>
+  </distributionManagement>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.jetbrains.teamcity.plugins</groupId>
+        <artifactId>fxcop-server</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jetbrains.teamcity.plugins</groupId>
+        <artifactId>fxcop-agent</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jetbrains.teamcity.plugins</groupId>
+        <artifactId>fxcop-common</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jetbrains.teamcity.plugins</groupId>
+        <artifactId>fxcop-tests</artifactId>
+        <version>${revision}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+
+    <testSourceDirectory>test</testSourceDirectory>
+    <testResources>
+      <testResource>
+        <directory>test-resources</directory>
+      </testResource>
+      <testResource>
+        <directory>testData</directory>
+      </testResource>
+    </testResources>
+    <resources>
+      <resource>
+        <directory>resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>3.4.0</version>
+          <configuration>
+            <outputFileNameMapping>@{artifactId}@@{dashClassifier?}@.@{extension}@</outputFileNameMapping>
+            <failOnMissingWebXml>false</failOnMissingWebXml>
+            <webResources>
+              <resource>
+                <directory>webapp</directory>
+              </resource>
+            </webResources>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>javac-release-flag-compat</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <properties>
+        <maven.compiler.release>8</maven.compiler.release>
+      </properties>
+    </profile>
+  </profiles>
+</project>
