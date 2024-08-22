@@ -40,12 +40,12 @@
                 </executions>
                 <configuration>
                     <agent>
-                        <intellijProjectPath>../../</intellijProjectPath>
+                        <intellijProjectPath>../../../</intellijProjectPath>
                         <pluginName>fxcop</pluginName>
                         <spec>:fxcop-agent</spec>
                     </agent>
                     <server>
-                        <intellijProjectPath>../../</intellijProjectPath>
+                        <intellijProjectPath>../../../</intellijProjectPath>
                         <pluginName>fxcop</pluginName>
                         <descriptor>
                             <nodeResponsibilitiesAware>true</nodeResponsibilitiesAware>
