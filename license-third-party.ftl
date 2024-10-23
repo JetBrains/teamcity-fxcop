@@ -7,18 +7,21 @@
     ["asm:asm-commons", "BSD 3-Clause"],
     ["asm:asm-tree", "BSD 3-Clause"],
     ["com.cenqua.shaj:shaj", "Apache 2.0"],
+    ["commons-codec:commons-codec", "Apache 2.0"],
     ["cglib:cglib-nodep", "Apache 2.0"],
     ["javax.servlet:jstl", "CDDL 1.1 / GPL 2.0"],
     ["jdom:jdom", "Apache 2.0"],
     ["nekohtml:nekohtml", "Apache 2.0"],
     ["org.antlr:antlr-runtime", "BSD 3-Clause"],
+    ["org.eclipse.mylyn.github:org.eclipse.egit.github.core", "Eclipse Public License 1.0"],
     ["oro:oro", "Apache 2.0"]
     ]/>
 
     <#assign missingLicenseUrls = [
     ["Apache 2.0", "https://www.apache.org/licenses/LICENSE-2.0.txt"],
     ["BSD 3-Clause", "https://asm.ow2.io/license.html"],
-    ["CDDL 1.1 / GPL 2.0", "https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html"]
+    ["CDDL 1.1 / GPL 2.0", "https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html"],
+    ["Eclipse Public License 1.0", "http://www.eclipse.org/legal/epl-v10.html"]
     ]/>
 
     <#assign result = ""/>
