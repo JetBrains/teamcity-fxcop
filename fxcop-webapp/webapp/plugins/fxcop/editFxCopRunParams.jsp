@@ -58,7 +58,7 @@
     </tr>
 
   <tr id="versionInputSection" ${hideVersionInput}>
-    <th><label for="${constants.versionKey}">FxCop version:<bs:help file="FxCop#FxCop+Installation"/></label></th>
+    <th><label for="${constants.versionKey}">FxCop version:<bs:help file="FxCop#FxCop+Installation" preservePlus="true"/></label></th>
     <td>
       <props:selectProperty name="${constants.versionKey}">
         <c:forEach var="item" items="${constants.avaliableVersions}">
