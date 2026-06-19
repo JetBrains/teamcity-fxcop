@@ -75,6 +75,13 @@
         <artifactId>fxcop-tests</artifactId>
         <version>${revision}</version>
       </dependency>
+      <dependency>
+        <groupId>org.jetbrains.teamcity</groupId>
+        <artifactId>bom</artifactId>
+        <version>${teamcity.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
