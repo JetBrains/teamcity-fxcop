@@ -1,0 +1,137 @@
+{
+  "title": "FxCop",
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "label": "FxCop detection mode",
+      "scope": "#/properties/fx-cop-installation",
+      "options": {
+        "branches": {
+          "auto": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "label": "FxCop version",
+                "scope": "#/properties/version",
+                "options": {
+                  "description": "The FxCop version required by the build; the agent requirement will be created. To use any version auto-detected on the agent side, select 'Any Detected'."
+                }
+              }
+            ]
+          },
+          "manual": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "label": "Installation root",
+                "scope": "#/properties/installation-root",
+                "options": {
+                  "description": "The path to the FxCopCmd.exe home directory"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "Control",
+      "label": "What to inspect",
+      "scope": "#/properties/inspection-source",
+      "options": {
+        "branches": {
+          "assemblies": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "label": "Assemblies",
+                "scope": "#/properties/files",
+                "options": {
+                  "multi": true
+                }
+              },
+              {
+                "type": "Control",
+                "label": "Exclude assembly files by wildcard",
+                "scope": "#/properties/exclude",
+                "options": {
+                  "multi": true,
+                  "description": "Assembly file names relative to the checkout root separated by spaces. Ant-like wildcards are supported. Example: bin*.dll"
+                }
+              }
+            ]
+          },
+          "project": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "InputPathControl",
+                "label": "FxCop project file",
+                "scope": "#/properties/project-file",
+                "options": {
+                  "onlyDirectories": false,
+                  "description": "The FxCop project file name relative to the checkout root"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "AdvancedSettingsSection",
+      "elements": [
+        {
+          "type": "Control",
+          "label": "Search referenced assemblies in GAC",
+          "scope": "#/properties/search-in-gac"
+        },
+        {
+          "type": "Control",
+          "label": "Search referenced assemblies in directories",
+          "scope": "#/properties/search-in-dirs",
+          "options": {
+            "description": "The space-separated list of directories relative to the checkout root. Sets /d: options for FxCopCmd"
+          }
+        },
+        {
+          "type": "Control",
+          "label": "Ignore generated code",
+          "scope": "#/properties/ignore-generated-code",
+          "options": {
+            "description": "Sets /ignoregeneratedcode for FxCopCmd (note: it's supported since FxCop 1.36)"
+          }
+        },
+        {
+          "type": "InputPathControl",
+          "label": "Report XSLT file",
+          "scope": "#/properties/report-xslt-file",
+          "options": {
+            "onlyDirectories": false,
+            "description": "The XSLT file to generate an HTML report. Leave blank to skip generation, set to '%system.FxCopRoot%/Xml/FxCopReport.xsl' to get a standard FxCop report, or specify any custom file relative to the checkout directory."
+          }
+        },
+        {
+          "type": "Control",
+          "label": "Additional FxCopCmd options",
+          "scope": "#/properties/additional-options",
+          "options": {
+            "description": "Additional options for FxCopCmd.exe command line"
+          }
+        },
+        {
+          "type": "Control",
+          "label": "Fail on analysis errors",
+          "scope": "#/properties/fail-on-analysis-error",
+          "options": {
+            "description": "Fails build on analysis errors from FxCop such as: ANALYSIS_ERROR, ASSEMBLY_LOAD_ERROR, ASSEMBLY_REFERENCES_ERROR, PROJECT_LOAD_ERROR, RULE_LIBRARY_LOAD_ERROR, UNKNOWN_ERROR, OUTPUT_ERROR"
+          }
+        }
+      ]
+    }
+  ]
+}
