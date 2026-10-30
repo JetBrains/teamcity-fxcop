@@ -16,7 +16,7 @@
                 "label": "FxCop version",
                 "scope": "#/properties/version",
                 "options": {
-                  "description": "The FxCop version required by the build; the agent requirement will be created. To use any version auto-detected on the agent side, select 'Any Detected'."
+                  "description": "The FxCop version required by the build; the agent requirement will be created. To use any version auto-detected on the agent side, select 'Any Detected'. [Learn more](https://www.jetbrains.com/help/teamcity/?FxCop#FxCop+Installation)."
                 }
               }
             ]
